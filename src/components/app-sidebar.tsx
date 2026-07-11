@@ -4,7 +4,7 @@ import {
   Settings, BarChart3, Instagram, Link2, Building2,
   Bot, MessageSquare, History, ImageIcon, Zap,
   LineChart, Workflow, CheckCheck, FlaskConical, Inbox, FolderOpen, ShieldCheck, Sparkles,
-  Palette, KeyRound,
+  Palette, KeyRound, LayoutTemplate, Brain, Wand2, Film, Plug, Download, Users, Eye, Wrench,
 } from "lucide-react";
 
 import {
