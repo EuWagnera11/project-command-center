@@ -4,6 +4,8 @@ import type {
   SharedLink, Organization, AIAction, AdSetWithAds, MarketingSkill,
   EngagementHeatmapCell, TopPostRow, GrowthPoint, AutomationRule, PostApproval,
   CaptionABTest, InboxMessage, MediaLibraryItem, AuditLog, FreepikImage,
+  CalendarV2Period, CalendarV2Response, CalendarV2Post, CalendarV2PeriodOption,
+  CalendarV2Query, QuickScheduleInput,
 } from "./types";
 
 // -------- Profiles --------
