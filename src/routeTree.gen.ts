@@ -16,6 +16,7 @@ import { Route as CalendarRouteImport } from './routes/calendar'
 import { Route as BulkRouteImport } from './routes/bulk'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as SettingsIndexRouteImport } from './routes/settings.index'
+import { Route as SettingsMetaAdsRouteImport } from './routes/settings.meta-ads'
 
 const SettingsRoute = SettingsRouteImport.update({
   id: '/settings',
@@ -52,6 +53,11 @@ const SettingsIndexRoute = SettingsIndexRouteImport.update({
   path: '/',
   getParentRoute: () => SettingsRoute,
 } as any)
+const SettingsMetaAdsRoute = SettingsMetaAdsRouteImport.update({
+  id: '/meta-ads',
+  path: '/meta-ads',
+  getParentRoute: () => SettingsRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -60,6 +66,7 @@ export interface FileRoutesByFullPath {
   '/posts': typeof PostsRoute
   '/schedule': typeof ScheduleRoute
   '/settings': typeof SettingsRouteWithChildren
+  '/settings/meta-ads': typeof SettingsMetaAdsRoute
   '/settings/': typeof SettingsIndexRoute
 }
 export interface FileRoutesByTo {
@@ -68,6 +75,7 @@ export interface FileRoutesByTo {
   '/calendar': typeof CalendarRoute
   '/posts': typeof PostsRoute
   '/schedule': typeof ScheduleRoute
+  '/settings/meta-ads': typeof SettingsMetaAdsRoute
   '/settings': typeof SettingsIndexRoute
 }
 export interface FileRoutesById {
@@ -78,6 +86,7 @@ export interface FileRoutesById {
   '/posts': typeof PostsRoute
   '/schedule': typeof ScheduleRoute
   '/settings': typeof SettingsRouteWithChildren
+  '/settings/meta-ads': typeof SettingsMetaAdsRoute
   '/settings/': typeof SettingsIndexRoute
 }
 export interface FileRouteTypes {
@@ -89,9 +98,17 @@ export interface FileRouteTypes {
     | '/posts'
     | '/schedule'
     | '/settings'
+    | '/settings/meta-ads'
     | '/settings/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/bulk' | '/calendar' | '/posts' | '/schedule' | '/settings'
+  to:
+    | '/'
+    | '/bulk'
+    | '/calendar'
+    | '/posts'
+    | '/schedule'
+    | '/settings/meta-ads'
+    | '/settings'
   id:
     | '__root__'
     | '/'
@@ -100,6 +117,7 @@ export interface FileRouteTypes {
     | '/posts'
     | '/schedule'
     | '/settings'
+    | '/settings/meta-ads'
     | '/settings/'
   fileRoutesById: FileRoutesById
 }
@@ -163,14 +181,23 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SettingsIndexRouteImport
       parentRoute: typeof SettingsRoute
     }
+    '/settings/meta-ads': {
+      id: '/settings/meta-ads'
+      path: '/meta-ads'
+      fullPath: '/settings/meta-ads'
+      preLoaderRoute: typeof SettingsMetaAdsRouteImport
+      parentRoute: typeof SettingsRoute
+    }
   }
 }
 
 interface SettingsRouteChildren {
+  SettingsMetaAdsRoute: typeof SettingsMetaAdsRoute
   SettingsIndexRoute: typeof SettingsIndexRoute
 }
 
 const SettingsRouteChildren: SettingsRouteChildren = {
+  SettingsMetaAdsRoute: SettingsMetaAdsRoute,
   SettingsIndexRoute: SettingsIndexRoute,
 }
 
