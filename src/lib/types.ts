@@ -178,3 +178,90 @@ export interface ClientDashboardData {
   scope: SharedLinkScope;
   generated_at: string;
 }
+
+// ---------- PARTE FINAL: IA + Marketing ----------
+
+export type AISeverity = "high" | "info" | "ok";
+export type AIActionStatus = "pending" | "approved" | "rejected" | "executed";
+export type AIActionType = "pause_campaign" | "scale_budget" | "new_creative" | "refine_audience" | "refine_targeting" | "healthy";
+
+export interface AISuggestion {
+  severity: AISeverity;
+  title: string;
+  body: string;
+  action_type: AIActionType;
+}
+
+export interface AIAnalysis {
+  campaign_id: string;
+  campaign_name: string;
+  metrics: { spend: number; impressions: number; clicks: number; ctr: number; cpc: number };
+  suggestions: AISuggestion[];
+  analyzed_at: string;
+}
+
+export interface AIActionFeedback {
+  rating: number; // 1-5
+  comment?: string;
+}
+
+export interface AIAction {
+  id: number;
+  campaign_id: string;
+  campaign_name: string;
+  type: AIActionType;
+  severity: AISeverity;
+  description: string;
+  status: AIActionStatus;
+  created_at: string;
+  reason?: string;
+  feedback?: AIActionFeedback;
+}
+
+export interface ChatMessage {
+  id: string;
+  role: "user" | "assistant";
+  content: string;
+  ts: string;
+}
+
+export interface MediaInfo {
+  post_id: number;
+  url: string;
+  type: "image" | "video";
+  size: number;
+}
+
+export interface MetaAd {
+  id: string;
+  name: string;
+  title: string;
+  body: string;
+  image_url: string;
+  status: "ACTIVE" | "PAUSED";
+}
+
+export interface MetaAdSet {
+  id: string;
+  name: string;
+  status: "ACTIVE" | "PAUSED";
+  daily_budget?: number;
+  optimization_goal: string;
+}
+
+export interface AdSetWithAds {
+  adset: MetaAdSet;
+  ads: MetaAd[];
+}
+
+export interface HistoryBundle {
+  ai_actions: AIAction[];
+  notifications: Notification[];
+  posts: Post[];
+}
+
+export interface MarketingSkill {
+  slug: string;
+  title: string;
+  description: string;
+}
