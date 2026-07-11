@@ -4,7 +4,7 @@ import {
   LayoutDashboard, ListChecks, PlusCircle, Package, CalendarDays, LineChart,
   FolderOpen, Inbox, BarChart3, ImageIcon, Bot, MessageSquare, Workflow,
   CheckCheck, FlaskConical, Sparkles, History, Building2, Link2, Zap,
-  Settings, ShieldCheck, Search,
+  Settings, ShieldCheck, Search, Palette, KeyRound,
 } from "lucide-react";
 import {
   CommandDialog, CommandEmpty, CommandGroup, CommandInput,
