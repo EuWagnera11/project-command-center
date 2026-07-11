@@ -180,6 +180,105 @@ export const api = {
     if (USE_MOCK) return delay({ success: true });
     return req(`/api/organizations/${id}/activate`, { method: "POST" });
   },
+
+  // -------- PARTE FINAL: IA + Marketing --------
+  listAIActions: (status?: string): Promise<AIAction[]> => USE_MOCK
+    ? delay(status ? state.aiActions.filter((a) => a.status === status) : [...state.aiActions])
+    : req(`/api/ai/actions${status ? `?status=${status}` : ""}`),
+
+  approveAIAction: (id: number) => {
+    if (USE_MOCK) {
+      state.aiActions = state.aiActions.map((a) => a.id === id ? { ...a, status: "executed" as const } : a);
+      return delay({ success: true });
+    }
+    return req(`/api/ai/actions/${id}/approve`, { method: "POST" });
+  },
+  rejectAIAction: (id: number, reason?: string) => {
+    if (USE_MOCK) {
+      state.aiActions = state.aiActions.map((a) => a.id === id ? { ...a, status: "rejected" as const, reason } : a);
+      return delay({ success: true });
+    }
+    return req(`/api/ai/actions/${id}/reject`, { method: "POST", body: JSON.stringify({ reason }) });
+  },
+  feedbackAIAction: (id: number, rating: number, comment?: string) => {
+    if (USE_MOCK) {
+      state.aiActions = state.aiActions.map((a) => a.id === id ? { ...a, feedback: { rating, comment } } : a);
+      return delay({ success: true });
+    }
+    return req(`/api/ai/actions/${id}/feedback`, { method: "POST", body: JSON.stringify({ rating, comment }) });
+  },
+
+  analyzeCampaign: (campaignId: string): Promise<AIAnalysis> => {
+    if (USE_MOCK) {
+      const camp = mock.mockCampaigns.find((c) => c.id === campaignId);
+      // deterministic pseudo-random metrics per campaign id
+      const seed = campaignId.charCodeAt(campaignId.length - 1) || 1;
+      const spend = 80 + seed * 12;
+      const impressions = 1200 + seed * 380;
+      const clicks = Math.max(4, Math.round(impressions * (0.003 + (seed % 4) * 0.008)));
+      const ctr = +(clicks / impressions * 100).toFixed(2);
+      const cpc = +(spend / clicks).toFixed(2);
+      const suggestions: AIAnalysis["suggestions"] = [];
+      if (ctr < 0.5) suggestions.push({ severity: "high", title: "Testar novo criativo", body: `CTR de ${ctr}% está abaixo de 0.5%. Sugerido pausar e testar novo criativo com hook mais forte.`, action_type: "new_creative" });
+      else if (ctr > 3.0) suggestions.push({ severity: "info", title: "Escalar budget", body: `CTR de ${ctr}% acima de 3%. Recomendado aumentar budget diário em 20-30%.`, action_type: "scale_budget" });
+      if (cpc > 5) suggestions.push({ severity: "info", title: "Refinar público", body: `CPC de R$ ${cpc} acima do ideal. Refinar segmentação demográfica.`, action_type: "refine_audience" });
+      if (spend > 200 && impressions < 3000) suggestions.push({ severity: "high", title: "Segmentação ineficiente", body: `Gasto de R$ ${spend} com apenas ${impressions} impressões. Revisar segmentação.`, action_type: "refine_targeting" });
+      if (suggestions.length === 0) suggestions.push({ severity: "ok", title: "Performance saudável", body: "Nenhuma ação necessária no momento. Continuar monitorando.", action_type: "healthy" });
+      return delay({
+        campaign_id: campaignId,
+        campaign_name: camp?.name ?? "Campanha desconhecida",
+        metrics: { spend, impressions, clicks, ctr, cpc },
+        suggestions,
+        analyzed_at: new Date().toISOString(),
+      }, 700);
+    }
+    return req(`/api/ai/analyze-campaign/${campaignId}`);
+  },
+
+  aiChat: (message: string): Promise<{ answer: string }> => {
+    if (USE_MOCK) {
+      const q = message.toLowerCase();
+      let answer = "";
+      if (q.includes("conta")) {
+        answer = `Você tem **${mock.mockMetaAccounts.length} contas Meta Ads** conectadas:\n\n${mock.mockMetaAccounts.map((a) => `- **${a.name}** — ${a.business_name} · Gasto total: R$ ${(a.amount_spent / 100).toLocaleString("pt-BR")}`).join("\n")}\n\nAlém disso, temos **${mock.mockProfiles.length} contas do Instagram** cadastradas.`;
+      } else if (q.includes("campanha")) {
+        answer = `Existem **${mock.mockCampaigns.length} campanhas** cadastradas. Detalhes:\n\n${mock.mockCampaigns.map((c) => `- \`${c.name}\` — status: **${c.status}** · objetivo: ${c.objective}`).join("\n")}\n\n> 💡 Nenhuma está ativa. Recomendo reativar as de maior CTR histórico.`;
+      } else if (q.includes("gasto") || q.includes("spend")) {
+        answer = `**Gasto nos últimos 7 dias:** R$ ${mock.mockMetaKPI.period_spend.toFixed(2)}\n\n- Impressões: ${mock.mockMetaKPI.period_impressions.toLocaleString("pt-BR")}\n- Cliques: ${mock.mockMetaKPI.period_clicks.toLocaleString("pt-BR")}\n- CPC médio: R$ ${mock.mockMetaKPI.avg_cpc.toFixed(2)}\n- CTR médio: ${mock.mockMetaKPI.avg_ctr.toFixed(2)}%`;
+      } else if (q.includes("post")) {
+        const pending = mock.mockPosts.filter((p) => p.status === "pending").length;
+        answer = `Temos **${pending} posts agendados** e **${mock.mockPosts.filter((p) => p.status === "published").length} publicados** nos últimos 7 dias.\n\nPróximos:\n${mock.mockPosts.filter((p) => p.status === "pending").slice(0, 3).map((p) => `- ${p.profile_name}: _${p.caption.slice(0, 50)}..._`).join("\n")}`;
+      } else if (q.includes("ctr") || q.includes("melhor")) {
+        const best = [...mock.mockMetaComparison].sort((a, b) => b.avg_ctr - a.avg_ctr)[0];
+        answer = `A conta com **melhor CTR** é **${best.name}** com **${best.avg_ctr.toFixed(2)}%** de CTR nos últimos 7 dias.\n\n> Segundo a skill \`meta-ads.md\`, CTR ideal para tráfego é acima de 1%. Você está bem posicionado! 🎯`;
+      } else if (q.includes("melhor") || q.includes("melhoria")) {
+        answer = `Baseado nos dados atuais e nas skills de marketing carregadas, aqui vão **3 recomendações**:\n\n1. **Reativar campanhas de melhor CTR** — 26 pausadas. Comece pela de maior histórico.\n2. **Aplicar framework AIDA** nos novos criativos — sua taxa de scroll está baixa.\n3. **Testar Reels em vez de imagens estáticas** — algoritmo prioriza vídeo em 2025.\n\nQuer que eu gere ações no _IA Manager_?`;
+      } else {
+        answer = `Recebi sua pergunta: _"${message}"_.\n\nPosso ajudar com:\n- 📱 Contas conectadas\n- 🎯 Campanhas Meta Ads\n- 💰 Gastos e performance\n- 📅 Posts agendados\n- ⭐ Melhor CTR\n- 🚀 Recomendações de melhoria\n\nUse os chips abaixo para começar rápido.`;
+      }
+      return delay({ answer }, 900);
+    }
+    return req("/api/ai/chat", { method: "POST", body: JSON.stringify({ message }) });
+  },
+
+  listSkills: (): Promise<MarketingSkill[]> => USE_MOCK ? delay(mock.mockSkills) : req("/api/ai/skills"),
+
+  getHistory: (): Promise<HistoryBundle> => USE_MOCK ? delay({
+    ai_actions: [...state.aiActions],
+    notifications: [...mock.mockNotifications],
+    posts: [...mock.mockPosts].sort((a, b) => b.scheduled_at.localeCompare(a.scheduled_at)),
+  }) : req("/api/history"),
+
+  postMedia: (postId: number): Promise<MediaInfo> => USE_MOCK ? delay({
+    post_id: postId,
+    url: `https://picsum.photos/seed/instabot-post-${postId}/640/640`,
+    type: "image",
+    size: 240_000 + postId * 1000,
+  }) : req(`/api/posts/${postId}/media`),
+
+  campaignAdsetsWithAds: (campaignId: string): Promise<AdSetWithAds[]> => USE_MOCK
+    ? delay(mock.mockAdSetsWithAds[campaignId] ?? [])
+    : req(`/api/meta-ads/campaigns/${campaignId}/adsets-with-ads`),
 };
 
 function iso(dOffset: number) {
