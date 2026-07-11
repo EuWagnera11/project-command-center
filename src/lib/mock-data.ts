@@ -199,3 +199,95 @@ export const mockSkills: MarketingSkill[] = [
   { slug: "sales-automation", title: "Sales Automation", description: "Make, n8n, Zapier e workflows." },
   { slug: "brand-positioning", title: "Brand Positioning", description: "Brand statement e arquétipos." },
 ];
+
+// -------- Fase avançada --------
+
+export const mockHeatmap: EngagementHeatmapCell[] = Array.from({ length: 7 * 24 }, (_, i) => {
+  const day = Math.floor(i / 24);
+  const hour = i % 24;
+  const peak = (hour >= 11 && hour <= 13) || (hour >= 18 && hour <= 21);
+  const weekend = day === 0 || day === 6;
+  const base = peak ? 60 : hour < 6 ? 5 : 25;
+  return { day, hour, score: Math.min(100, Math.round(base + (weekend ? 15 : 0) + Math.random() * 25)) };
+});
+
+export const mockTopPosts: TopPostRow[] = [
+  { post_id: 29, caption: "Publicado ontem — bom engajamento.", profile_name: "Wagner constanteads", post_type: "photo", likes: 342, comments: 28, reach: 4820, engagement_rate: 7.7, published_at: iso(-1, 10, 0) },
+  { post_id: 28, caption: "Reel do processo criativo.", profile_name: "Refine Cubo", post_type: "reel", likes: 918, comments: 76, reach: 12400, engagement_rate: 8.0, published_at: iso(-1, 18, 0) },
+  { post_id: 27, caption: "Direito digital em 2026 — o que mudou.", profile_name: "Alves Consultoria", post_type: "photo", likes: 220, comments: 41, reach: 3120, engagement_rate: 8.4, published_at: iso(-2, 14, 0) },
+  { post_id: 26, caption: "Dica rápida sobre AIDA em Reels.", profile_name: "Wagner constanteads", post_type: "reel", likes: 611, comments: 52, reach: 8900, engagement_rate: 7.4, published_at: iso(-3, 12, 0) },
+  { post_id: 25, caption: "5 princípios para landing pages.", profile_name: "Refine Cubo", post_type: "carousel", likes: 480, comments: 33, reach: 6410, engagement_rate: 8.0, published_at: iso(-4, 9, 0) },
+];
+
+export const mockGrowth: GrowthPoint[] = Array.from({ length: 30 }, (_, i) => {
+  const d = new Date(now); d.setDate(d.getDate() - (29 - i));
+  return {
+    date: d.toISOString().slice(0, 10),
+    followers: 3200 + i * 12 + Math.round(Math.sin(i / 3) * 8),
+    reach: 6000 + Math.round(Math.cos(i / 2) * 900) + i * 30,
+    engagement: +(4 + Math.sin(i / 4) * 1.2).toFixed(2),
+  };
+});
+
+export const mockRules: AutomationRule[] = [
+  { id: 1, name: "Pausar CTR baixo", description: "Pausar campanhas com CTR < 0.4% por 48h", scope: "campaign", scope_id: "*", metric: "ctr", operator: "<", threshold: 0.4, time_window: "48h", action: "pause_campaign", is_active: true, trigger_count: 12, last_triggered_at: iso(-1, 22, 10) },
+  { id: 2, name: "Escalar top performers", description: "Aumentar budget em 25% se CTR > 2.5%", scope: "campaign", scope_id: "*", metric: "ctr", operator: ">", threshold: 2.5, time_window: "7d", action: "scale_budget", is_active: true, trigger_count: 4 },
+  { id: 3, name: "Alerta de gasto alto", description: "Notificar se gasto > R$ 200 em 24h", scope: "account", scope_id: "act_2", metric: "spend", operator: ">", threshold: 200, time_window: "24h", action: "notify", is_active: true, trigger_count: 3, last_triggered_at: iso(0, 12, 30) },
+  { id: 4, name: "Reduzir budget se CPC alto", description: "Reduzir budget 20% se CPC > R$ 5", scope: "campaign", scope_id: "*", metric: "cpc", operator: ">", threshold: 5, time_window: "24h", action: "reduce_budget", is_active: false, trigger_count: 0 },
+];
+
+export const mockApprovals: PostApproval[] = mockPosts.filter(p => p.status === "pending").slice(0, 4).map((p, i) => ({
+  id: 200 + i,
+  post_id: p.id,
+  post: p,
+  status: (i === 0 ? "pending" : i === 1 ? "pending" : i === 2 ? "approved" : "rejected") as "pending" | "approved" | "rejected",
+  requested_by: "IA",
+  requested_at: iso(-1, 9, 0),
+  approved_by: i === 2 ? "Wagner" : undefined,
+  approved_at: i === 2 ? iso(-1, 10, 0) : undefined,
+  rejection_reason: i === 3 ? "Criativo fora do briefing" : undefined,
+}));
+
+export const mockABTests: CaptionABTest[] = [
+  { id: 1, post_id: 29, caption_a: "Publicado ontem — bom engajamento 🚀", caption_b: "Bora começar bem a semana! 💥", impressions_a: 4200, clicks_a: 68, impressions_b: 4180, clicks_b: 91, ctr_a: 1.62, ctr_b: 2.18, winner: "b", winner_decided_at: iso(-1, 18, 0), status: "decided", created_at: iso(-3) },
+  { id: 2, post_id: 28, caption_a: "Reel do processo criativo", caption_b: "Deslize e veja como criamos isso 👇", impressions_a: 2100, clicks_a: 42, impressions_b: 2080, clicks_b: 39, ctr_a: 2.0, ctr_b: 1.87, status: "running", created_at: iso(-1) },
+  { id: 3, post_id: 27, caption_a: "5 dicas para atrair clientes premium", caption_b: "Como fechei R$ 50k em 30 dias", impressions_a: 1800, clicks_a: 22, impressions_b: 1750, clicks_b: 51, ctr_a: 1.22, ctr_b: 2.91, winner: "b", winner_decided_at: iso(-2, 12, 0), status: "decided", created_at: iso(-5) },
+];
+
+export const mockInbox: InboxMessage[] = [
+  { id: 1, profile_id: 1, profile_name: "Wagner", source: "dm", sender: "@ana.mkt", message_text: "Oi! Vocês fazem consultoria para agências pequenas?", ai_reply: "Olá Ana! Sim, atendemos agências de todos os tamanhos. Posso te enviar mais detalhes por aqui?", status: "pending", received_at: ago(15) },
+  { id: 2, profile_id: 2, profile_name: "Alves", source: "comment", sender: "@joao.dev", message_text: "Amei o post sobre direito digital 🔥", ai_reply: "Muito obrigado pelo carinho, João! 🙌", status: "sent", received_at: ago(45) },
+  { id: 3, profile_id: 1, profile_name: "Wagner", source: "dm", sender: "@maria.ceo", message_text: "Qual é o valor do serviço de gestão de tráfego?", status: "pending", received_at: ago(120) },
+  { id: 4, profile_id: 3, profile_name: "Refine", source: "comment", sender: "@design.br", message_text: "Ferramenta usada nesse mockup?", ai_reply: "Usamos Figma + Framer Motion para as animações! 🎨", status: "archived", received_at: ago(360) },
+];
+
+export const mockMediaLibrary: MediaLibraryItem[] = Array.from({ length: 12 }, (_, i) => ({
+  id: 300 + i,
+  name: `media_${i + 1}.${i % 4 === 3 ? "mp4" : "jpg"}`,
+  path: `/uploads/media_${i + 1}`,
+  url: `https://picsum.photos/seed/instabot-media-${i}/400/400`,
+  size: 150_000 + i * 22_000,
+  tags: [["produto", "loja"], ["equipe", "bastidor"], ["reel", "video"], ["quote", "motivacional"]][i % 4],
+  used: i % 3 !== 0,
+  is_video: i % 4 === 3,
+  uploaded_at: iso(-i - 1, 10 + i, 0),
+}));
+
+export const mockAuditLogs: AuditLog[] = [
+  { id: 1, actor: "Wagner", action: "post.publish", target_type: "post", target_id: "29", ip: "192.168.0.10", created_at: ago(30) },
+  { id: 2, actor: "IA", action: "campaign.pause", target_type: "campaign", target_id: "c2", meta: { reason: "CTR < 0.4%" }, created_at: ago(120) },
+  { id: 3, actor: "Wagner", action: "settings.update", target_type: "settings", target_id: "media_folder", ip: "192.168.0.10", created_at: ago(240) },
+  { id: 4, actor: "IA", action: "rule.trigger", target_type: "rule", target_id: "1", meta: { campaign: "c2" }, created_at: ago(300) },
+  { id: 5, actor: "Wagner", action: "shared_link.create", target_type: "shared_link", target_id: "1", ip: "192.168.0.10", created_at: ago(600) },
+  { id: 6, actor: "Wagner", action: "profile.login_browser", target_type: "profile", target_id: "3", ip: "192.168.0.10", created_at: ago(900) },
+  { id: 7, actor: "IA", action: "action.approve", target_type: "campaign", target_id: "c3", meta: { action_id: 1003 }, created_at: ago(1200) },
+];
+
+export const mockFreepik: FreepikImage[] = Array.from({ length: 12 }, (_, i) => ({
+  id: `fp_${i}`,
+  title: ["Business team", "Marketing chart", "Instagram phone", "Ecommerce shop", "Data dashboard", "AI concept", "Coworking", "Growth arrow", "Social icons", "Content creator", "Brand identity", "Digital ads"][i],
+  thumbnail_url: `https://picsum.photos/seed/freepik-${i}/280/280`,
+  image_url: `https://picsum.photos/seed/freepik-${i}/1024/1024`,
+  source: (i < 6 ? "freepik" : i < 10 ? "freepik-ai" : "fallback-picsum") as "freepik" | "freepik-ai" | "fallback-picsum",
+}));
+
