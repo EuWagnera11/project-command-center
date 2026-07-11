@@ -1,32 +1,20 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 
-type Theme = "light" | "dark";
-interface Ctx { theme: Theme; toggle: () => void; setTheme: (t: Theme) => void }
+type Theme = "dark";
+interface Ctx { theme: Theme }
 
 const ThemeContext = createContext<Ctx | null>(null);
 const STORAGE_KEY = "instabot-theme";
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
-  const [theme, setThemeState] = useState<Theme>("dark");
+  const [theme] = useState<Theme>("dark");
 
-  // Read persisted theme after mount to avoid SSR hydration mismatch.
   useEffect(() => {
-    const stored = (typeof window !== "undefined" && localStorage.getItem(STORAGE_KEY)) as Theme | null;
-    setThemeState(stored ?? "dark");
+    document.documentElement.classList.add("dark");
+    localStorage.setItem(STORAGE_KEY, "dark");
   }, []);
 
-  useEffect(() => {
-    const root = document.documentElement;
-    root.classList.toggle("dark", theme === "dark");
-    localStorage.setItem(STORAGE_KEY, theme);
-  }, [theme]);
-
-  const value: Ctx = {
-    theme,
-    setTheme: setThemeState,
-    toggle: () => setThemeState((t) => (t === "dark" ? "light" : "dark")),
-  };
-  return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>;
+  return <ThemeContext.Provider value={{ theme }}>{children}</ThemeContext.Provider>;
 }
 
 export function useTheme() {
