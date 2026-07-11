@@ -3,6 +3,7 @@ import {
   LayoutDashboard, ListChecks, PlusCircle, Package, CalendarDays,
   Settings, BarChart3, Instagram, Link2, Building2,
   Bot, MessageSquare, History, ImageIcon, Zap,
+  LineChart, Workflow, CheckCheck, FlaskConical, Inbox, FolderOpen, ShieldCheck, Sparkles,
 } from "lucide-react";
 
 import {
@@ -18,6 +19,9 @@ const nav = [
   { title: "Agendar", url: "/schedule", icon: PlusCircle },
   { title: "Em Massa", url: "/bulk", icon: Package },
   { title: "Calendário", url: "/calendar", icon: CalendarDays },
+  { title: "Analytics", url: "/analytics", icon: LineChart },
+  { title: "Biblioteca", url: "/media-library", icon: FolderOpen },
+  { title: "Inbox", url: "/inbox", icon: Inbox },
 ] as const;
 
 const ads = [
@@ -28,6 +32,10 @@ const ads = [
 const ia = [
   { title: "IA Manager", url: "/ai-manager", icon: Bot },
   { title: "Chat IA", url: "/ai-chat", icon: MessageSquare },
+  { title: "Automações", url: "/rules", icon: Workflow },
+  { title: "Aprovações", url: "/approvals", icon: CheckCheck },
+  { title: "A/B Tests", url: "/ab-tests", icon: FlaskConical },
+  { title: "Freepik Studio", url: "/freepik-studio", icon: Sparkles },
   { title: "Histórico", url: "/history", icon: History },
 ] as const;
 
@@ -39,6 +47,7 @@ const agency = [
 
 const system = [
   { title: "Configurações", url: "/settings", icon: Settings },
+  { title: "Audit Logs", url: "/audit", icon: ShieldCheck },
 ] as const;
 
 export function AppSidebar() {
