@@ -75,7 +75,7 @@ function MetaDashboardPage() {
 
       <div className="space-y-6 p-6">
         {/* KPI grid */}
-        <div className="grid grid-cols-2 gap-4 md:grid-cols-3 xl:grid-cols-6">
+        <div className="grid grid-cols-2 gap-3 md:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-10">
           {kpiCards.map((k) => (
             <Card key={k.label} className={`p-4 ${k.grad} border-0`}>
               <div className="flex items-center justify-between">
@@ -218,6 +218,30 @@ function MetaDashboardPage() {
             </table>
           </div>
         </Card>
+
+        {/* Weekly AI report */}
+        {report && (
+          <Card className="border-primary/30 bg-gradient-to-br from-primary/5 to-ig-purple/5 p-5">
+            <div className="mb-3 flex items-center gap-2">
+              <div className="grid h-9 w-9 place-items-center rounded-lg bg-gradient-primary text-white shadow-glow">
+                <Sparkles className="h-4 w-4" />
+              </div>
+              <div>
+                <h3 className="text-sm font-semibold">Relatório Semanal com IA</h3>
+                <p className="text-xs text-muted-foreground">Análise automática dos últimos 7 dias</p>
+              </div>
+            </div>
+            <p className="mb-4 text-sm leading-relaxed">{report.summary}</p>
+            <ul className="grid gap-2 sm:grid-cols-2">
+              {report.highlights.map((h, i) => (
+                <li key={i} className="flex items-start gap-2 rounded-lg border bg-background/60 p-3 text-sm">
+                  <span className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-primary" />
+                  <span>{h}</span>
+                </li>
+              ))}
+            </ul>
+          </Card>
+        )}
       </div>
     </div>
   );
