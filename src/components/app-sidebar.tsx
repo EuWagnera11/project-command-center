@@ -24,7 +24,7 @@ const nav = [
 
 const ads = [
   { title: "Meta Ads", url: "/meta-dashboard", icon: BarChart3 },
-  { title: "Criativos", url: "/meta-creatives/c1", icon: ImageIcon },
+  { title: "Criativos", url: "/meta-creatives", icon: ImageIcon },
 ] as const;
 
 const ia = [
