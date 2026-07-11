@@ -13,6 +13,7 @@ import { Route as SharedLinksRouteImport } from './routes/shared-links'
 import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as ScheduleRouteImport } from './routes/schedule'
 import { Route as RulesRouteImport } from './routes/rules'
+import { Route as RolesRouteImport } from './routes/roles'
 import { Route as QuickShareRouteImport } from './routes/quick-share'
 import { Route as PostsRouteImport } from './routes/posts'
 import { Route as OrganizacoesRouteImport } from './routes/organizacoes'
@@ -60,6 +61,11 @@ const ScheduleRoute = ScheduleRouteImport.update({
 const RulesRoute = RulesRouteImport.update({
   id: '/rules',
   path: '/rules',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RolesRoute = RolesRouteImport.update({
+  id: '/roles',
+  path: '/roles',
   getParentRoute: () => rootRouteImport,
 } as any)
 const QuickShareRoute = QuickShareRouteImport.update({
@@ -228,6 +234,7 @@ export interface FileRoutesByFullPath {
   '/organizacoes': typeof OrganizacoesRoute
   '/posts': typeof PostsRoute
   '/quick-share': typeof QuickShareRoute
+  '/roles': typeof RolesRoute
   '/rules': typeof RulesRoute
   '/schedule': typeof ScheduleRoute
   '/settings': typeof SettingsRouteWithChildren
@@ -262,6 +269,7 @@ export interface FileRoutesByTo {
   '/organizacoes': typeof OrganizacoesRoute
   '/posts': typeof PostsRoute
   '/quick-share': typeof QuickShareRoute
+  '/roles': typeof RolesRoute
   '/rules': typeof RulesRoute
   '/schedule': typeof ScheduleRoute
   '/shared-links': typeof SharedLinksRoute
@@ -296,6 +304,7 @@ export interface FileRoutesById {
   '/organizacoes': typeof OrganizacoesRoute
   '/posts': typeof PostsRoute
   '/quick-share': typeof QuickShareRoute
+  '/roles': typeof RolesRoute
   '/rules': typeof RulesRoute
   '/schedule': typeof ScheduleRoute
   '/settings': typeof SettingsRouteWithChildren
@@ -332,6 +341,7 @@ export interface FileRouteTypes {
     | '/organizacoes'
     | '/posts'
     | '/quick-share'
+    | '/roles'
     | '/rules'
     | '/schedule'
     | '/settings'
@@ -366,6 +376,7 @@ export interface FileRouteTypes {
     | '/organizacoes'
     | '/posts'
     | '/quick-share'
+    | '/roles'
     | '/rules'
     | '/schedule'
     | '/shared-links'
@@ -399,6 +410,7 @@ export interface FileRouteTypes {
     | '/organizacoes'
     | '/posts'
     | '/quick-share'
+    | '/roles'
     | '/rules'
     | '/schedule'
     | '/settings'
@@ -434,6 +446,7 @@ export interface RootRouteChildren {
   OrganizacoesRoute: typeof OrganizacoesRoute
   PostsRoute: typeof PostsRoute
   QuickShareRoute: typeof QuickShareRoute
+  RolesRoute: typeof RolesRoute
   RulesRoute: typeof RulesRoute
   ScheduleRoute: typeof ScheduleRoute
   SettingsRoute: typeof SettingsRouteWithChildren
@@ -469,6 +482,13 @@ declare module '@tanstack/react-router' {
       path: '/rules'
       fullPath: '/rules'
       preLoaderRoute: typeof RulesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/roles': {
+      id: '/roles'
+      path: '/roles'
+      fullPath: '/roles'
+      preLoaderRoute: typeof RolesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/quick-share': {
@@ -721,6 +741,7 @@ const rootRouteChildren: RootRouteChildren = {
   OrganizacoesRoute: OrganizacoesRoute,
   PostsRoute: PostsRoute,
   QuickShareRoute: QuickShareRoute,
+  RolesRoute: RolesRoute,
   RulesRoute: RulesRoute,
   ScheduleRoute: ScheduleRoute,
   SettingsRoute: SettingsRouteWithChildren,
