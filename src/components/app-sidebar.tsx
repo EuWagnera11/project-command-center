@@ -70,6 +70,7 @@ export function AppSidebar() {
         {[
           { label: "Workspace", items: nav },
           { label: "Anúncios", items: ads },
+          { label: "IA & Automação", items: ia },
           { label: "Agência", items: agency },
           { label: "Sistema", items: system },
         ].map((group) => (
