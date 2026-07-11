@@ -88,11 +88,13 @@ export const mockCampaigns: MetaCampaign[] = [
   { id: "c3", ad_account_id: "act_4", ad_account_name: "CA - 001 LOJA ADS", name: "Advantage+ Shopping", status: "PAUSED", objective: "OUTCOME_SALES", lifetime_budget: 100000 },
 ];
 
+const ago = (minutes: number) => new Date(Date.now() - minutes * 60_000).toISOString();
+
 export const mockNotifications: Notification[] = [
-  { timestamp: iso(0, 13, 40), level: "info", title: "Publicação concluída", message: "@euwagnera — post #29 publicado com sucesso" },
-  { timestamp: iso(0, 12, 30), level: "warn", title: "Alerta Meta Ads", message: "Alto gasto detectado em CA 1 - LojaAds" },
-  { timestamp: iso(-1, 20, 15), level: "error", title: "Falha ao publicar", message: "@alvesconsultoriajuridica — sessão expirada" },
-  { timestamp: iso(-1, 8, 0), level: "info", title: "Novo agendamento", message: "3 posts agendados para 11/07" },
+  { timestamp: ago(12), level: "info", title: "Publicação concluída", message: "@euwagnera — post #29 publicado com sucesso" },
+  { timestamp: ago(48), level: "warn", title: "Alerta Meta Ads", message: "Alto gasto detectado em CA 1 - LojaAds" },
+  { timestamp: ago(60 * 5 + 10), level: "error", title: "Falha ao publicar", message: "@alvesconsultoriajuridica — sessão expirada" },
+  { timestamp: ago(60 * 18), level: "info", title: "Novo agendamento", message: "3 posts agendados para amanhã" },
 ];
 
 export const mockBotStatus: BotStatus = {
