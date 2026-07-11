@@ -24,6 +24,7 @@ import { Route as MediaToolsRouteImport } from './routes/media-tools'
 import { Route as MediaLibraryRouteImport } from './routes/media-library'
 import { Route as IntegrationsRouteImport } from './routes/integrations'
 import { Route as InboxRouteImport } from './routes/inbox'
+import { Route as ImageEditorRouteImport } from './routes/image-editor'
 import { Route as IdpRouteImport } from './routes/idp'
 import { Route as HistoryRouteImport } from './routes/history'
 import { Route as FreepikStudioRouteImport } from './routes/freepik-studio'
@@ -118,6 +119,11 @@ const IntegrationsRoute = IntegrationsRouteImport.update({
 const InboxRoute = InboxRouteImport.update({
   id: '/inbox',
   path: '/inbox',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ImageEditorRoute = ImageEditorRouteImport.update({
+  id: '/image-editor',
+  path: '/image-editor',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IdpRoute = IdpRouteImport.update({
@@ -238,6 +244,7 @@ export interface FileRoutesByFullPath {
   '/freepik-studio': typeof FreepikStudioRoute
   '/history': typeof HistoryRoute
   '/idp': typeof IdpRoute
+  '/image-editor': typeof ImageEditorRoute
   '/inbox': typeof InboxRoute
   '/integrations': typeof IntegrationsRoute
   '/media-library': typeof MediaLibraryRoute
@@ -275,6 +282,7 @@ export interface FileRoutesByTo {
   '/freepik-studio': typeof FreepikStudioRoute
   '/history': typeof HistoryRoute
   '/idp': typeof IdpRoute
+  '/image-editor': typeof ImageEditorRoute
   '/inbox': typeof InboxRoute
   '/integrations': typeof IntegrationsRoute
   '/media-library': typeof MediaLibraryRoute
@@ -312,6 +320,7 @@ export interface FileRoutesById {
   '/freepik-studio': typeof FreepikStudioRoute
   '/history': typeof HistoryRoute
   '/idp': typeof IdpRoute
+  '/image-editor': typeof ImageEditorRoute
   '/inbox': typeof InboxRoute
   '/integrations': typeof IntegrationsRoute
   '/media-library': typeof MediaLibraryRoute
@@ -351,6 +360,7 @@ export interface FileRouteTypes {
     | '/freepik-studio'
     | '/history'
     | '/idp'
+    | '/image-editor'
     | '/inbox'
     | '/integrations'
     | '/media-library'
@@ -388,6 +398,7 @@ export interface FileRouteTypes {
     | '/freepik-studio'
     | '/history'
     | '/idp'
+    | '/image-editor'
     | '/inbox'
     | '/integrations'
     | '/media-library'
@@ -424,6 +435,7 @@ export interface FileRouteTypes {
     | '/freepik-studio'
     | '/history'
     | '/idp'
+    | '/image-editor'
     | '/inbox'
     | '/integrations'
     | '/media-library'
@@ -462,6 +474,7 @@ export interface RootRouteChildren {
   FreepikStudioRoute: typeof FreepikStudioRoute
   HistoryRoute: typeof HistoryRoute
   IdpRoute: typeof IdpRoute
+  ImageEditorRoute: typeof ImageEditorRoute
   InboxRoute: typeof InboxRoute
   IntegrationsRoute: typeof IntegrationsRoute
   MediaLibraryRoute: typeof MediaLibraryRoute
@@ -585,6 +598,13 @@ declare module '@tanstack/react-router' {
       path: '/inbox'
       fullPath: '/inbox'
       preLoaderRoute: typeof InboxRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/image-editor': {
+      id: '/image-editor'
+      path: '/image-editor'
+      fullPath: '/image-editor'
+      preLoaderRoute: typeof ImageEditorRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/idp': {
@@ -773,6 +793,7 @@ const rootRouteChildren: RootRouteChildren = {
   FreepikStudioRoute: FreepikStudioRoute,
   HistoryRoute: HistoryRoute,
   IdpRoute: IdpRoute,
+  ImageEditorRoute: ImageEditorRoute,
   InboxRoute: InboxRoute,
   IntegrationsRoute: IntegrationsRoute,
   MediaLibraryRoute: MediaLibraryRoute,
