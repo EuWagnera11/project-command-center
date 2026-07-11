@@ -1,7 +1,7 @@
 import type {
   Post, Profile, Template, HashtagGroup, MetaAccount, MetaCampaign,
   MetaKPI, MetaComparison, MetaAlert, Notification, BotStatus, Settings, Backup,
-  SharedLink, Organization,
+  SharedLink, Organization, AIAction, AdSetWithAds, MarketingSkill,
 } from "./types";
 
 // -------- Profiles --------
