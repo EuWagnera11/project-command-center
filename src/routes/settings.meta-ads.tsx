@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
-import { Eye, MousePointerClick, DollarSign, TrendingUp, Zap, Save, RefreshCcw } from "lucide-react";
+import { Eye, MousePointerClick, DollarSign, TrendingUp, Zap, Save, RefreshCcw, AlertTriangle } from "lucide-react";
 import {
   LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, BarChart, Bar, Legend,
 } from "recharts";
@@ -27,23 +27,27 @@ export const Route = createFileRoute("/settings/meta-ads")({
 
 function MetaAdsPage() {
   const [creds, setCreds] = useState({ access_token: "", ad_account_id: "" });
-  const { data: kpis } = useQuery({ queryKey: ["meta-kpis"], queryFn: () => api.getMetaKPIs() });
-  const { data: campaigns } = useQuery({ queryKey: ["meta-camps"], queryFn: () => api.getMetaCampaigns() });
-  const { data: daily } = useQuery({ queryKey: ["meta-daily"], queryFn: () => api.getMetaDaily() });
+  const { data: kpis } = useQuery({ queryKey: ["meta-kpis"], queryFn: () => api.metaKPI() });
+  const { data: campaigns } = useQuery({ queryKey: ["meta-camps"], queryFn: () => api.metaCampaigns() });
+  const { data: daily } = useQuery({ queryKey: ["meta-daily"], queryFn: () => api.metaTimeseries() });
+  const { data: alerts } = useQuery({ queryKey: ["meta-alerts"], queryFn: () => api.metaAlerts() });
 
-  const trend = useMemo(() => (daily ?? []).map((d) => ({
-    date: d.date.slice(5),
-    Gasto: d.spend,
-    Impressões: d.impressions / 100,
-    Cliques: d.clicks,
-  })), [daily]);
+  const trend = useMemo(
+    () => (daily ?? []).map((d) => ({
+      date: d.label,
+      Gasto: d.spend,
+      Impressões: d.impressions,
+      Cliques: d.clicks,
+    })),
+    [daily],
+  );
 
   const kpiCards = kpis ? [
-    { label: "Impressões", value: kpis.impressions.toLocaleString("pt-BR"), icon: Eye, color: "text-info" },
-    { label: "Cliques", value: kpis.clicks.toLocaleString("pt-BR"), icon: MousePointerClick, color: "text-primary" },
-    { label: "Gasto", value: `R$ ${kpis.spend.toFixed(2)}`, icon: DollarSign, color: "text-success" },
-    { label: "CTR", value: `${kpis.ctr.toFixed(2)}%`, icon: TrendingUp, color: "text-warning-foreground" },
-    { label: "CPC", value: `R$ ${kpis.cpc.toFixed(2)}`, icon: Zap, color: "text-accent" },
+    { label: "Impressões", value: kpis.period_impressions.toLocaleString("pt-BR"), icon: Eye, color: "text-info" },
+    { label: "Cliques", value: kpis.period_clicks.toLocaleString("pt-BR"), icon: MousePointerClick, color: "text-primary" },
+    { label: "Gasto", value: `R$ ${kpis.period_spend.toFixed(2)}`, icon: DollarSign, color: "text-success" },
+    { label: "CTR", value: `${kpis.avg_ctr.toFixed(2)}%`, icon: TrendingUp, color: "text-warning-foreground" },
+    { label: "CPC", value: `R$ ${kpis.avg_cpc.toFixed(2)}`, icon: Zap, color: "text-accent" },
   ] : [];
 
   return (
@@ -70,6 +74,23 @@ function MetaAdsPage() {
             </Card>
           ))}
         </div>
+
+        {alerts && alerts.length > 0 && (
+          <Card className="border-warning/40 bg-warning/5 p-4">
+            <div className="mb-2 flex items-center gap-2 text-sm font-semibold">
+              <AlertTriangle className="h-4 w-4 text-warning-foreground" />
+              Alertas ativos ({alerts.length})
+            </div>
+            <div className="space-y-2">
+              {alerts.map((a) => (
+                <div key={a.id} className="flex items-center justify-between rounded-md bg-background/60 p-2 text-sm">
+                  <span>{a.message}</span>
+                  <Badge variant="outline">{a.alert_type}</Badge>
+                </div>
+              ))}
+            </div>
+          </Card>
+        )}
 
         <div className="grid gap-6 lg:grid-cols-2">
           <Card className="p-5">
@@ -106,28 +127,32 @@ function MetaAdsPage() {
         </div>
 
         <Card className="p-5">
-          <h3 className="mb-4 text-sm font-semibold">Campanhas ativas</h3>
+          <h3 className="mb-4 text-sm font-semibold">Campanhas</h3>
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead className="border-b text-left text-xs uppercase text-muted-foreground">
                 <tr>
                   <th className="pb-2">Campanha</th>
+                  <th className="pb-2">Conta</th>
                   <th className="pb-2">Status</th>
-                  <th className="pb-2 text-right">Impressões</th>
-                  <th className="pb-2 text-right">Cliques</th>
-                  <th className="pb-2 text-right">CTR</th>
-                  <th className="pb-2 text-right">Gasto</th>
+                  <th className="pb-2">Objetivo</th>
+                  <th className="pb-2 text-right">Orçamento</th>
                 </tr>
               </thead>
               <tbody className="divide-y">
                 {campaigns?.map((c) => (
                   <tr key={c.id}>
                     <td className="py-3 font-medium">{c.name}</td>
+                    <td className="text-muted-foreground">{c.ad_account_name}</td>
                     <td><Badge variant={c.status === "ACTIVE" ? "default" : "secondary"}>{c.status}</Badge></td>
-                    <td className="text-right tabular-nums">{c.impressions.toLocaleString("pt-BR")}</td>
-                    <td className="text-right tabular-nums">{c.clicks.toLocaleString("pt-BR")}</td>
-                    <td className="text-right tabular-nums">{c.ctr.toFixed(2)}%</td>
-                    <td className="text-right tabular-nums font-semibold">R$ {c.spend.toFixed(2)}</td>
+                    <td className="text-xs text-muted-foreground">{c.objective}</td>
+                    <td className="text-right tabular-nums font-semibold">
+                      {c.daily_budget
+                        ? `R$ ${(c.daily_budget / 100).toFixed(2)}/dia`
+                        : c.lifetime_budget
+                          ? `R$ ${(c.lifetime_budget / 100).toFixed(2)} total`
+                          : "—"}
+                    </td>
                   </tr>
                 ))}
               </tbody>
