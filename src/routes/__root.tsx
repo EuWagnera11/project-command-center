@@ -146,7 +146,8 @@ function RootComponent() {
                     <StatusPill tone="success">Meta Ads · 60s</StatusPill>
                     <StatusPill tone="warning">IG 2/3</StatusPill>
                   </div>
-                  <div className="ml-auto flex items-center gap-1">
+                  <div className="ml-auto flex items-center gap-2">
+                    <CommandPaletteTrigger />
                     <span className="hidden text-xs text-muted-foreground sm:inline">Atualizado agora</span>
                     <NotificationsBell />
                   </div>
