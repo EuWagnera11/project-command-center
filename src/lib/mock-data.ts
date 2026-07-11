@@ -291,3 +291,88 @@ export const mockFreepik: FreepikImage[] = Array.from({ length: 12 }, (_, i) => 
   source: (i < 6 ? "freepik" : i < 10 ? "freepik-ai" : "fallback-picsum") as "freepik" | "freepik-ai" | "fallback-picsum",
 }));
 
+
+// ---------- Canva + IdP ----------
+import type {
+  CanvaDesign, CanvaIntentLog, CanvaAppStatus,
+  OAuthClient, OAuthUser, OAuthToken, IdPStatus,
+} from "./types";
+
+const canvaTypes: CanvaDesign["type"][] = ["poster", "social", "video", "doc"];
+export const mockCanvaDesigns: CanvaDesign[] = Array.from({ length: 9 }, (_, i) => ({
+  id: `DAF${(1000 + i).toString(36).toUpperCase()}`,
+  name: [
+    "Promo Black Friday", "Feed Semanal — Loja X", "Reel motivacional",
+    "Story lançamento", "Post carrossel dicas", "Banner campanha",
+    "Post produto novo", "Story enquete", "Feed institucional",
+  ][i],
+  thumbnail_url: `https://picsum.photos/seed/canva-${i}/400/500`,
+  type: canvaTypes[i % 4],
+  status: i % 3 === 0 ? "published" : "draft",
+  updated_at: ago(60 * (i + 1)),
+}));
+
+export const mockCanvaIntents: CanvaIntentLog[] = [
+  { id: 1, intent: "publish", design_id: mockCanvaDesigns[0].id, design_name: mockCanvaDesigns[0].name, operation: "publish", status: "ok", created_at: ago(120) },
+  { id: 2, intent: "design", design_id: mockCanvaDesigns[1].id, design_name: mockCanvaDesigns[1].name, operation: "edit", status: "ok", created_at: ago(400) },
+  { id: 3, intent: "data", design_id: mockCanvaDesigns[2].id, design_name: mockCanvaDesigns[2].name, operation: "read", status: "ok", created_at: ago(900) },
+  { id: 4, intent: "publish", design_id: mockCanvaDesigns[3].id, design_name: mockCanvaDesigns[3].name, operation: "publish", status: "error", created_at: ago(1500) },
+];
+
+export const mockCanvaStatus: CanvaAppStatus = {
+  app_id: "AAHAAH8NpAk",
+  connected: true,
+  scopes: ["design:read", "design:write", "asset:read", "publish:write"],
+  webhook_url: "http://localhost:5000/canva-webhook",
+  last_sync: ago(60),
+  designs_count: mockCanvaDesigns.length,
+};
+
+export const mockOAuthClients: OAuthClient[] = [
+  {
+    id: 1, client_id: "instabot-canva-app",
+    client_secret: "sk_live_" + "•".repeat(56),
+    name: "Canva Apps SDK",
+    redirect_uris: ["https://www.canva.com/apps/oauth/authorized"],
+    scopes: ["openid", "profile", "email", "design:read"],
+    is_active: true, created_at: ago(60 * 60 * 24 * 30),
+  },
+  {
+    id: 2, client_id: "zapier-integration",
+    client_secret: "sk_live_" + "•".repeat(56),
+    name: "Zapier",
+    redirect_uris: ["https://zapier.com/dashboard/auth/oauth/return/App123456CLIAPI/"],
+    scopes: ["openid", "profile", "posts:read", "posts:write"],
+    is_active: true, created_at: ago(60 * 60 * 24 * 10),
+  },
+  {
+    id: 3, client_id: "cli-tool-dev",
+    client_secret: "sk_test_" + "•".repeat(56),
+    name: "CLI Tool (dev)",
+    redirect_uris: ["http://localhost:8765/callback"],
+    scopes: ["openid", "posts:read"],
+    is_active: false, created_at: ago(60 * 60 * 24 * 3),
+  },
+];
+
+export const mockOAuthUsers: OAuthUser[] = [
+  { username: "wagner", display_name: "Wagner Constante", is_admin: true, created_at: ago(60 * 60 * 24 * 60) },
+  { username: "demo", display_name: "Demo User", is_admin: false, created_at: ago(60 * 60 * 24 * 15) },
+];
+
+export const mockOAuthTokens: OAuthToken[] = [
+  { id: 1, client_id: "instabot-canva-app", username: "wagner", scopes: ["openid", "design:read"], issued_at: ago(300), expires_at: iso(0, 1, 0), revoked: false },
+  { id: 2, client_id: "zapier-integration", username: "wagner", scopes: ["posts:read", "posts:write"], issued_at: ago(60 * 60 * 3), expires_at: iso(0, 0, 30), revoked: false },
+  { id: 3, client_id: "cli-tool-dev", username: "demo", scopes: ["posts:read"], issued_at: ago(60 * 60 * 24 * 5), expires_at: iso(-4, 0, 0), revoked: true },
+];
+
+export const mockIdPStatus: IdPStatus = {
+  enabled: true,
+  issuer: "http://localhost:5000",
+  jwks_url: "http://localhost:5000/.well-known/jwks.json",
+  authorize_url: "http://localhost:5000/oauth/authorize",
+  token_url: "http://localhost:5000/oauth/token",
+  active_tokens: mockOAuthTokens.filter((t) => !t.revoked).length,
+  clients_count: mockOAuthClients.length,
+  users_count: mockOAuthUsers.length,
+};
