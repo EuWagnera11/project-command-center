@@ -33,14 +33,19 @@ const ads = [
 const ia = [
   { title: "IA Manager", url: "/ai-manager", icon: Bot },
   { title: "Chat IA", url: "/ai-chat", icon: MessageSquare },
+  { title: "AI Templates", url: "/ai-templates", icon: LayoutTemplate },
+  { title: "Advanced AI", url: "/advanced-ai", icon: Brain },
   { title: "Automações", url: "/rules", icon: Workflow },
   { title: "Aprovações", url: "/approvals", icon: CheckCheck },
   { title: "A/B Tests", url: "/ab-tests", icon: FlaskConical },
   { title: "Freepik Studio", url: "/freepik-studio", icon: Sparkles },
+  { title: "Editor Imagem", url: "/image-editor", icon: Wand2 },
+  { title: "Editor Vídeo", url: "/video-editor", icon: Film },
   { title: "Histórico", url: "/history", icon: History },
 ] as const;
 
 const integrations = [
+  { title: "Hub Integrações", url: "/integrations", icon: Plug },
   { title: "Canva Studio", url: "/canva-studio", icon: Palette },
   { title: "IdP OAuth2", url: "/idp", icon: KeyRound },
 ] as const;
@@ -53,6 +58,10 @@ const agency = [
 
 const system = [
   { title: "Configurações", url: "/settings", icon: Settings },
+  { title: "Roles & Times", url: "/roles", icon: Users },
+  { title: "Ferramentas Mídia", url: "/media-tools", icon: Wrench },
+  { title: "Preview Realista", url: "/preview", icon: Eye },
+  { title: "Exports", url: "/exports", icon: Download },
   { title: "Audit Logs", url: "/audit", icon: ShieldCheck },
 ] as const;
 
