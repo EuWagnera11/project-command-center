@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
-import { Trash2, Globe, LogOut, RefreshCw, Plus, Key, FolderOpen, Search } from "lucide-react";
+import { Trash2, Globe, LogOut, RefreshCw, Plus, Key, FolderOpen, Search, Database, Download, Upload } from "lucide-react";
 import { toast } from "sonner";
 
 import { api } from "@/lib/api";
@@ -43,6 +43,7 @@ function SettingsPage() {
   const { data: settings } = useQuery({ queryKey: ["settings"], queryFn: () => api.getSettings() });
   const { data: templates, refetch: refetchTpl } = useQuery({ queryKey: ["templates"], queryFn: () => api.listTemplates() });
   const { data: hashtags, refetch: refetchHash } = useQuery({ queryKey: ["hashtags"], queryFn: () => api.listHashtags() });
+  const { data: backups, refetch: refetchBackups } = useQuery({ queryKey: ["backups"], queryFn: () => api.listBackups() });
 
   const [newProfile, setNewProfile] = useState({ name: "", instagram_username: "" });
   const [mediaFolder, setMediaFolder] = useState("");
@@ -68,6 +69,7 @@ function SettingsPage() {
             <TabsTrigger value="media">Mídia</TabsTrigger>
             <TabsTrigger value="templates">Templates</TabsTrigger>
             <TabsTrigger value="hashtags">Hashtags</TabsTrigger>
+            <TabsTrigger value="backups">Backups</TabsTrigger>
             <TabsTrigger value="system">Sistema</TabsTrigger>
           </TabsList>
 
