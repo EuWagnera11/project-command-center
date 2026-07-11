@@ -476,4 +476,172 @@ export const mockVideoEditorTools: VideoEditorTool[] = [
   { id: "detect-cuts", label: "Detectar Cortes", description: "Marcadores de mudança de cena" },
   { id: "run-pipeline", label: "Pipeline Completa", description: "Analisa + corta + normaliza áudio" },
   { id: "premiere-export", label: "Instruções Premiere", description: "Exporta XML/EDL para Adobe Premiere" },
+
+// -------- Calendar V2 --------
+export const availablePeriods: CalendarV2PeriodOption[] = [
+  { id: "today", label: "Hoje" },
+  { id: "yesterday", label: "Ontem" },
+  { id: "7d", label: "Últimos 7 dias" },
+  { id: "15d", label: "Últimos 15 dias" },
+  { id: "30d", label: "Últimos 30 dias" },
+  { id: "90d", label: "Últimos 90 dias" },
+  { id: "week", label: "Esta semana" },
+  { id: "month", label: "Este mês" },
+  { id: "quarter", label: "Trimestre" },
+  { id: "custom", label: "Personalizado" },
 ];
+
+const periodLabels: Record<CalendarV2Period, string> = {
+  today: "Hoje", yesterday: "Ontem", "7d": "7 dias", "15d": "15 dias",
+  "30d": "30 dias", "90d": "90 dias", week: "Esta semana",
+  month: "Este mês", quarter: "Trimestre", custom: "Personalizado",
+};
+
+// mutable store for drag/quick-schedule so mock reflects mutations
+export const calendarPosts: Post[] = (() => {
+  const extra: Post[] = [];
+  let idSeed = 100;
+  const base = new Date(); base.setHours(0, 0, 0, 0);
+  const captions = [
+    "Nova campanha rolando 🔥", "Bastidores do estúdio", "Case do cliente publicado",
+    "Story de review", "Reel viral em produção", "Carrossel de dicas", "Post educativo",
+  ];
+  for (let i = -30; i <= 30; i++) {
+    if (Math.random() < 0.55) {
+      const d = new Date(base); d.setDate(d.getDate() + i);
+      const hour = 8 + Math.floor(Math.random() * 14);
+      d.setHours(hour, [0, 15, 30, 45][Math.floor(Math.random() * 4)]);
+      const profile = mockProfiles[Math.floor(Math.random() * mockProfiles.length)];
+      const types: Post["post_type"][] = ["photo", "reel", "story", "carousel"];
+      const status: Post["status"] = i < 0 ? (Math.random() < 0.1 ? "failed" : "published") : "pending";
+      extra.push({
+        id: idSeed++,
+        profile_id: profile.id,
+        media_path: `/uploads/mock-${idSeed}.jpg`,
+        post_type: types[Math.floor(Math.random() * types.length)],
+        caption: captions[Math.floor(Math.random() * captions.length)],
+        scheduled_at: d.toISOString(),
+        status,
+        profile_name: profile.name,
+        instagram_username: profile.instagram_username,
+      });
+    }
+  }
+  return [...mockPosts, ...extra];
+})();
+
+function resolvePeriodRange(q: CalendarV2Query): { start: Date; end: Date } {
+  const now = new Date();
+  const startOf = (d: Date) => { const x = new Date(d); x.setHours(0, 0, 0, 0); return x; };
+  const endOf = (d: Date) => { const x = new Date(d); x.setHours(23, 59, 59, 999); return x; };
+  switch (q.period) {
+    case "today": return { start: startOf(now), end: endOf(now) };
+    case "yesterday": { const y = new Date(now); y.setDate(y.getDate() - 1); return { start: startOf(y), end: endOf(y) }; }
+    case "7d": case "15d": case "30d": case "90d": {
+      const n = parseInt(q.period, 10);
+      const s = new Date(now); s.setDate(s.getDate() - n);
+      return { start: startOf(s), end: endOf(now) };
+    }
+    case "week": { const s = new Date(now); s.setDate(s.getDate() - s.getDay()); return { start: startOf(s), end: endOf(now) }; }
+    case "month": { const s = new Date(now.getFullYear(), now.getMonth(), 1); const e = new Date(now.getFullYear(), now.getMonth() + 1, 0); return { start: startOf(s), end: endOf(e) }; }
+    case "quarter": { const qStart = Math.floor(now.getMonth() / 3) * 3; const s = new Date(now.getFullYear(), qStart, 1); const e = new Date(now.getFullYear(), qStart + 3, 0); return { start: startOf(s), end: endOf(e) }; }
+    case "custom": {
+      const s = q.start ? new Date(q.start) : startOf(now);
+      const e = q.end ? new Date(q.end) : endOf(now);
+      return { start: startOf(s), end: endOf(e) };
+    }
+  }
+}
+
+export function buildCalendarV2(query: CalendarV2Query): CalendarV2Response {
+  const { start, end } = resolvePeriodRange(query);
+  const filtered = calendarPosts.filter((p) => {
+    const t = new Date(p.scheduled_at);
+    if (t < start || t > end) return false;
+    if (query.profile_id && String(p.profile_id) !== String(query.profile_id)) return false;
+    if (query.type && p.post_type !== query.type) return false;
+    if (query.status && p.status !== query.status) return false;
+    return true;
+  });
+
+  const grouped: Record<string, CalendarV2Post[]> = {};
+  const byType: Record<string, number> = {};
+  const byStatus: Record<string, number> = {};
+  const hourCount: Record<string, number> = {};
+  const dayCount: Record<string, number> = {};
+
+  for (const p of filtered) {
+    const d = new Date(p.scheduled_at);
+    const key = d.toISOString().slice(0, 10);
+    const hh = d.getHours().toString().padStart(2, "0");
+    const time = `${hh}:${d.getMinutes().toString().padStart(2, "0")}`;
+    const dayName = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"][d.getDay()];
+    (grouped[key] ||= []).push({
+      id: p.id, time, type: p.post_type, status: p.status,
+      caption: p.caption, profile_name: p.profile_name ?? "",
+    });
+    byType[p.post_type] = (byType[p.post_type] ?? 0) + 1;
+    byStatus[p.status] = (byStatus[p.status] ?? 0) + 1;
+    hourCount[`${hh}h`] = (hourCount[`${hh}h`] ?? 0) + 1;
+    dayCount[dayName] = (dayCount[dayName] ?? 0) + 1;
+  }
+  Object.values(grouped).forEach((arr) => arr.sort((a, b) => a.time.localeCompare(b.time)));
+
+  const bestHour = Object.entries(hourCount).sort((a, b) => b[1] - a[1])[0];
+  const bestDay = Object.entries(dayCount).sort((a, b) => b[1] - a[1])[0];
+  const label = periodLabels[query.period];
+
+  return {
+    success: true,
+    period: query.period,
+    period_label: label,
+    view: query.view ?? "day",
+    stats: {
+      total: filtered.length,
+      by_type: byType,
+      by_status: byStatus,
+      best_hour: bestHour?.[0] ?? null,
+      best_day: bestDay?.[0] ?? null,
+      best_hour_count: bestHour?.[1] ?? 0,
+      best_day_count: bestDay?.[1] ?? 0,
+      period_label: label,
+    },
+    grouped,
+    total: filtered.length,
+    profiles: mockProfiles.map((p) => ({ id: p.id, name: p.name })),
+    available_periods: availablePeriods,
+    custom_range: query.period === "custom" && query.start && query.end
+      ? { start: query.start, end: query.end } : null,
+  };
+}
+
+export function moveCalendarPost(postId: number, newDate: string, newTime?: string) {
+  const p = calendarPosts.find((x) => x.id === postId);
+  if (!p) return { success: false as const };
+  const existing = new Date(p.scheduled_at);
+  const [y, m, dd] = newDate.split("-").map(Number);
+  const target = new Date(existing);
+  target.setFullYear(y, (m ?? 1) - 1, dd ?? 1);
+  if (newTime) {
+    const [hh, mm] = newTime.split(":").map(Number);
+    target.setHours(hh ?? 0, mm ?? 0, 0, 0);
+  }
+  p.scheduled_at = target.toISOString();
+  return { success: true as const, post_id: postId, new_date: p.scheduled_at };
+}
+
+export function quickScheduleCalendar(body: QuickScheduleInput) {
+  const [y, m, d] = body.date.split("-").map(Number);
+  const [hh, mm] = body.time.split(":").map(Number);
+  const when = new Date(y, (m ?? 1) - 1, d ?? 1, hh ?? 12, mm ?? 0);
+  const profile = mockProfiles.find((p) => p.id === body.profile_id) ?? mockProfiles[0];
+  const id = Math.max(0, ...calendarPosts.map((p) => p.id)) + 1;
+  const post: Post = {
+    id, profile_id: body.profile_id, media_path: body.media_path || "/uploads/quick.jpg",
+    post_type: body.post_type, caption: body.caption, scheduled_at: when.toISOString(),
+    status: "pending", profile_name: profile.name, instagram_username: profile.instagram_username,
+  };
+  calendarPosts.unshift(post);
+  return { success: true as const, post_id: id, scheduled_at: when.toISOString() };
+}
+
