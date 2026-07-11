@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as VideoEditorRouteImport } from './routes/video-editor'
 import { Route as SharedLinksRouteImport } from './routes/shared-links'
 import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as ScheduleRouteImport } from './routes/schedule'
@@ -46,6 +47,11 @@ import { Route as SettingsMetaAdsRouteImport } from './routes/settings.meta-ads'
 import { Route as MetaCreativesCampaignIdRouteImport } from './routes/meta-creatives.$campaignId'
 import { Route as ClientTokenRouteImport } from './routes/client.$token'
 
+const VideoEditorRoute = VideoEditorRouteImport.update({
+  id: '/video-editor',
+  path: '/video-editor',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SharedLinksRoute = SharedLinksRouteImport.update({
   id: '/shared-links',
   path: '/shared-links',
@@ -260,6 +266,7 @@ export interface FileRoutesByFullPath {
   '/schedule': typeof ScheduleRoute
   '/settings': typeof SettingsRouteWithChildren
   '/shared-links': typeof SharedLinksRoute
+  '/video-editor': typeof VideoEditorRoute
   '/client/$token': typeof ClientTokenRoute
   '/meta-creatives/$campaignId': typeof MetaCreativesCampaignIdRoute
   '/settings/meta-ads': typeof SettingsMetaAdsRoute
@@ -297,6 +304,7 @@ export interface FileRoutesByTo {
   '/rules': typeof RulesRoute
   '/schedule': typeof ScheduleRoute
   '/shared-links': typeof SharedLinksRoute
+  '/video-editor': typeof VideoEditorRoute
   '/client/$token': typeof ClientTokenRoute
   '/meta-creatives/$campaignId': typeof MetaCreativesCampaignIdRoute
   '/settings/meta-ads': typeof SettingsMetaAdsRoute
@@ -336,6 +344,7 @@ export interface FileRoutesById {
   '/schedule': typeof ScheduleRoute
   '/settings': typeof SettingsRouteWithChildren
   '/shared-links': typeof SharedLinksRoute
+  '/video-editor': typeof VideoEditorRoute
   '/client/$token': typeof ClientTokenRoute
   '/meta-creatives/$campaignId': typeof MetaCreativesCampaignIdRoute
   '/settings/meta-ads': typeof SettingsMetaAdsRoute
@@ -376,6 +385,7 @@ export interface FileRouteTypes {
     | '/schedule'
     | '/settings'
     | '/shared-links'
+    | '/video-editor'
     | '/client/$token'
     | '/meta-creatives/$campaignId'
     | '/settings/meta-ads'
@@ -413,6 +423,7 @@ export interface FileRouteTypes {
     | '/rules'
     | '/schedule'
     | '/shared-links'
+    | '/video-editor'
     | '/client/$token'
     | '/meta-creatives/$campaignId'
     | '/settings/meta-ads'
@@ -451,6 +462,7 @@ export interface FileRouteTypes {
     | '/schedule'
     | '/settings'
     | '/shared-links'
+    | '/video-editor'
     | '/client/$token'
     | '/meta-creatives/$campaignId'
     | '/settings/meta-ads'
@@ -490,11 +502,19 @@ export interface RootRouteChildren {
   ScheduleRoute: typeof ScheduleRoute
   SettingsRoute: typeof SettingsRouteWithChildren
   SharedLinksRoute: typeof SharedLinksRoute
+  VideoEditorRoute: typeof VideoEditorRoute
   ClientTokenRoute: typeof ClientTokenRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/video-editor': {
+      id: '/video-editor'
+      path: '/video-editor'
+      fullPath: '/video-editor'
+      preLoaderRoute: typeof VideoEditorRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/shared-links': {
       id: '/shared-links'
       path: '/shared-links'
@@ -809,6 +829,7 @@ const rootRouteChildren: RootRouteChildren = {
   ScheduleRoute: ScheduleRoute,
   SettingsRoute: SettingsRouteWithChildren,
   SharedLinksRoute: SharedLinksRoute,
+  VideoEditorRoute: VideoEditorRoute,
   ClientTokenRoute: ClientTokenRoute,
 }
 export const routeTree = rootRouteImport
