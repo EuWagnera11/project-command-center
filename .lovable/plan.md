@@ -1,45 +1,61 @@
-Sim, análise completa dos 4 MDs (INSTRUCOES_LOVABLE-5, PARTE_10, PARTE_11, PROMPT_BACKEND) confrontada com o código atual. Abaixo o plano para fechar 100% da spec.
+## Objetivo
+Fechar 100% das specs implementando as 5 features finais do `PARTE_FINAL_MARKETING.md` (front-only, com mocks realistas seguindo o padrão atual).
 
-## Estado atual
-8 rotas base + design system + tipos + mock API prontos. Falta a "camada viva" (SSE/realtime, drag&drop, login browser), features avançadas (backups, smart schedule, IA tom visual) e a PARTE 10 inteira (sharing + multi-agência).
+## Novas rotas
 
-## Fase 1 — Realtime & UX viva
-- Hook `useSSE` conectando em `/api/events` (fallback silencioso no modo mock).
-- Sino de notificações no header com drawer de histórico.
-- Status bar pulsante no dashboard (scheduler live).
-- `ConfirmDialog` global via hook (substitui `confirm()` nativo).
-- Skeletons e Empty states padronizados.
-- Sidebar drawer para mobile (< 768px).
-- Polling padronizado: dashboard 30s, posts 15s, meta 60s.
+### 1. `/ai-manager` — IA Campaign Manager
+- Lista de campanhas Meta Ads (1 por linha) com botão **🤖 Analisar**.
+- Ao analisar: card com métricas (Gasto, Impressões, Cliques, CTR) + sugestões coloridas por severity (high/info/ok).
+- Regras mockadas: CTR<0.5% → novo criativo; CTR>3% → escalar budget; CPC>R$5 → refinar público; spend>R$200 low impressions → segmentação; else "saudável".
+- Painel lateral **Ações Pendentes** com Aprovar / Rejeitar (com reason) / Feedback (rating 1-5 + texto).
+- Tabela histórica ao final (todas as ações com status).
 
-## Fase 2 — Fluxo Instagram completo
-- Modal "Login via Browser" com polling e estados `browser_login` / `2fa_pending` / `checkpoint`.
-- Enriquecer badges e ações da lista de contas em `/settings`.
+### 2. `/ai-chat` — Chat IA com RAG
+- UI estilo WhatsApp: bolhas user/assistant, typing indicator, auto-scroll, Enter envia.
+- Markdown rendering (react-markdown já no stack? senão adicionar).
+- 6 suggestion chips: Contas, Campanhas, Gasto 7d, Posts, Melhor CTR, Melhorias.
+- Mock: respostas baseadas em `mock-data` + skills faker; latência 800ms.
+- Chip lateral mostrando "14 skills carregadas" (lista expansível com os 14 nomes de `data/skills/*.md`).
 
-## Fase 3 — Editor e agenda inteligentes
-- Seletor visual de tom (cards com emoji) no `/schedule` e `/bulk`.
-- Smart Schedule: chamar `/api/schedule/suggest` e mostrar horários sugeridos como chips clicáveis.
-- Drag & drop em `/bulk` (reordenar itens) e `/calendar` (mover post entre dias) chamando `/api/posts/:id/reschedule`.
+### 3. `/history` — Histórico Consolidado
+- 3 colunas: Ações da IA (status colorido) · Notificações (timeline) · Posts recentes (tabela compacta).
+- Filtros de período (7d/30d/tudo).
 
-## Fase 4 — Dashboards completos
-- `/` — Hero Strip (5 mini-cards), Bento Grid (8 ações rápidas), tabela "Próximos Posts", coluna Atividade + Notificações conforme spec.
-- `/meta-dashboard` — completar para 10 KPIs, adicionar bloco "Relatório Semanal com IA" (`/api/meta-ads/report/weekly`).
-- Página/seção de Backups em `/settings` (listar, criar, restaurar).
+### 4. `/meta-creatives/$campaignId` — Preview de Criativos
+- Header gradient da campanha.
+- Cards de AdSets com border-left verde/amarelo (ativo/pausado).
+- Grid de Ads aninhados: image 140×140, título+body truncados, badge status.
+- Botão "voltar" para `/meta-dashboard`.
 
-## Fase 5 — PARTE 10 (Sharing + Multi-Agência)
-- Tipos novos: `SharedLink`, `Organization`, `ClientDashboardData`.
-- 14 endpoints em `api.ts` + mocks.
-- `/shared-links-manager` — CRUD, gerar token, copiar URL, senha, expiração, contador de views, ativar/desativar.
-- `/organizacoes` — CRUD agências + trocar agência ativa (Context global no root).
-- `/client/:token` — dashboard público read-only (sem sidebar), com header gradient, KPIs, campanhas, timeseries.
-- Novos itens na sidebar em grupo "Agência".
+### 5. `/quick-share` — Quick Share
+- Grid de contas Meta; cada card com botão **Gerar link** que cria SharedLink instantâneo e mostra URL + copy button + QR.
+
+## Tipos & API (`src/lib/types.ts` + `api.ts` + `mock-data.ts`)
+Adicionar:
+- `AIAction { id, type, campaign_id, description, severity, status: pending|approved|rejected|executed, created_at, feedback? }`
+- `AIAnalysis { campaign_id, metrics, suggestions: {severity, title, body}[] }`
+- `ChatMessage { role, content, ts }`
+- `MediaInfo { post_id, url, type, size }`
+- `AdSetWithAds { adset, ads: Ad[] }` / `Ad { id, name, title, body, image_url, status }`
+- Endpoints mockados: `analyzeCampaign`, `aiActions`, `approveAction`, `rejectAction`, `feedbackAction`, `aiChat`, `getHistory`, `postMedia`, `campaignAdsetsWithAds`.
+
+## Sidebar
+Novo grupo **IA & Automação**:
+- 🤖 IA Manager → `/ai-manager`
+- 💬 Chat IA → `/ai-chat`
+- 📜 Histórico → `/history`
+- 🎨 Criativos → `/meta-creatives` (redireciona para primeira campanha, ou lista)
+- ⚡ Quick Share → `/quick-share`
+
+## Dependências
+- Adicionar `react-markdown` (para Chat IA) e `qrcode.react` (para Quick Share) via `bun add`.
 
 ## Detalhes técnicos
-- Tudo continua front-only, com mocks realistas; ativa backend real via `VITE_API_URL`.
-- SSE usa `EventSource` nativo, encapsulado em hook com reconexão e no-op quando mock.
-- Drag & drop com `@dnd-kit/core` (leve, acessível).
-- Context de agência ativa persistido em `localStorage` e enviado como header `X-Org-Id` pelo `api.ts`.
-- Rota pública `/client/$token` fica fora do layout com sidebar (usa layout próprio).
+- Todas rotas seguem TanStack file-based routing com `head()` próprio, `errorComponent`, `notFoundComponent`.
+- Usar `useSuspenseQuery` + `queryOptions` no padrão já estabelecido.
+- Cards, tabelas e badges reutilizam shadcn existentes.
+- Segue tema dark-first já configurado; sem hardcoded colors.
 
 ## Fora de escopo
-Backend Flask, integrações reais Meta/OpenAI/Playwright — permanecem para o Claude Code no handoff.
+- Backend real (permanece Flask no Claude Code).
+- Persistência real de feedback/ações (só mock em memória com estado React Query).

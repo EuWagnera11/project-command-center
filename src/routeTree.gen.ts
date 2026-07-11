@@ -12,14 +12,20 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as SharedLinksRouteImport } from './routes/shared-links'
 import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as ScheduleRouteImport } from './routes/schedule'
+import { Route as QuickShareRouteImport } from './routes/quick-share'
 import { Route as PostsRouteImport } from './routes/posts'
 import { Route as OrganizacoesRouteImport } from './routes/organizacoes'
 import { Route as MetaDashboardRouteImport } from './routes/meta-dashboard'
+import { Route as MetaCreativesRouteImport } from './routes/meta-creatives'
+import { Route as HistoryRouteImport } from './routes/history'
 import { Route as CalendarRouteImport } from './routes/calendar'
 import { Route as BulkRouteImport } from './routes/bulk'
+import { Route as AiManagerRouteImport } from './routes/ai-manager'
+import { Route as AiChatRouteImport } from './routes/ai-chat'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as SettingsIndexRouteImport } from './routes/settings.index'
 import { Route as SettingsMetaAdsRouteImport } from './routes/settings.meta-ads'
+import { Route as MetaCreativesCampaignIdRouteImport } from './routes/meta-creatives.$campaignId'
 import { Route as ClientTokenRouteImport } from './routes/client.$token'
 
 const SharedLinksRoute = SharedLinksRouteImport.update({
@@ -37,6 +43,11 @@ const ScheduleRoute = ScheduleRouteImport.update({
   path: '/schedule',
   getParentRoute: () => rootRouteImport,
 } as any)
+const QuickShareRoute = QuickShareRouteImport.update({
+  id: '/quick-share',
+  path: '/quick-share',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PostsRoute = PostsRouteImport.update({
   id: '/posts',
   path: '/posts',
@@ -52,6 +63,16 @@ const MetaDashboardRoute = MetaDashboardRouteImport.update({
   path: '/meta-dashboard',
   getParentRoute: () => rootRouteImport,
 } as any)
+const MetaCreativesRoute = MetaCreativesRouteImport.update({
+  id: '/meta-creatives',
+  path: '/meta-creatives',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HistoryRoute = HistoryRouteImport.update({
+  id: '/history',
+  path: '/history',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CalendarRoute = CalendarRouteImport.update({
   id: '/calendar',
   path: '/calendar',
@@ -60,6 +81,16 @@ const CalendarRoute = CalendarRouteImport.update({
 const BulkRoute = BulkRouteImport.update({
   id: '/bulk',
   path: '/bulk',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AiManagerRoute = AiManagerRouteImport.update({
+  id: '/ai-manager',
+  path: '/ai-manager',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AiChatRoute = AiChatRouteImport.update({
+  id: '/ai-chat',
+  path: '/ai-chat',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -77,6 +108,11 @@ const SettingsMetaAdsRoute = SettingsMetaAdsRouteImport.update({
   path: '/meta-ads',
   getParentRoute: () => SettingsRoute,
 } as any)
+const MetaCreativesCampaignIdRoute = MetaCreativesCampaignIdRouteImport.update({
+  id: '/$campaignId',
+  path: '/$campaignId',
+  getParentRoute: () => MetaCreativesRoute,
+} as any)
 const ClientTokenRoute = ClientTokenRouteImport.update({
   id: '/client/$token',
   path: '/client/$token',
@@ -85,43 +121,61 @@ const ClientTokenRoute = ClientTokenRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/ai-chat': typeof AiChatRoute
+  '/ai-manager': typeof AiManagerRoute
   '/bulk': typeof BulkRoute
   '/calendar': typeof CalendarRoute
+  '/history': typeof HistoryRoute
+  '/meta-creatives': typeof MetaCreativesRouteWithChildren
   '/meta-dashboard': typeof MetaDashboardRoute
   '/organizacoes': typeof OrganizacoesRoute
   '/posts': typeof PostsRoute
+  '/quick-share': typeof QuickShareRoute
   '/schedule': typeof ScheduleRoute
   '/settings': typeof SettingsRouteWithChildren
   '/shared-links': typeof SharedLinksRoute
   '/client/$token': typeof ClientTokenRoute
+  '/meta-creatives/$campaignId': typeof MetaCreativesCampaignIdRoute
   '/settings/meta-ads': typeof SettingsMetaAdsRoute
   '/settings/': typeof SettingsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/ai-chat': typeof AiChatRoute
+  '/ai-manager': typeof AiManagerRoute
   '/bulk': typeof BulkRoute
   '/calendar': typeof CalendarRoute
+  '/history': typeof HistoryRoute
+  '/meta-creatives': typeof MetaCreativesRouteWithChildren
   '/meta-dashboard': typeof MetaDashboardRoute
   '/organizacoes': typeof OrganizacoesRoute
   '/posts': typeof PostsRoute
+  '/quick-share': typeof QuickShareRoute
   '/schedule': typeof ScheduleRoute
   '/shared-links': typeof SharedLinksRoute
   '/client/$token': typeof ClientTokenRoute
+  '/meta-creatives/$campaignId': typeof MetaCreativesCampaignIdRoute
   '/settings/meta-ads': typeof SettingsMetaAdsRoute
   '/settings': typeof SettingsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/ai-chat': typeof AiChatRoute
+  '/ai-manager': typeof AiManagerRoute
   '/bulk': typeof BulkRoute
   '/calendar': typeof CalendarRoute
+  '/history': typeof HistoryRoute
+  '/meta-creatives': typeof MetaCreativesRouteWithChildren
   '/meta-dashboard': typeof MetaDashboardRoute
   '/organizacoes': typeof OrganizacoesRoute
   '/posts': typeof PostsRoute
+  '/quick-share': typeof QuickShareRoute
   '/schedule': typeof ScheduleRoute
   '/settings': typeof SettingsRouteWithChildren
   '/shared-links': typeof SharedLinksRoute
   '/client/$token': typeof ClientTokenRoute
+  '/meta-creatives/$campaignId': typeof MetaCreativesCampaignIdRoute
   '/settings/meta-ads': typeof SettingsMetaAdsRoute
   '/settings/': typeof SettingsIndexRoute
 }
@@ -129,53 +183,76 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/ai-chat'
+    | '/ai-manager'
     | '/bulk'
     | '/calendar'
+    | '/history'
+    | '/meta-creatives'
     | '/meta-dashboard'
     | '/organizacoes'
     | '/posts'
+    | '/quick-share'
     | '/schedule'
     | '/settings'
     | '/shared-links'
     | '/client/$token'
+    | '/meta-creatives/$campaignId'
     | '/settings/meta-ads'
     | '/settings/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/ai-chat'
+    | '/ai-manager'
     | '/bulk'
     | '/calendar'
+    | '/history'
+    | '/meta-creatives'
     | '/meta-dashboard'
     | '/organizacoes'
     | '/posts'
+    | '/quick-share'
     | '/schedule'
     | '/shared-links'
     | '/client/$token'
+    | '/meta-creatives/$campaignId'
     | '/settings/meta-ads'
     | '/settings'
   id:
     | '__root__'
     | '/'
+    | '/ai-chat'
+    | '/ai-manager'
     | '/bulk'
     | '/calendar'
+    | '/history'
+    | '/meta-creatives'
     | '/meta-dashboard'
     | '/organizacoes'
     | '/posts'
+    | '/quick-share'
     | '/schedule'
     | '/settings'
     | '/shared-links'
     | '/client/$token'
+    | '/meta-creatives/$campaignId'
     | '/settings/meta-ads'
     | '/settings/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AiChatRoute: typeof AiChatRoute
+  AiManagerRoute: typeof AiManagerRoute
   BulkRoute: typeof BulkRoute
   CalendarRoute: typeof CalendarRoute
+  HistoryRoute: typeof HistoryRoute
+  MetaCreativesRoute: typeof MetaCreativesRouteWithChildren
   MetaDashboardRoute: typeof MetaDashboardRoute
   OrganizacoesRoute: typeof OrganizacoesRoute
   PostsRoute: typeof PostsRoute
+  QuickShareRoute: typeof QuickShareRoute
   ScheduleRoute: typeof ScheduleRoute
   SettingsRoute: typeof SettingsRouteWithChildren
   SharedLinksRoute: typeof SharedLinksRoute
@@ -205,6 +282,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ScheduleRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/quick-share': {
+      id: '/quick-share'
+      path: '/quick-share'
+      fullPath: '/quick-share'
+      preLoaderRoute: typeof QuickShareRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/posts': {
       id: '/posts'
       path: '/posts'
@@ -226,6 +310,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MetaDashboardRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/meta-creatives': {
+      id: '/meta-creatives'
+      path: '/meta-creatives'
+      fullPath: '/meta-creatives'
+      preLoaderRoute: typeof MetaCreativesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/history': {
+      id: '/history'
+      path: '/history'
+      fullPath: '/history'
+      preLoaderRoute: typeof HistoryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/calendar': {
       id: '/calendar'
       path: '/calendar'
@@ -238,6 +336,20 @@ declare module '@tanstack/react-router' {
       path: '/bulk'
       fullPath: '/bulk'
       preLoaderRoute: typeof BulkRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ai-manager': {
+      id: '/ai-manager'
+      path: '/ai-manager'
+      fullPath: '/ai-manager'
+      preLoaderRoute: typeof AiManagerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ai-chat': {
+      id: '/ai-chat'
+      path: '/ai-chat'
+      fullPath: '/ai-chat'
+      preLoaderRoute: typeof AiChatRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -261,6 +373,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SettingsMetaAdsRouteImport
       parentRoute: typeof SettingsRoute
     }
+    '/meta-creatives/$campaignId': {
+      id: '/meta-creatives/$campaignId'
+      path: '/$campaignId'
+      fullPath: '/meta-creatives/$campaignId'
+      preLoaderRoute: typeof MetaCreativesCampaignIdRouteImport
+      parentRoute: typeof MetaCreativesRoute
+    }
     '/client/$token': {
       id: '/client/$token'
       path: '/client/$token'
@@ -270,6 +389,18 @@ declare module '@tanstack/react-router' {
     }
   }
 }
+
+interface MetaCreativesRouteChildren {
+  MetaCreativesCampaignIdRoute: typeof MetaCreativesCampaignIdRoute
+}
+
+const MetaCreativesRouteChildren: MetaCreativesRouteChildren = {
+  MetaCreativesCampaignIdRoute: MetaCreativesCampaignIdRoute,
+}
+
+const MetaCreativesRouteWithChildren = MetaCreativesRoute._addFileChildren(
+  MetaCreativesRouteChildren,
+)
 
 interface SettingsRouteChildren {
   SettingsMetaAdsRoute: typeof SettingsMetaAdsRoute
@@ -287,11 +418,16 @@ const SettingsRouteWithChildren = SettingsRoute._addFileChildren(
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AiChatRoute: AiChatRoute,
+  AiManagerRoute: AiManagerRoute,
   BulkRoute: BulkRoute,
   CalendarRoute: CalendarRoute,
+  HistoryRoute: HistoryRoute,
+  MetaCreativesRoute: MetaCreativesRouteWithChildren,
   MetaDashboardRoute: MetaDashboardRoute,
   OrganizacoesRoute: OrganizacoesRoute,
   PostsRoute: PostsRoute,
+  QuickShareRoute: QuickShareRoute,
   ScheduleRoute: ScheduleRoute,
   SettingsRoute: SettingsRouteWithChildren,
   SharedLinksRoute: SharedLinksRoute,
