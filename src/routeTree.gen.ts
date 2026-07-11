@@ -23,6 +23,7 @@ import { Route as InboxRouteImport } from './routes/inbox'
 import { Route as HistoryRouteImport } from './routes/history'
 import { Route as CalendarRouteImport } from './routes/calendar'
 import { Route as BulkRouteImport } from './routes/bulk'
+import { Route as AuditRouteImport } from './routes/audit'
 import { Route as ApprovalsRouteImport } from './routes/approvals'
 import { Route as AnalyticsRouteImport } from './routes/analytics'
 import { Route as AiManagerRouteImport } from './routes/ai-manager'
@@ -104,6 +105,11 @@ const BulkRoute = BulkRouteImport.update({
   path: '/bulk',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuditRoute = AuditRouteImport.update({
+  id: '/audit',
+  path: '/audit',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApprovalsRoute = ApprovalsRouteImport.update({
   id: '/approvals',
   path: '/approvals',
@@ -162,6 +168,7 @@ export interface FileRoutesByFullPath {
   '/ai-manager': typeof AiManagerRoute
   '/analytics': typeof AnalyticsRoute
   '/approvals': typeof ApprovalsRoute
+  '/audit': typeof AuditRoute
   '/bulk': typeof BulkRoute
   '/calendar': typeof CalendarRoute
   '/history': typeof HistoryRoute
@@ -188,6 +195,7 @@ export interface FileRoutesByTo {
   '/ai-manager': typeof AiManagerRoute
   '/analytics': typeof AnalyticsRoute
   '/approvals': typeof ApprovalsRoute
+  '/audit': typeof AuditRoute
   '/bulk': typeof BulkRoute
   '/calendar': typeof CalendarRoute
   '/history': typeof HistoryRoute
@@ -214,6 +222,7 @@ export interface FileRoutesById {
   '/ai-manager': typeof AiManagerRoute
   '/analytics': typeof AnalyticsRoute
   '/approvals': typeof ApprovalsRoute
+  '/audit': typeof AuditRoute
   '/bulk': typeof BulkRoute
   '/calendar': typeof CalendarRoute
   '/history': typeof HistoryRoute
@@ -242,6 +251,7 @@ export interface FileRouteTypes {
     | '/ai-manager'
     | '/analytics'
     | '/approvals'
+    | '/audit'
     | '/bulk'
     | '/calendar'
     | '/history'
@@ -268,6 +278,7 @@ export interface FileRouteTypes {
     | '/ai-manager'
     | '/analytics'
     | '/approvals'
+    | '/audit'
     | '/bulk'
     | '/calendar'
     | '/history'
@@ -293,6 +304,7 @@ export interface FileRouteTypes {
     | '/ai-manager'
     | '/analytics'
     | '/approvals'
+    | '/audit'
     | '/bulk'
     | '/calendar'
     | '/history'
@@ -320,6 +332,7 @@ export interface RootRouteChildren {
   AiManagerRoute: typeof AiManagerRoute
   AnalyticsRoute: typeof AnalyticsRoute
   ApprovalsRoute: typeof ApprovalsRoute
+  AuditRoute: typeof AuditRoute
   BulkRoute: typeof BulkRoute
   CalendarRoute: typeof CalendarRoute
   HistoryRoute: typeof HistoryRoute
@@ -437,6 +450,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BulkRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/audit': {
+      id: '/audit'
+      path: '/audit'
+      fullPath: '/audit'
+      preLoaderRoute: typeof AuditRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/approvals': {
       id: '/approvals'
       path: '/approvals'
@@ -543,6 +563,7 @@ const rootRouteChildren: RootRouteChildren = {
   AiManagerRoute: AiManagerRoute,
   AnalyticsRoute: AnalyticsRoute,
   ApprovalsRoute: ApprovalsRoute,
+  AuditRoute: AuditRoute,
   BulkRoute: BulkRoute,
   CalendarRoute: CalendarRoute,
   HistoryRoute: HistoryRoute,
