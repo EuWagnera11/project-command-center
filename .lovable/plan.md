@@ -1,52 +1,56 @@
+# Fechar 100% dos MDs — Calendar V2
 
-# Plano — completar 100% do frontend InstaBot
+Após análise minuciosa dos 7 MDs, o único gap real é o **Calendar V2** (`INSTRUCOES_CALENDAR_V2.md`). Todo o resto já está implementado.
 
-## Estado atual (já pronto)
-Dashboard, Posts, Schedule, Bulk, Calendar, Settings, Meta Dashboard, Meta Creatives, AI Manager, AI Chat, History, Shared Links, Organizações, Client view, Quick Share, Notifications Bell, SSE hook, Dark-only.
+## O que será construído
 
-## Faltando (dos 6 MDs)
+### 1. Nova rota `/calendar-v2`
+Arquivo: `src/routes/calendar-v2.tsx`
 
-### Rotas novas (8)
-1. `/analytics` — Heatmap de engajamento + Top posts + Growth chart
-2. `/rules` — Automação if-then (metric/operator/threshold/action) com CRUD
-3. `/approvals` — Fila de aprovação de posts (aprovar/rejeitar com motivo)
-4. `/ab-tests` — A/B test de captions com winner automático (CTR A vs B)
-5. `/inbox` — DMs + comentários unificados com sugestão IA de resposta
-6. `/media-library` — Biblioteca de mídia com tags, filtros, preview, upload
-7. `/audit` — Logs de auditoria (quem fez o quê)
-8. `/freepik-studio` — Busca/gera imagens (Freepik + IA fallback Picsum)
+**Toolbar de filtros** (dropdowns, não abas):
+- Período: hoje, ontem, 7d, 15d, 30d (default), 90d, semana, mês, trimestre, custom
+- Quando `custom` → mostra 2 date pickers (De / Até) + botão Aplicar
+- Perfil (dropdown dinâmico via `profiles`)
+- Tipo (photo / reel / story / carousel)
+- Label do período à direita
 
-### Features globais (5)
-9. **Command Palette (⌘K)** — busca global em posts/campanhas/contas/rotas
-10. **Toast system** já existe (sonner) → padronizar helpers em `src/lib/toast.ts`
-11. **Export CSV/PDF** — helpers em `src/lib/export.ts` + botões em Posts/Meta/History
-12. **Preview realista Instagram** — componente `<InstagramPreview>` (feed/reel/story/carrossel) usado em Schedule/Bulk
-13. **Login via Browser modal** — estados `browser_login`, `2fa_pending`, `checkpoint` com polling em Settings
+**5 Stats Cards**:
+- Total, Pendentes, Publicados, Melhor hora, Melhor dia
 
-### Tipos e mocks
-- Estender `src/lib/types.ts`: `CaptionABTest`, `PostApproval`, `AutomationRule`, `InboxMessage`, `MediaLibraryItem`, `FreepikImage`, `AuditLog`, `EngagementHeatmap`
-- Adicionar mocks correspondentes em `src/lib/mock-data.ts`
-- Adicionar endpoints (stub mock) em `src/lib/api.ts`
+**Grid 7 colunas** (Dom–Sáb):
+- Células com número do dia + pills de posts
+- Hoje destacado
+- Dias fora do período esmaecidos
+- Pills coloridas por status (pending / published / failed)
+- **Drag-and-drop HTML5** entre dias → dispara `move`
+- Click no dia → abre modal quick-schedule
+- Click no pill → navega para `/posts?highlight=<id>` (usando `<Link>` TanStack, não `window.location`)
 
-### Sidebar
-Reorganizar em 4 grupos:
-- **Workspace**: Dashboard, Posts, Agendar, Em Massa, Calendário, Aprovações, Inbox
-- **IA & Automação**: AI Manager, Chat IA, Regras, A/B Tests, Histórico, Freepik
-- **Anúncios**: Meta Dashboard, Criativos, Analytics
-- **Sistema**: Media Library, Organizações, Shared Links, Quick Share, Auditoria, Configurações
+**Modal do dia** (Dialog shadcn):
+- Título com data formatada em pt-BR
+- Lista posts do dia
+- Form: tipo + hora + caption + botão criar (via `quick-schedule`)
 
-Adicionar botão ⌘K no header/sidebar.
+**Auto-refresh 60s** via `refetchInterval` no TanStack Query.
+
+### 2. Types (`src/lib/types.ts`)
+Adicionar: `CalendarV2Stats`, `CalendarV2Post`, `CalendarV2Period`, `CalendarV2Response`.
+
+### 3. Mock + API (`src/lib/mock-data.ts`, `src/lib/api.ts`)
+- Mock: gerar `grouped` a partir dos posts existentes filtrando pelo período; calcular stats (best_hour/best_day, by_type, by_status)
+- Endpoints stub em `api.ts`:
+  - `calendarV2(params)` → `GET /api/calendar/v2`
+  - `calendarV2Move({post_id, new_date, new_time?})` → `POST /api/calendar/v2/move`
+  - `calendarV2QuickSchedule(body)` → `POST /api/calendar/v2/quick-schedule`
+- Respeita toggle `VITE_API_URL` (mock ↔ real) como as outras rotas
+
+### 4. Sidebar + Command Palette
+- Adicionar item "Calendário v2" no grupo Workspace (ícone `CalendarDays`)
+- Adicionar entrada no `command-palette.tsx`
 
 ## Fora de escopo
-PWA/service worker, push notifications, offline sync, i18n PT/EN — omitidos para manter foco no core. Podem ser feitos numa segunda rodada se quiser.
-
-## Detalhes técnicos
-- Tudo frontend, sem backend. Mocks via `src/lib/api.ts` (respeita toggle `VITE_API_URL`)
-- TanStack Query com `queryOptions` + `useQuery`
-- shadcn/ui existente (Card, Table, Dialog, Tabs, Badge, Button)
-- Recharts para heatmap/growth
-- `cmdk` (já vem com shadcn) para command palette
-- `jspdf` + `papaparse` para export (adicionar deps)
+- PWA, i18n, push notifications, service worker (não pedidos nos MDs atuais)
+- Substituir `/calendar` antigo — mantido para não quebrar links existentes
 
 ## Entrega
-1 wave só, todas as 8 rotas + 5 features globais + sidebar reorganizada. Ao final, atualizo o prompt do Claude Code com os novos endpoints necessários.
+1 wave: rota + types + mocks + api + sidebar + palette, com typecheck limpo.

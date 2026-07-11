@@ -16,6 +16,7 @@ import type {
   OAuthClient, OAuthUser, OAuthToken, IdPStatus,
   AITemplate, DeepAnalysisResult, TranscriptionResult, GoogleIntegrationStatus,
   IntegrationCard, ExportJob, RoleMember, RoleDefinition, MediaTool, VideoEditorTool,
+  CalendarV2Query, CalendarV2Response, QuickScheduleInput,
 } from "./types";
 
 const BASE_URL = (import.meta.env.VITE_API_URL as string | undefined)?.replace(/\/$/, "") ?? "";
@@ -380,6 +381,20 @@ export const api = {
   videoEditorTools: (): Promise<VideoEditorTool[]> => USE_MOCK ? delay(mock.mockVideoEditorTools) : req("/api/video-editor/tools"),
   runVideoTool: (id: string, url: string) =>
     USE_MOCK ? delay({ success: true, output_url: "/video-editor/output.mp4" }, 1200) : req(`/api/video-editor/${id}`, { method: "POST", body: JSON.stringify({ url }) }),
+
+  // Calendar V2
+  calendarV2: (q: CalendarV2Query): Promise<CalendarV2Response> => {
+    if (USE_MOCK) return delay(mock.buildCalendarV2(q));
+    const qs = new URLSearchParams();
+    Object.entries(q).forEach(([k, v]) => { if (v !== undefined && v !== "") qs.set(k, String(v)); });
+    return req(`/api/calendar/v2?${qs.toString()}`);
+  },
+  calendarV2Move: (post_id: number, new_date: string, new_time?: string) =>
+    USE_MOCK ? delay(mock.moveCalendarPost(post_id, new_date, new_time))
+             : req("/api/calendar/v2/move", { method: "POST", body: JSON.stringify({ post_id, new_date, new_time }) }),
+  calendarV2QuickSchedule: (body: QuickScheduleInput) =>
+    USE_MOCK ? delay(mock.quickScheduleCalendar(body))
+             : req("/api/calendar/v2/quick-schedule", { method: "POST", body: JSON.stringify(body) }),
 };
 
 function iso(dOffset: number) {

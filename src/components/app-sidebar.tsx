@@ -20,6 +20,7 @@ const nav = [
   { title: "Agendar", url: "/schedule", icon: PlusCircle },
   { title: "Em Massa", url: "/bulk", icon: Package },
   { title: "Calendário", url: "/calendar", icon: CalendarDays },
+  { title: "Calendário v2", url: "/calendar-v2", icon: CalendarDays },
   { title: "Analytics", url: "/analytics", icon: LineChart },
   { title: "Biblioteca", url: "/media-library", icon: FolderOpen },
   { title: "Inbox", url: "/inbox", icon: Inbox },

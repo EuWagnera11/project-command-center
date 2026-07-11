@@ -453,3 +453,66 @@ export interface MediaTool {
 export interface VideoEditorTool {
   id: string; label: string; description: string;
 }
+
+// -------- Calendar V2 --------
+export type CalendarV2Period =
+  | "today" | "yesterday" | "7d" | "15d" | "30d" | "90d"
+  | "week" | "month" | "quarter" | "custom";
+
+export interface CalendarV2Stats {
+  total: number;
+  by_type: Record<string, number>;
+  by_status: Record<string, number>;
+  best_hour: string | null;
+  best_day: string | null;
+  best_hour_count: number;
+  best_day_count: number;
+  period_label: string;
+}
+
+export interface CalendarV2Post {
+  id: number;
+  time: string;
+  type: PostType;
+  status: PostStatus;
+  caption: string;
+  profile_name: string;
+}
+
+export interface CalendarV2PeriodOption {
+  id: CalendarV2Period;
+  label: string;
+}
+
+export interface CalendarV2Response {
+  success: true;
+  period: CalendarV2Period;
+  period_label: string;
+  view: "day" | "week";
+  stats: CalendarV2Stats;
+  grouped: Record<string, CalendarV2Post[]>;
+  total: number;
+  profiles: Array<{ id: number; name: string }>;
+  available_periods: CalendarV2PeriodOption[];
+  custom_range: { start: string; end: string } | null;
+}
+
+export interface CalendarV2Query {
+  period: CalendarV2Period;
+  start?: string;
+  end?: string;
+  profile_id?: number | string;
+  type?: PostType | "";
+  status?: PostStatus | "";
+  view?: "day" | "week";
+}
+
+export interface QuickScheduleInput {
+  profile_id: number;
+  post_type: PostType;
+  date: string;
+  time: string;
+  caption: string;
+  media_path?: string;
+}
+
