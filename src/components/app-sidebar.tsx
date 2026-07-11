@@ -1,7 +1,7 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import {
   LayoutDashboard, ListChecks, PlusCircle, Package, CalendarDays,
-  Settings, BarChart3, Moon, Sun, Instagram, Link2, Building2,
+  Settings, BarChart3, Instagram, Link2, Building2,
   Bot, MessageSquare, History, ImageIcon, Zap,
 } from "lucide-react";
 
@@ -11,8 +11,6 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { useTheme } from "./theme-provider";
 
 const nav = [
   { title: "Dashboard", url: "/", icon: LayoutDashboard },
@@ -47,7 +45,6 @@ export function AppSidebar() {
   const { state } = useSidebar();
   const collapsed = state === "collapsed";
   const pathname = useRouterState({ select: (s) => s.location.pathname });
-  const { theme, toggle } = useTheme();
   const isActive = (url: string) => (url === "/" ? pathname === "/" : pathname.startsWith(url));
 
   return (
@@ -107,10 +104,6 @@ export function AppSidebar() {
             <div className="mt-1 text-[11px] text-muted-foreground">2 de 3 contas conectadas</div>
           </div>
         )}
-        <Button variant="ghost" size="sm" onClick={toggle} className="justify-start gap-2">
-          {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-          {!collapsed && <span>{theme === "dark" ? "Light Mode" : "Dark Mode"}</span>}
-        </Button>
       </SidebarFooter>
     </Sidebar>
   );
