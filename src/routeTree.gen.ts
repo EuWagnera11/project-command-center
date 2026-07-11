@@ -18,6 +18,7 @@ import { Route as PostsRouteImport } from './routes/posts'
 import { Route as OrganizacoesRouteImport } from './routes/organizacoes'
 import { Route as MetaDashboardRouteImport } from './routes/meta-dashboard'
 import { Route as MetaCreativesRouteImport } from './routes/meta-creatives'
+import { Route as MediaLibraryRouteImport } from './routes/media-library'
 import { Route as InboxRouteImport } from './routes/inbox'
 import { Route as HistoryRouteImport } from './routes/history'
 import { Route as CalendarRouteImport } from './routes/calendar'
@@ -76,6 +77,11 @@ const MetaDashboardRoute = MetaDashboardRouteImport.update({
 const MetaCreativesRoute = MetaCreativesRouteImport.update({
   id: '/meta-creatives',
   path: '/meta-creatives',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MediaLibraryRoute = MediaLibraryRouteImport.update({
+  id: '/media-library',
+  path: '/media-library',
   getParentRoute: () => rootRouteImport,
 } as any)
 const InboxRoute = InboxRouteImport.update({
@@ -160,6 +166,7 @@ export interface FileRoutesByFullPath {
   '/calendar': typeof CalendarRoute
   '/history': typeof HistoryRoute
   '/inbox': typeof InboxRoute
+  '/media-library': typeof MediaLibraryRoute
   '/meta-creatives': typeof MetaCreativesRouteWithChildren
   '/meta-dashboard': typeof MetaDashboardRoute
   '/organizacoes': typeof OrganizacoesRoute
@@ -185,6 +192,7 @@ export interface FileRoutesByTo {
   '/calendar': typeof CalendarRoute
   '/history': typeof HistoryRoute
   '/inbox': typeof InboxRoute
+  '/media-library': typeof MediaLibraryRoute
   '/meta-creatives': typeof MetaCreativesRouteWithChildren
   '/meta-dashboard': typeof MetaDashboardRoute
   '/organizacoes': typeof OrganizacoesRoute
@@ -210,6 +218,7 @@ export interface FileRoutesById {
   '/calendar': typeof CalendarRoute
   '/history': typeof HistoryRoute
   '/inbox': typeof InboxRoute
+  '/media-library': typeof MediaLibraryRoute
   '/meta-creatives': typeof MetaCreativesRouteWithChildren
   '/meta-dashboard': typeof MetaDashboardRoute
   '/organizacoes': typeof OrganizacoesRoute
@@ -237,6 +246,7 @@ export interface FileRouteTypes {
     | '/calendar'
     | '/history'
     | '/inbox'
+    | '/media-library'
     | '/meta-creatives'
     | '/meta-dashboard'
     | '/organizacoes'
@@ -262,6 +272,7 @@ export interface FileRouteTypes {
     | '/calendar'
     | '/history'
     | '/inbox'
+    | '/media-library'
     | '/meta-creatives'
     | '/meta-dashboard'
     | '/organizacoes'
@@ -286,6 +297,7 @@ export interface FileRouteTypes {
     | '/calendar'
     | '/history'
     | '/inbox'
+    | '/media-library'
     | '/meta-creatives'
     | '/meta-dashboard'
     | '/organizacoes'
@@ -312,6 +324,7 @@ export interface RootRouteChildren {
   CalendarRoute: typeof CalendarRoute
   HistoryRoute: typeof HistoryRoute
   InboxRoute: typeof InboxRoute
+  MediaLibraryRoute: typeof MediaLibraryRoute
   MetaCreativesRoute: typeof MetaCreativesRouteWithChildren
   MetaDashboardRoute: typeof MetaDashboardRoute
   OrganizacoesRoute: typeof OrganizacoesRoute
@@ -387,6 +400,13 @@ declare module '@tanstack/react-router' {
       path: '/meta-creatives'
       fullPath: '/meta-creatives'
       preLoaderRoute: typeof MetaCreativesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/media-library': {
+      id: '/media-library'
+      path: '/media-library'
+      fullPath: '/media-library'
+      preLoaderRoute: typeof MediaLibraryRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/inbox': {
@@ -527,6 +547,7 @@ const rootRouteChildren: RootRouteChildren = {
   CalendarRoute: CalendarRoute,
   HistoryRoute: HistoryRoute,
   InboxRoute: InboxRoute,
+  MediaLibraryRoute: MediaLibraryRoute,
   MetaCreativesRoute: MetaCreativesRouteWithChildren,
   MetaDashboardRoute: MetaDashboardRoute,
   OrganizacoesRoute: OrganizacoesRoute,
