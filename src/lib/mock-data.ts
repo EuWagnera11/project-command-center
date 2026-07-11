@@ -376,3 +376,102 @@ export const mockIdPStatus: IdPStatus = {
   clients_count: mockOAuthClients.length,
   users_count: mockOAuthUsers.length,
 };
+
+// ---------- Rodada final ----------
+import type {
+  AITemplate, DeepAnalysisResult, TranscriptionResult, GoogleIntegrationStatus,
+  IntegrationCard, ExportJob, RoleMember, RoleDefinition, MediaTool, VideoEditorTool,
+} from "./types";
+
+export const mockAITemplates: AITemplate[] = [
+  { id: 1, slug: "caption-venda", title: "Caption de Venda Direta", description: "Copy focada em conversão com CTA claro.", category: "caption", prompt: "Escreva uma caption vendedora para {produto}...", uses: 128 },
+  { id: 2, slug: "caption-storytelling", title: "Storytelling", description: "Narrativa emocional em 3 atos.", category: "caption", prompt: "Conte uma história sobre {tema}...", uses: 92 },
+  { id: 3, slug: "hashtag-nicho", title: "Hashtags de Nicho", description: "30 hashtags mescladas por volume.", category: "hashtag", prompt: "Gere 30 hashtags para {nicho}...", uses: 210 },
+  { id: 4, slug: "hashtag-local", title: "Hashtags Locais", description: "Foco geo (cidade/bairro).", category: "hashtag", prompt: "Gere hashtags locais em {cidade}...", uses: 74 },
+  { id: 5, slug: "campanha-lancamento", title: "Campanha de Lançamento", description: "Estrutura 7 dias pré-launch.", category: "campaign", prompt: "Monte um cronograma de 7 dias...", uses: 41 },
+  { id: 6, slug: "campanha-blackfriday", title: "Black Friday", description: "Cronograma promocional agressivo.", category: "campaign", prompt: "Plano BF para {loja}...", uses: 58 },
+  { id: 7, slug: "analise-concorrente", title: "Análise de Concorrente", description: "Benchmark de 3 perfis.", category: "analysis", prompt: "Analise @{perfil} vs concorrentes...", uses: 33 },
+  { id: 8, slug: "analise-engajamento", title: "Diagnóstico de Engajamento", description: "Identifica quedas e picos.", category: "analysis", prompt: "Analise os últimos 30 posts...", uses: 67 },
+  { id: 9, slug: "reply-comentario", title: "Resposta a Comentário", description: "Tom humano e empático.", category: "reply", prompt: "Responda ao comentário: {texto}...", uses: 152 },
+  { id: 10, slug: "reply-dm", title: "Resposta de DM", description: "Foco em qualificar lead.", category: "reply", prompt: "Responda a DM: {texto}...", uses: 118 },
+  { id: 11, slug: "caption-reels", title: "Caption para Reels", description: "Curta, com hook forte.", category: "caption", prompt: "Reels sobre {tema}...", uses: 189 },
+  { id: 12, slug: "caption-carousel", title: "Caption Carrossel", description: "Estrutura educativa.", category: "caption", prompt: "Carrossel de {n} slides sobre {tema}...", uses: 104 },
+  { id: 13, slug: "hashtag-trending", title: "Hashtags Trending", description: "Baseadas em tendências semanais.", category: "hashtag", prompt: "Trending hashtags de {semana}...", uses: 88 },
+  { id: 14, slug: "campanha-remarketing", title: "Remarketing Meta", description: "Público quente 30d.", category: "campaign", prompt: "Estratégia de remarketing 30d...", uses: 22 },
+  { id: 15, slug: "campanha-testeab", title: "Estrutura de Teste A/B", description: "3 criativos, 2 públicos.", category: "campaign", prompt: "Setup A/B com {orcamento}...", uses: 19 },
+  { id: 16, slug: "analise-post", title: "Análise de Post Específico", description: "Por que performou/afundou.", category: "analysis", prompt: "Analise post ID {id}...", uses: 45 },
+  { id: 17, slug: "analise-hashtag", title: "Análise de Hashtag", description: "Volume, saturação, alcance.", category: "analysis", prompt: "Analise a hashtag #{tag}...", uses: 27 },
+  { id: 18, slug: "reply-critica", title: "Resposta a Crítica", description: "Reversão de sentimento.", category: "reply", prompt: "Responda crítica negativa: {texto}...", uses: 61 },
+  { id: 19, slug: "caption-humor", title: "Caption com Humor", description: "Tom leve, memável.", category: "caption", prompt: "Caption engraçada sobre {tema}...", uses: 76 },
+  { id: 20, slug: "caption-autoridade", title: "Caption de Autoridade", description: "Educacional, técnico.", category: "caption", prompt: "Post de autoridade sobre {tema}...", uses: 55 },
+  { id: 21, slug: "hashtag-branded", title: "Hashtags Branded", description: "Mix marca + campanha.", category: "hashtag", prompt: "Hashtags para marca {nome}...", uses: 38 },
+  { id: 22, slug: "campanha-influencer", title: "Briefing Influencer", description: "Copy para parceria paga.", category: "campaign", prompt: "Briefing para @{perfil}...", uses: 14 },
+];
+
+export const mockDeepAnalysis: DeepAnalysisResult = {
+  summary: "Perfil em crescimento saudável (+8,2% seguidores/mês). Engajamento acima da média do nicho (4,7% vs 2,3%). Concentração excessiva em posts educativos — falta variedade de formato.",
+  strengths: ["Consistência de postagem (5/semana)", "Reels com hook forte (retenção 68%)", "Uso inteligente de carrossel"],
+  weaknesses: ["Baixa frequência de Stories (2/dia)", "Ausência de UGC/repost", "Hashtags saturadas em 40% dos posts"],
+  opportunities: ["Explorar tendência de #trend2026", "Colaborações com @concorrente_afim", "Lives semanais às terças 19h"],
+  recommendations: ["Testar 3 novos formatos de Reels nas próximas 2 semanas", "Reduzir hashtags saturadas para <20%", "Programar 6 stories/dia com CTA"],
+};
+
+export const mockTranscription: TranscriptionResult = {
+  text: "Olá pessoal, hoje eu vou mostrar como criar campanhas altamente segmentadas usando IA. O primeiro passo é entender seu público-alvo...",
+  language: "pt-BR",
+  duration_sec: 42,
+};
+
+export const mockGoogleStatus: GoogleIntegrationStatus = {
+  connected: true, email: "wagner@instabot.local", sheets: 4, last_sync: ago(1),
+};
+
+export const mockIntegrationCards: IntegrationCard[] = [
+  { id: "instagram", name: "Instagram", category: "instagram", status: "connected", description: "3 contas conectadas via browser login", last_activity: ago(1) },
+  { id: "meta-ads", name: "Meta Ads", category: "meta", status: "connected", description: "5 contas ativas em 3 BMs", last_activity: ago(1) },
+  { id: "canva", name: "Canva", category: "canva", status: "connected", description: "12 designs sincronizados", last_activity: ago(60) },
+  { id: "canva-app", name: "Canva Apps SDK", category: "canva", status: "connected", description: "App ID AAHAAH8NpAk publicado", last_activity: ago(120) },
+  { id: "google", name: "Google Sheets", category: "google", status: "connected", description: "4 planilhas sincronizando", last_activity: ago(1) },
+  { id: "freepik", name: "Freepik", category: "freepik", status: "connected", description: "API key ativa", last_activity: ago(180) },
+  { id: "idp", name: "IdP OAuth2", category: "idp", status: "connected", description: "2 clients ativos, 1 usuário logado", last_activity: ago(1) },
+];
+
+export const mockExports: ExportJob[] = [
+  { id: 1, name: "Posts_Novembro_2026", kind: "posts", format: "csv", size_kb: 128, created_at: ago(120), url: "#" },
+  { id: 2, name: "Relatorio_Meta_Semanal", kind: "meta", format: "pdf", size_kb: 892, created_at: ago(1), url: "#" },
+  { id: 3, name: "Historico_Completo", kind: "history", format: "xlsx", size_kb: 456, created_at: ago(3), url: "#" },
+  { id: 4, name: "Audit_Log_30d", kind: "audit", format: "csv", size_kb: 214, created_at: ago(5), url: "#" },
+  { id: 5, name: "Posts_Outubro_2026", kind: "posts", format: "csv", size_kb: 156, created_at: ago(12), url: "#" },
+];
+
+export const mockRoleDefinitions: RoleDefinition[] = [
+  { name: "owner", label: "Owner", permissions: ["Tudo", "Faturamento", "Deletar workspace", "Gerenciar roles"] },
+  { name: "admin", label: "Admin", permissions: ["Gerenciar posts", "Gerenciar contas IG", "Gerenciar regras", "Convidar membros"] },
+  { name: "editor", label: "Editor", permissions: ["Criar/editar posts", "Aprovar rascunhos", "Usar IA"] },
+  { name: "viewer", label: "Viewer", permissions: ["Visualizar dashboards", "Exportar relatórios"] },
+];
+
+export const mockRoleMembers: RoleMember[] = [
+  { id: 1, name: "Wagner Andrade", email: "wagner@instabot.local", role: "owner", last_seen: ago(0), avatar_seed: "wagner" },
+  { id: 2, name: "Marina Silva", email: "marina@agencia.com", role: "admin", last_seen: ago(60), avatar_seed: "marina" },
+  { id: 3, name: "Rafael Souza", email: "rafael@agencia.com", role: "editor", last_seen: ago(180), avatar_seed: "rafael" },
+  { id: 4, name: "Cliente Loja X", email: "contato@lojax.com", role: "viewer", last_seen: ago(2), avatar_seed: "lojax" },
+  { id: 5, name: "Cliente Café Y", email: "gerencia@cafey.com", role: "viewer", last_seen: ago(7), avatar_seed: "cafey" },
+];
+
+export const mockMediaTools: MediaTool[] = [
+  { id: "smart-compress", label: "Compressão Inteligente", description: "Reduz tamanho preservando qualidade visual", icon: "compress" },
+  { id: "watermark", label: "Marca d'água", description: "Aplica logo/texto com posicionamento", icon: "watermark" },
+  { id: "remove-bg", label: "Remover Fundo", description: "Isola sujeito principal via IA", icon: "removebg" },
+  { id: "crop-aspect", label: "Crop por Aspect Ratio", description: "1:1, 4:5, 9:16 automaticamente", icon: "crop" },
+  { id: "convert", label: "Conversão de Formato", description: "PNG/JPG/WebP/HEIC → destino", icon: "convert" },
+  { id: "extract-audio", label: "Extrair Áudio", description: "MP3 de qualquer vídeo", icon: "audio" },
+];
+
+export const mockVideoEditorTools: VideoEditorTool[] = [
+  { id: "analyze", label: "Analisar Vídeo", description: "Cenas, cortes sugeridos, qualidade de áudio" },
+  { id: "cut-silences", label: "Cortar Silêncios", description: "Remove pausas automaticamente" },
+  { id: "detect-cuts", label: "Detectar Cortes", description: "Marcadores de mudança de cena" },
+  { id: "run-pipeline", label: "Pipeline Completa", description: "Analisa + corta + normaliza áudio" },
+  { id: "premiere-export", label: "Instruções Premiere", description: "Exporta XML/EDL para Adobe Premiere" },
+];

@@ -14,6 +14,8 @@ import type {
   CaptionABTest, InboxMessage, MediaLibraryItem, AuditLog, FreepikImage, ApprovalStatus,
   CanvaDesign, CanvaIntentLog, CanvaAppStatus, CanvaIntentKind,
   OAuthClient, OAuthUser, OAuthToken, IdPStatus,
+  AITemplate, DeepAnalysisResult, TranscriptionResult, GoogleIntegrationStatus,
+  IntegrationCard, ExportJob, RoleMember, RoleDefinition, MediaTool, VideoEditorTool,
 } from "./types";
 
 const BASE_URL = (import.meta.env.VITE_API_URL as string | undefined)?.replace(/\/$/, "") ?? "";
@@ -340,6 +342,44 @@ export const api = {
   idpTokens: (): Promise<OAuthToken[]> => USE_MOCK ? delay(mock.mockOAuthTokens) : req("/api/idp/tokens"),
   idpRevokeToken: (id: number) =>
     USE_MOCK ? delay({ success: true }) : req(`/api/idp/tokens/${id}/revoke`, { method: "POST" }),
+
+  // -------- AI Templates --------
+  aiTemplates: (): Promise<AITemplate[]> => USE_MOCK ? delay(mock.mockAITemplates) : req("/api/ai/templates"),
+  aiRunTemplate: (id: number, vars: Record<string, string>) =>
+    USE_MOCK ? delay({ success: true, output: "Resultado mockado do template." }) : req(`/api/ai/templates/${id}`, { method: "POST", body: JSON.stringify(vars) }),
+
+  // -------- Advanced AI --------
+  deepAnalysis: (target: string): Promise<DeepAnalysisResult> =>
+    USE_MOCK ? delay(mock.mockDeepAnalysis, 900) : req("/api/deep-analysis", { method: "POST", body: JSON.stringify({ target }) }),
+  translate: (text: string, to: string): Promise<{ text: string }> =>
+    USE_MOCK ? delay({ text: `[${to}] ${text}` }) : req("/api/translate", { method: "POST", body: JSON.stringify({ text, to }) }),
+  transcribe: (url: string): Promise<TranscriptionResult> =>
+    USE_MOCK ? delay(mock.mockTranscription, 1200) : req("/api/transcribe", { method: "POST", body: JSON.stringify({ url }) }),
+
+  // -------- Integrations Hub --------
+  integrationCards: (): Promise<IntegrationCard[]> => USE_MOCK ? delay(mock.mockIntegrationCards) : req("/api/integrations"),
+  googleStatus: (): Promise<GoogleIntegrationStatus> => USE_MOCK ? delay(mock.mockGoogleStatus) : req("/api/google/status"),
+
+  // -------- Exports --------
+  listExports: (): Promise<ExportJob[]> => USE_MOCK ? delay(mock.mockExports) : req("/api/exports"),
+  createExport: (kind: string, format: string) =>
+    USE_MOCK ? delay({ success: true, id: Date.now() }) : req("/api/exports", { method: "POST", body: JSON.stringify({ kind, format }) }),
+
+  // -------- Roles --------
+  roleMembers: (): Promise<RoleMember[]> => USE_MOCK ? delay(mock.mockRoleMembers) : req("/api/roles/members"),
+  roleDefinitions: (): Promise<RoleDefinition[]> => USE_MOCK ? delay(mock.mockRoleDefinitions) : req("/api/roles"),
+  updateMemberRole: (id: number, role: string) =>
+    USE_MOCK ? delay({ success: true }) : req(`/api/roles/members/${id}`, { method: "PATCH", body: JSON.stringify({ role }) }),
+
+  // -------- Media Tools --------
+  mediaTools: (): Promise<MediaTool[]> => USE_MOCK ? delay(mock.mockMediaTools) : req("/api/media/tools"),
+  runMediaTool: (id: string, payload: Record<string, unknown>) =>
+    USE_MOCK ? delay({ success: true, output_url: "/media-tools/output.png" }, 900) : req(`/api/media/${id}`, { method: "POST", body: JSON.stringify(payload) }),
+
+  // -------- Video Editor --------
+  videoEditorTools: (): Promise<VideoEditorTool[]> => USE_MOCK ? delay(mock.mockVideoEditorTools) : req("/api/video-editor/tools"),
+  runVideoTool: (id: string, url: string) =>
+    USE_MOCK ? delay({ success: true, output_url: "/video-editor/output.mp4" }, 1200) : req(`/api/video-editor/${id}`, { method: "POST", body: JSON.stringify({ url }) }),
 };
 
 function iso(dOffset: number) {
