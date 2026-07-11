@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
-import { Trash2, Globe, LogOut, RefreshCw, Plus, Key, FolderOpen, Search } from "lucide-react";
+import { Trash2, Globe, LogOut, RefreshCw, Plus, Key, FolderOpen, Search, Database, Download, Upload } from "lucide-react";
 import { toast } from "sonner";
 
 import { api } from "@/lib/api";
@@ -43,6 +43,7 @@ function SettingsPage() {
   const { data: settings } = useQuery({ queryKey: ["settings"], queryFn: () => api.getSettings() });
   const { data: templates, refetch: refetchTpl } = useQuery({ queryKey: ["templates"], queryFn: () => api.listTemplates() });
   const { data: hashtags, refetch: refetchHash } = useQuery({ queryKey: ["hashtags"], queryFn: () => api.listHashtags() });
+  const { data: backups, refetch: refetchBackups } = useQuery({ queryKey: ["backups"], queryFn: () => api.listBackups() });
 
   const [newProfile, setNewProfile] = useState({ name: "", instagram_username: "" });
   const [mediaFolder, setMediaFolder] = useState("");
@@ -68,6 +69,7 @@ function SettingsPage() {
             <TabsTrigger value="media">Mídia</TabsTrigger>
             <TabsTrigger value="templates">Templates</TabsTrigger>
             <TabsTrigger value="hashtags">Hashtags</TabsTrigger>
+            <TabsTrigger value="backups">Backups</TabsTrigger>
             <TabsTrigger value="system">Sistema</TabsTrigger>
           </TabsList>
 
@@ -211,6 +213,38 @@ function SettingsPage() {
               }}>
                 <Plus className="mr-1 h-4 w-4" /> Adicionar grupo
               </Button>
+            </Card>
+          </TabsContent>
+
+          {/* --- Backups --- */}
+          <TabsContent value="backups" className="space-y-4">
+            <Card className="p-4">
+              <div className="mb-3 flex items-center justify-between">
+                <div>
+                  <h3 className="text-sm font-semibold flex items-center gap-2"><Database className="h-4 w-4" /> Backups do banco SQLite</h3>
+                  <p className="text-xs text-muted-foreground">Snapshots automáticos diários + criação manual sob demanda.</p>
+                </div>
+                <Button size="sm" onClick={async () => { await api.createBackup(); toast.success("Backup criado"); refetchBackups(); }}>
+                  <Download className="mr-1 h-4 w-4" /> Criar backup agora
+                </Button>
+              </div>
+              <div className="divide-y rounded-md border">
+                {backups?.map((b) => (
+                  <div key={b.filename} className="flex items-center gap-3 p-3">
+                    <Database className="h-4 w-4 text-primary shrink-0" />
+                    <div className="min-w-0 flex-1">
+                      <div className="truncate text-sm font-medium">{b.filename}</div>
+                      <div className="text-xs text-muted-foreground">{b.created} · {(b.size / 1024 / 1024).toFixed(2)} MB</div>
+                    </div>
+                    <Button size="sm" variant="outline" onClick={async () => { await api.restoreBackup(b.filename); toast.success("Restaurado"); }}>
+                      <Upload className="mr-1 h-3.5 w-3.5" /> Restaurar
+                    </Button>
+                  </div>
+                ))}
+                {(!backups || backups.length === 0) && (
+                  <div className="p-6 text-center text-xs text-muted-foreground">Nenhum backup ainda.</div>
+                )}
+              </div>
             </Card>
           </TabsContent>
 

@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo } from "react";
-import { Eye, MousePointerClick, DollarSign, TrendingUp, Zap, RefreshCcw, AlertTriangle, Key, Users, Activity } from "lucide-react";
+import { Eye, MousePointerClick, DollarSign, TrendingUp, Zap, RefreshCcw, AlertTriangle, Key, Users, Activity, Wallet, PauseCircle, PlayCircle, Sparkles, Target } from "lucide-react";
 import {
   LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, BarChart, Bar, Legend,
 } from "recharts";
@@ -29,6 +29,7 @@ function MetaDashboardPage() {
   const { data: daily } = useQuery({ queryKey: ["meta-daily"], queryFn: () => api.metaTimeseries() });
   const { data: alerts } = useQuery({ queryKey: ["meta-alerts"], queryFn: () => api.metaAlerts() });
   const { data: comparison } = useQuery({ queryKey: ["meta-comp"], queryFn: () => api.metaComparison() });
+  const { data: report } = useQuery({ queryKey: ["meta-report"], queryFn: () => api.metaWeeklyReport() });
 
   const trend = useMemo(
     () => (daily ?? []).map((d) => ({
@@ -42,12 +43,17 @@ function MetaDashboardPage() {
 
   const kpiCards = kpis ? [
     { label: "Contas", value: String(kpis.total_accounts), icon: Users, color: "text-primary", grad: "bg-gradient-to-br from-primary/10 to-primary/5" },
+    { label: "Campanhas ativas", value: String(kpis.active_campaigns), icon: PlayCircle, color: "text-success", grad: "bg-gradient-to-br from-success/10 to-success/5" },
+    { label: "Campanhas pausadas", value: String(kpis.paused_campaigns), icon: PauseCircle, color: "text-muted-foreground", grad: "bg-gradient-to-br from-muted/50 to-muted/20" },
+    { label: "Saldo total", value: `R$ ${kpis.total_balance.toFixed(2)}`, icon: Wallet, color: "text-info", grad: "bg-gradient-to-br from-info/10 to-info/5" },
     { label: "Impressões (7d)", value: kpis.period_impressions.toLocaleString("pt-BR"), icon: Eye, color: "text-info", grad: "bg-gradient-to-br from-info/10 to-info/5" },
-    { label: "Cliques (7d)", value: kpis.period_clicks.toLocaleString("pt-BR"), icon: MousePointerClick, color: "text-accent", grad: "bg-gradient-to-br from-accent/10 to-accent/5" },
+    { label: "Cliques (7d)", value: kpis.period_clicks.toLocaleString("pt-BR"), icon: MousePointerClick, color: "text-accent-foreground", grad: "bg-gradient-to-br from-accent/20 to-accent/5" },
+    { label: "Alcance (7d)", value: kpis.period_reach.toLocaleString("pt-BR"), icon: Target, color: "text-ig-purple", grad: "bg-gradient-to-br from-ig-purple/10 to-ig-purple/5" },
     { label: "Gasto (7d)", value: `R$ ${kpis.period_spend.toFixed(2)}`, icon: DollarSign, color: "text-success", grad: "bg-gradient-to-br from-success/10 to-success/5" },
     { label: "CTR médio", value: `${kpis.avg_ctr.toFixed(2)}%`, icon: TrendingUp, color: "text-warning-foreground", grad: "bg-gradient-to-br from-warning/10 to-warning/5" },
     { label: "CPC médio", value: `R$ ${kpis.avg_cpc.toFixed(2)}`, icon: Zap, color: "text-destructive", grad: "bg-gradient-to-br from-destructive/10 to-destructive/5" },
   ] : [];
+
 
   return (
     <div>
@@ -69,7 +75,7 @@ function MetaDashboardPage() {
 
       <div className="space-y-6 p-6">
         {/* KPI grid */}
-        <div className="grid grid-cols-2 gap-4 md:grid-cols-3 xl:grid-cols-6">
+        <div className="grid grid-cols-2 gap-3 md:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-10">
           {kpiCards.map((k) => (
             <Card key={k.label} className={`p-4 ${k.grad} border-0`}>
               <div className="flex items-center justify-between">
@@ -212,6 +218,30 @@ function MetaDashboardPage() {
             </table>
           </div>
         </Card>
+
+        {/* Weekly AI report */}
+        {report && (
+          <Card className="border-primary/30 bg-gradient-to-br from-primary/5 to-ig-purple/5 p-5">
+            <div className="mb-3 flex items-center gap-2">
+              <div className="grid h-9 w-9 place-items-center rounded-lg bg-gradient-primary text-white shadow-glow">
+                <Sparkles className="h-4 w-4" />
+              </div>
+              <div>
+                <h3 className="text-sm font-semibold">Relatório Semanal com IA</h3>
+                <p className="text-xs text-muted-foreground">Análise automática dos últimos 7 dias</p>
+              </div>
+            </div>
+            <p className="mb-4 text-sm leading-relaxed">{report.summary}</p>
+            <ul className="grid gap-2 sm:grid-cols-2">
+              {report.highlights.map((h, i) => (
+                <li key={i} className="flex items-start gap-2 rounded-lg border bg-background/60 p-3 text-sm">
+                  <span className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-primary" />
+                  <span>{h}</span>
+                </li>
+              ))}
+            </ul>
+          </Card>
+        )}
       </div>
     </div>
   );

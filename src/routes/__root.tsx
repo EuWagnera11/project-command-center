@@ -4,6 +4,7 @@ import {
   Link,
   createRootRouteWithContext,
   useRouter,
+  useRouterState,
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
@@ -15,6 +16,7 @@ import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar, StatusPill } from "@/components/app-sidebar";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
+import { NotificationsBell } from "@/components/notifications-bell";
 
 function NotFoundComponent() {
   return (
@@ -114,34 +116,48 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const isPublic = pathname.startsWith("/client/");
+
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider>
-        <SidebarProvider>
-          <div className="flex min-h-screen w-full bg-background">
-            <AppSidebar />
-            <div className="flex min-w-0 flex-1 flex-col">
-              <header className="sticky top-0 z-30 flex h-14 shrink-0 items-center gap-3 border-b bg-background/80 px-4 backdrop-blur">
-                <SidebarTrigger />
-                <div className="hidden items-center gap-2 sm:flex">
-                  <StatusPill tone="success">
-                    <span className="h-1.5 w-1.5 rounded-full bg-success" />
-                    Scheduler Ativo
-                  </StatusPill>
-                  <StatusPill tone="success">Meta Ads · 60s</StatusPill>
-                  <StatusPill tone="warning">IG 2/3</StatusPill>
-                </div>
-                <div className="ml-auto text-xs text-muted-foreground">
-                  Atualizado agora
-                </div>
-              </header>
-              <main className="min-w-0 flex-1">
-                <Outlet />
-              </main>
+        {isPublic ? (
+          <>
+            <Outlet />
+            <Toaster position="bottom-right" richColors />
+          </>
+        ) : (
+          <SidebarProvider>
+            <div className="flex min-h-screen w-full bg-background">
+              <AppSidebar />
+              <div className="flex min-w-0 flex-1 flex-col">
+                <header className="sticky top-0 z-30 flex h-14 shrink-0 items-center gap-3 border-b bg-background/80 px-4 backdrop-blur">
+                  <SidebarTrigger />
+                  <div className="hidden items-center gap-2 sm:flex">
+                    <StatusPill tone="success">
+                      <span className="relative flex h-2 w-2">
+                        <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-success opacity-75" />
+                        <span className="relative inline-flex h-2 w-2 rounded-full bg-success" />
+                      </span>
+                      Scheduler Ativo
+                    </StatusPill>
+                    <StatusPill tone="success">Meta Ads · 60s</StatusPill>
+                    <StatusPill tone="warning">IG 2/3</StatusPill>
+                  </div>
+                  <div className="ml-auto flex items-center gap-1">
+                    <span className="hidden text-xs text-muted-foreground sm:inline">Atualizado agora</span>
+                    <NotificationsBell />
+                  </div>
+                </header>
+                <main className="min-w-0 flex-1">
+                  <Outlet />
+                </main>
+              </div>
             </div>
-          </div>
-          <Toaster position="bottom-right" richColors />
-        </SidebarProvider>
+            <Toaster position="bottom-right" richColors />
+          </SidebarProvider>
+        )}
       </ThemeProvider>
     </QueryClientProvider>
   );

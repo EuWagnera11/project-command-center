@@ -9,16 +9,24 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SharedLinksRouteImport } from './routes/shared-links'
 import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as ScheduleRouteImport } from './routes/schedule'
 import { Route as PostsRouteImport } from './routes/posts'
+import { Route as OrganizacoesRouteImport } from './routes/organizacoes'
 import { Route as MetaDashboardRouteImport } from './routes/meta-dashboard'
 import { Route as CalendarRouteImport } from './routes/calendar'
 import { Route as BulkRouteImport } from './routes/bulk'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as SettingsIndexRouteImport } from './routes/settings.index'
 import { Route as SettingsMetaAdsRouteImport } from './routes/settings.meta-ads'
+import { Route as ClientTokenRouteImport } from './routes/client.$token'
 
+const SharedLinksRoute = SharedLinksRouteImport.update({
+  id: '/shared-links',
+  path: '/shared-links',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SettingsRoute = SettingsRouteImport.update({
   id: '/settings',
   path: '/settings',
@@ -32,6 +40,11 @@ const ScheduleRoute = ScheduleRouteImport.update({
 const PostsRoute = PostsRouteImport.update({
   id: '/posts',
   path: '/posts',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OrganizacoesRoute = OrganizacoesRouteImport.update({
+  id: '/organizacoes',
+  path: '/organizacoes',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MetaDashboardRoute = MetaDashboardRouteImport.update({
@@ -64,15 +77,23 @@ const SettingsMetaAdsRoute = SettingsMetaAdsRouteImport.update({
   path: '/meta-ads',
   getParentRoute: () => SettingsRoute,
 } as any)
+const ClientTokenRoute = ClientTokenRouteImport.update({
+  id: '/client/$token',
+  path: '/client/$token',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/bulk': typeof BulkRoute
   '/calendar': typeof CalendarRoute
   '/meta-dashboard': typeof MetaDashboardRoute
+  '/organizacoes': typeof OrganizacoesRoute
   '/posts': typeof PostsRoute
   '/schedule': typeof ScheduleRoute
   '/settings': typeof SettingsRouteWithChildren
+  '/shared-links': typeof SharedLinksRoute
+  '/client/$token': typeof ClientTokenRoute
   '/settings/meta-ads': typeof SettingsMetaAdsRoute
   '/settings/': typeof SettingsIndexRoute
 }
@@ -81,8 +102,11 @@ export interface FileRoutesByTo {
   '/bulk': typeof BulkRoute
   '/calendar': typeof CalendarRoute
   '/meta-dashboard': typeof MetaDashboardRoute
+  '/organizacoes': typeof OrganizacoesRoute
   '/posts': typeof PostsRoute
   '/schedule': typeof ScheduleRoute
+  '/shared-links': typeof SharedLinksRoute
+  '/client/$token': typeof ClientTokenRoute
   '/settings/meta-ads': typeof SettingsMetaAdsRoute
   '/settings': typeof SettingsIndexRoute
 }
@@ -92,9 +116,12 @@ export interface FileRoutesById {
   '/bulk': typeof BulkRoute
   '/calendar': typeof CalendarRoute
   '/meta-dashboard': typeof MetaDashboardRoute
+  '/organizacoes': typeof OrganizacoesRoute
   '/posts': typeof PostsRoute
   '/schedule': typeof ScheduleRoute
   '/settings': typeof SettingsRouteWithChildren
+  '/shared-links': typeof SharedLinksRoute
+  '/client/$token': typeof ClientTokenRoute
   '/settings/meta-ads': typeof SettingsMetaAdsRoute
   '/settings/': typeof SettingsIndexRoute
 }
@@ -105,9 +132,12 @@ export interface FileRouteTypes {
     | '/bulk'
     | '/calendar'
     | '/meta-dashboard'
+    | '/organizacoes'
     | '/posts'
     | '/schedule'
     | '/settings'
+    | '/shared-links'
+    | '/client/$token'
     | '/settings/meta-ads'
     | '/settings/'
   fileRoutesByTo: FileRoutesByTo
@@ -116,8 +146,11 @@ export interface FileRouteTypes {
     | '/bulk'
     | '/calendar'
     | '/meta-dashboard'
+    | '/organizacoes'
     | '/posts'
     | '/schedule'
+    | '/shared-links'
+    | '/client/$token'
     | '/settings/meta-ads'
     | '/settings'
   id:
@@ -126,9 +159,12 @@ export interface FileRouteTypes {
     | '/bulk'
     | '/calendar'
     | '/meta-dashboard'
+    | '/organizacoes'
     | '/posts'
     | '/schedule'
     | '/settings'
+    | '/shared-links'
+    | '/client/$token'
     | '/settings/meta-ads'
     | '/settings/'
   fileRoutesById: FileRoutesById
@@ -138,13 +174,23 @@ export interface RootRouteChildren {
   BulkRoute: typeof BulkRoute
   CalendarRoute: typeof CalendarRoute
   MetaDashboardRoute: typeof MetaDashboardRoute
+  OrganizacoesRoute: typeof OrganizacoesRoute
   PostsRoute: typeof PostsRoute
   ScheduleRoute: typeof ScheduleRoute
   SettingsRoute: typeof SettingsRouteWithChildren
+  SharedLinksRoute: typeof SharedLinksRoute
+  ClientTokenRoute: typeof ClientTokenRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/shared-links': {
+      id: '/shared-links'
+      path: '/shared-links'
+      fullPath: '/shared-links'
+      preLoaderRoute: typeof SharedLinksRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/settings': {
       id: '/settings'
       path: '/settings'
@@ -164,6 +210,13 @@ declare module '@tanstack/react-router' {
       path: '/posts'
       fullPath: '/posts'
       preLoaderRoute: typeof PostsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/organizacoes': {
+      id: '/organizacoes'
+      path: '/organizacoes'
+      fullPath: '/organizacoes'
+      preLoaderRoute: typeof OrganizacoesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/meta-dashboard': {
@@ -208,6 +261,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SettingsMetaAdsRouteImport
       parentRoute: typeof SettingsRoute
     }
+    '/client/$token': {
+      id: '/client/$token'
+      path: '/client/$token'
+      fullPath: '/client/$token'
+      preLoaderRoute: typeof ClientTokenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -230,9 +290,12 @@ const rootRouteChildren: RootRouteChildren = {
   BulkRoute: BulkRoute,
   CalendarRoute: CalendarRoute,
   MetaDashboardRoute: MetaDashboardRoute,
+  OrganizacoesRoute: OrganizacoesRoute,
   PostsRoute: PostsRoute,
   ScheduleRoute: ScheduleRoute,
   SettingsRoute: SettingsRouteWithChildren,
+  SharedLinksRoute: SharedLinksRoute,
+  ClientTokenRoute: ClientTokenRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
