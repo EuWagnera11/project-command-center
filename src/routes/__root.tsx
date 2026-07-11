@@ -17,6 +17,7 @@ import { AppSidebar, StatusPill } from "@/components/app-sidebar";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
 import { NotificationsBell } from "@/components/notifications-bell";
+import { CommandPalette, CommandPaletteTrigger } from "@/components/command-palette";
 
 function NotFoundComponent() {
   return (
