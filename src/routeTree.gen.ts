@@ -18,6 +18,7 @@ import { Route as MetaDashboardRouteImport } from './routes/meta-dashboard'
 import { Route as CalendarRouteImport } from './routes/calendar'
 import { Route as BulkRouteImport } from './routes/bulk'
 import { Route as AiManagerRouteImport } from './routes/ai-manager'
+import { Route as AiChatRouteImport } from './routes/ai-chat'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as SettingsIndexRouteImport } from './routes/settings.index'
 import { Route as SettingsMetaAdsRouteImport } from './routes/settings.meta-ads'
@@ -68,6 +69,11 @@ const AiManagerRoute = AiManagerRouteImport.update({
   path: '/ai-manager',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AiChatRoute = AiChatRouteImport.update({
+  id: '/ai-chat',
+  path: '/ai-chat',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -91,6 +97,7 @@ const ClientTokenRoute = ClientTokenRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/ai-chat': typeof AiChatRoute
   '/ai-manager': typeof AiManagerRoute
   '/bulk': typeof BulkRoute
   '/calendar': typeof CalendarRoute
@@ -106,6 +113,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/ai-chat': typeof AiChatRoute
   '/ai-manager': typeof AiManagerRoute
   '/bulk': typeof BulkRoute
   '/calendar': typeof CalendarRoute
@@ -121,6 +129,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/ai-chat': typeof AiChatRoute
   '/ai-manager': typeof AiManagerRoute
   '/bulk': typeof BulkRoute
   '/calendar': typeof CalendarRoute
@@ -138,6 +147,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/ai-chat'
     | '/ai-manager'
     | '/bulk'
     | '/calendar'
@@ -153,6 +163,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/ai-chat'
     | '/ai-manager'
     | '/bulk'
     | '/calendar'
@@ -167,6 +178,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/ai-chat'
     | '/ai-manager'
     | '/bulk'
     | '/calendar'
@@ -183,6 +195,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AiChatRoute: typeof AiChatRoute
   AiManagerRoute: typeof AiManagerRoute
   BulkRoute: typeof BulkRoute
   CalendarRoute: typeof CalendarRoute
@@ -260,6 +273,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AiManagerRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/ai-chat': {
+      id: '/ai-chat'
+      path: '/ai-chat'
+      fullPath: '/ai-chat'
+      preLoaderRoute: typeof AiChatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -307,6 +327,7 @@ const SettingsRouteWithChildren = SettingsRoute._addFileChildren(
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AiChatRoute: AiChatRoute,
   AiManagerRoute: AiManagerRoute,
   BulkRoute: BulkRoute,
   CalendarRoute: CalendarRoute,
