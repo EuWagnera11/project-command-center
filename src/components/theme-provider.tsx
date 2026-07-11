@@ -7,13 +7,12 @@ const ThemeContext = createContext<Ctx | null>(null);
 const STORAGE_KEY = "instabot-theme";
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
-  const [theme, setThemeState] = useState<Theme>("light");
+  const [theme, setThemeState] = useState<Theme>("dark");
 
   // Read persisted theme after mount to avoid SSR hydration mismatch.
   useEffect(() => {
     const stored = (typeof window !== "undefined" && localStorage.getItem(STORAGE_KEY)) as Theme | null;
-    const prefersDark = typeof window !== "undefined" && window.matchMedia("(prefers-color-scheme: dark)").matches;
-    setThemeState(stored ?? (prefersDark ? "dark" : "light"));
+    setThemeState(stored ?? "dark");
   }, []);
 
   useEffect(() => {
