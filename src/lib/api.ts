@@ -10,6 +10,8 @@ import type {
   MetaKPI, MetaComparison, MetaAlert, Notification, BotStatus, Settings, Backup,
   SharedLink, SharedLinkScope, Organization, ClientDashboardData,
   AIAction, AIAnalysis, AdSetWithAds, MediaInfo, HistoryBundle, MarketingSkill,
+  EngagementHeatmapCell, TopPostRow, GrowthPoint, AutomationRule, PostApproval,
+  CaptionABTest, InboxMessage, MediaLibraryItem, AuditLog, FreepikImage, ApprovalStatus,
 } from "./types";
 
 const BASE_URL = (import.meta.env.VITE_API_URL as string | undefined)?.replace(/\/$/, "") ?? "";
