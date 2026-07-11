@@ -40,6 +40,11 @@ const ia = [
   { title: "Histórico", url: "/history", icon: History },
 ] as const;
 
+const integrations = [
+  { title: "Canva Studio", url: "/canva-studio", icon: Palette },
+  { title: "IdP OAuth2", url: "/idp", icon: KeyRound },
+] as const;
+
 const agency = [
   { title: "Agências", url: "/organizacoes", icon: Building2 },
   { title: "Links do cliente", url: "/shared-links", icon: Link2 },
