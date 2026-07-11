@@ -21,6 +21,7 @@ import { Route as MetaCreativesRouteImport } from './routes/meta-creatives'
 import { Route as HistoryRouteImport } from './routes/history'
 import { Route as CalendarRouteImport } from './routes/calendar'
 import { Route as BulkRouteImport } from './routes/bulk'
+import { Route as ApprovalsRouteImport } from './routes/approvals'
 import { Route as AnalyticsRouteImport } from './routes/analytics'
 import { Route as AiManagerRouteImport } from './routes/ai-manager'
 import { Route as AiChatRouteImport } from './routes/ai-chat'
@@ -90,6 +91,11 @@ const BulkRoute = BulkRouteImport.update({
   path: '/bulk',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApprovalsRoute = ApprovalsRouteImport.update({
+  id: '/approvals',
+  path: '/approvals',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AnalyticsRoute = AnalyticsRouteImport.update({
   id: '/analytics',
   path: '/analytics',
@@ -136,6 +142,7 @@ export interface FileRoutesByFullPath {
   '/ai-chat': typeof AiChatRoute
   '/ai-manager': typeof AiManagerRoute
   '/analytics': typeof AnalyticsRoute
+  '/approvals': typeof ApprovalsRoute
   '/bulk': typeof BulkRoute
   '/calendar': typeof CalendarRoute
   '/history': typeof HistoryRoute
@@ -158,6 +165,7 @@ export interface FileRoutesByTo {
   '/ai-chat': typeof AiChatRoute
   '/ai-manager': typeof AiManagerRoute
   '/analytics': typeof AnalyticsRoute
+  '/approvals': typeof ApprovalsRoute
   '/bulk': typeof BulkRoute
   '/calendar': typeof CalendarRoute
   '/history': typeof HistoryRoute
@@ -180,6 +188,7 @@ export interface FileRoutesById {
   '/ai-chat': typeof AiChatRoute
   '/ai-manager': typeof AiManagerRoute
   '/analytics': typeof AnalyticsRoute
+  '/approvals': typeof ApprovalsRoute
   '/bulk': typeof BulkRoute
   '/calendar': typeof CalendarRoute
   '/history': typeof HistoryRoute
@@ -204,6 +213,7 @@ export interface FileRouteTypes {
     | '/ai-chat'
     | '/ai-manager'
     | '/analytics'
+    | '/approvals'
     | '/bulk'
     | '/calendar'
     | '/history'
@@ -226,6 +236,7 @@ export interface FileRouteTypes {
     | '/ai-chat'
     | '/ai-manager'
     | '/analytics'
+    | '/approvals'
     | '/bulk'
     | '/calendar'
     | '/history'
@@ -247,6 +258,7 @@ export interface FileRouteTypes {
     | '/ai-chat'
     | '/ai-manager'
     | '/analytics'
+    | '/approvals'
     | '/bulk'
     | '/calendar'
     | '/history'
@@ -270,6 +282,7 @@ export interface RootRouteChildren {
   AiChatRoute: typeof AiChatRoute
   AiManagerRoute: typeof AiManagerRoute
   AnalyticsRoute: typeof AnalyticsRoute
+  ApprovalsRoute: typeof ApprovalsRoute
   BulkRoute: typeof BulkRoute
   CalendarRoute: typeof CalendarRoute
   HistoryRoute: typeof HistoryRoute
@@ -371,6 +384,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BulkRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/approvals': {
+      id: '/approvals'
+      path: '/approvals'
+      fullPath: '/approvals'
+      preLoaderRoute: typeof ApprovalsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/analytics': {
       id: '/analytics'
       path: '/analytics'
@@ -461,6 +481,7 @@ const rootRouteChildren: RootRouteChildren = {
   AiChatRoute: AiChatRoute,
   AiManagerRoute: AiManagerRoute,
   AnalyticsRoute: AnalyticsRoute,
+  ApprovalsRoute: ApprovalsRoute,
   BulkRoute: BulkRoute,
   CalendarRoute: CalendarRoute,
   HistoryRoute: HistoryRoute,

@@ -64,7 +64,7 @@ function ApprovalsPage() {
               <InstagramPreview
                 imageUrl={r.post.media_path ? `https://picsum.photos/seed/post-${r.post_id}/600/600` : `https://picsum.photos/seed/post-${r.post_id}/600/600`}
                 caption={r.post.caption}
-                username={r.post.profile_username ?? "instabot"}
+                username={r.post.profile_name ?? "instabot"}
               />
               <div className="text-xs text-muted-foreground">
                 Solicitado por <strong>{r.requested_by}</strong> · {new Date(r.requested_at).toLocaleString("pt-BR")}
