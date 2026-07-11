@@ -16,6 +16,7 @@ import type {
   OAuthClient, OAuthUser, OAuthToken, IdPStatus,
   AITemplate, DeepAnalysisResult, TranscriptionResult, GoogleIntegrationStatus,
   IntegrationCard, ExportJob, RoleMember, RoleDefinition, MediaTool, VideoEditorTool,
+  CalendarV2Query, CalendarV2Response, QuickScheduleInput,
 } from "./types";
 
 const BASE_URL = (import.meta.env.VITE_API_URL as string | undefined)?.replace(/\/$/, "") ?? "";
