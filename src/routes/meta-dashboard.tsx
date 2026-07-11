@@ -54,14 +54,6 @@ function MetaDashboardPage() {
     { label: "CPC médio", value: `R$ ${kpis.avg_cpc.toFixed(2)}`, icon: Zap, color: "text-destructive", grad: "bg-gradient-to-br from-destructive/10 to-destructive/5" },
   ] : [];
 
-  const kpiCards = kpis ? [
-    { label: "Contas", value: String(kpis.total_accounts), icon: Users, color: "text-primary", grad: "bg-gradient-to-br from-primary/10 to-primary/5" },
-    { label: "Impressões (7d)", value: kpis.period_impressions.toLocaleString("pt-BR"), icon: Eye, color: "text-info", grad: "bg-gradient-to-br from-info/10 to-info/5" },
-    { label: "Cliques (7d)", value: kpis.period_clicks.toLocaleString("pt-BR"), icon: MousePointerClick, color: "text-accent", grad: "bg-gradient-to-br from-accent/10 to-accent/5" },
-    { label: "Gasto (7d)", value: `R$ ${kpis.period_spend.toFixed(2)}`, icon: DollarSign, color: "text-success", grad: "bg-gradient-to-br from-success/10 to-success/5" },
-    { label: "CTR médio", value: `${kpis.avg_ctr.toFixed(2)}%`, icon: TrendingUp, color: "text-warning-foreground", grad: "bg-gradient-to-br from-warning/10 to-warning/5" },
-    { label: "CPC médio", value: `R$ ${kpis.avg_cpc.toFixed(2)}`, icon: Zap, color: "text-destructive", grad: "bg-gradient-to-br from-destructive/10 to-destructive/5" },
-  ] : [];
 
   return (
     <div>
