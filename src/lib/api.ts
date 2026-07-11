@@ -36,6 +36,7 @@ const delay = <T>(v: T, ms = 250) => new Promise<T>((r) => setTimeout(() => r(v)
 const state = {
   sharedLinks: [...mock.mockSharedLinks],
   orgs: [...mock.mockOrganizations],
+  aiActions: [...mock.mockAIActions],
 };
 
 const randToken = () => Array.from({ length: 24 }, () => "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"[Math.floor(Math.random() * 62)]).join("");
