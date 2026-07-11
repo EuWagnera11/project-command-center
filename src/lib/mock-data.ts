@@ -423,21 +423,21 @@ export const mockTranscription: TranscriptionResult = {
 };
 
 export const mockGoogleStatus: GoogleIntegrationStatus = {
-  connected: true, email: "wagner@instabot.local", sheets: 4, last_sync: ago(0, 0, 30),
+  connected: true, email: "wagner@instabot.local", sheets: 4, last_sync: ago(1),
 };
 
 export const mockIntegrationCards: IntegrationCard[] = [
-  { id: "instagram", name: "Instagram", category: "instagram", status: "connected", description: "3 contas conectadas via browser login", last_activity: ago(0, 0, 5) },
-  { id: "meta-ads", name: "Meta Ads", category: "meta", status: "connected", description: "5 contas ativas em 3 BMs", last_activity: ago(0, 0, 12) },
-  { id: "canva", name: "Canva", category: "canva", status: "connected", description: "12 designs sincronizados", last_activity: ago(0, 1) },
-  { id: "canva-app", name: "Canva Apps SDK", category: "canva", status: "connected", description: "App ID AAHAAH8NpAk publicado", last_activity: ago(0, 2) },
-  { id: "google", name: "Google Sheets", category: "google", status: "connected", description: "4 planilhas sincronizando", last_activity: ago(0, 0, 30) },
-  { id: "freepik", name: "Freepik", category: "freepik", status: "connected", description: "API key ativa", last_activity: ago(0, 3) },
-  { id: "idp", name: "IdP OAuth2", category: "idp", status: "connected", description: "2 clients ativos, 1 usuário logado", last_activity: ago(0, 0, 2) },
+  { id: "instagram", name: "Instagram", category: "instagram", status: "connected", description: "3 contas conectadas via browser login", last_activity: ago(1) },
+  { id: "meta-ads", name: "Meta Ads", category: "meta", status: "connected", description: "5 contas ativas em 3 BMs", last_activity: ago(1) },
+  { id: "canva", name: "Canva", category: "canva", status: "connected", description: "12 designs sincronizados", last_activity: ago(60) },
+  { id: "canva-app", name: "Canva Apps SDK", category: "canva", status: "connected", description: "App ID AAHAAH8NpAk publicado", last_activity: ago(120) },
+  { id: "google", name: "Google Sheets", category: "google", status: "connected", description: "4 planilhas sincronizando", last_activity: ago(1) },
+  { id: "freepik", name: "Freepik", category: "freepik", status: "connected", description: "API key ativa", last_activity: ago(180) },
+  { id: "idp", name: "IdP OAuth2", category: "idp", status: "connected", description: "2 clients ativos, 1 usuário logado", last_activity: ago(1) },
 ];
 
 export const mockExports: ExportJob[] = [
-  { id: 1, name: "Posts_Novembro_2026", kind: "posts", format: "csv", size_kb: 128, created_at: ago(0, 2), url: "#" },
+  { id: 1, name: "Posts_Novembro_2026", kind: "posts", format: "csv", size_kb: 128, created_at: ago(120), url: "#" },
   { id: 2, name: "Relatorio_Meta_Semanal", kind: "meta", format: "pdf", size_kb: 892, created_at: ago(1), url: "#" },
   { id: 3, name: "Historico_Completo", kind: "history", format: "xlsx", size_kb: 456, created_at: ago(3), url: "#" },
   { id: 4, name: "Audit_Log_30d", kind: "audit", format: "csv", size_kb: 214, created_at: ago(5), url: "#" },
@@ -452,9 +452,9 @@ export const mockRoleDefinitions: RoleDefinition[] = [
 ];
 
 export const mockRoleMembers: RoleMember[] = [
-  { id: 1, name: "Wagner Andrade", email: "wagner@instabot.local", role: "owner", last_seen: ago(0, 0, 0), avatar_seed: "wagner" },
-  { id: 2, name: "Marina Silva", email: "marina@agencia.com", role: "admin", last_seen: ago(0, 1), avatar_seed: "marina" },
-  { id: 3, name: "Rafael Souza", email: "rafael@agencia.com", role: "editor", last_seen: ago(0, 3), avatar_seed: "rafael" },
+  { id: 1, name: "Wagner Andrade", email: "wagner@instabot.local", role: "owner", last_seen: ago(0), avatar_seed: "wagner" },
+  { id: 2, name: "Marina Silva", email: "marina@agencia.com", role: "admin", last_seen: ago(60), avatar_seed: "marina" },
+  { id: 3, name: "Rafael Souza", email: "rafael@agencia.com", role: "editor", last_seen: ago(180), avatar_seed: "rafael" },
   { id: 4, name: "Cliente Loja X", email: "contato@lojax.com", role: "viewer", last_seen: ago(2), avatar_seed: "lojax" },
   { id: 5, name: "Cliente Café Y", email: "gerencia@cafey.com", role: "viewer", last_seen: ago(7), avatar_seed: "cafey" },
 ];
