@@ -87,7 +87,7 @@ export const api = {
   metaAccounts: (): Promise<MetaAccount[]> => USE_MOCK ? delay(mock.mockMetaAccounts) : req("/api/meta-ads/accounts"),
   metaKPI: (days = 7): Promise<MetaKPI> => USE_MOCK ? delay(mock.mockMetaKPI) : req(`/api/meta-ads/dashboard/kpis?days=${days}`),
   metaComparison: (days = 7): Promise<MetaComparison[]> => USE_MOCK ? delay(mock.mockMetaComparison) : req(`/api/meta-ads/dashboard/comparison?days=${days}`),
-  metaTimeseries: (days = 7) => USE_MOCK ? delay(mock.mockMetaTimeseries) : req(`/api/meta-ads/dashboard/timeseries?days=${days}`),
+  metaTimeseries: (days = 7): Promise<Array<{ date: string; label: string; spend: number; impressions: number; clicks: number; ctr: number }>> => USE_MOCK ? delay(mock.mockMetaTimeseries) : req(`/api/meta-ads/dashboard/timeseries?days=${days}`),
   metaCampaigns: (accountId?: string): Promise<MetaCampaign[]> => USE_MOCK
     ? delay(accountId ? mock.mockCampaigns.filter((c) => c.ad_account_id === accountId) : mock.mockCampaigns)
     : req(`/api/meta-ads/campaigns${accountId ? `?account_id=${accountId}` : ""}`),
