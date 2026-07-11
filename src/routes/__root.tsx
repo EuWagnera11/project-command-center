@@ -155,6 +155,7 @@ function RootComponent() {
                 <main className="min-w-0 flex-1">
                   <Outlet />
                 </main>
+                <CommandPalette />
               </div>
             </div>
             <Toaster position="bottom-right" richColors />
