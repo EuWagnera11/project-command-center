@@ -2,6 +2,7 @@ import { Link, useRouterState } from "@tanstack/react-router";
 import {
   LayoutDashboard, ListChecks, PlusCircle, Package, CalendarDays,
   Settings, BarChart3, Moon, Sun, Instagram, Link2, Building2,
+  Bot, MessageSquare, History, ImageIcon, Zap,
 } from "lucide-react";
 
 import {
@@ -23,11 +24,19 @@ const nav = [
 
 const ads = [
   { title: "Meta Ads", url: "/meta-dashboard", icon: BarChart3 },
+  { title: "Criativos", url: "/meta-creatives/c1", icon: ImageIcon },
+] as const;
+
+const ia = [
+  { title: "IA Manager", url: "/ai-manager", icon: Bot },
+  { title: "Chat IA", url: "/ai-chat", icon: MessageSquare },
+  { title: "Histórico", url: "/history", icon: History },
 ] as const;
 
 const agency = [
   { title: "Agências", url: "/organizacoes", icon: Building2 },
   { title: "Links do cliente", url: "/shared-links", icon: Link2 },
+  { title: "Quick Share", url: "/quick-share", icon: Zap },
 ] as const;
 
 const system = [
