@@ -32,6 +32,7 @@ import { Route as AnalyticsRouteImport } from './routes/analytics'
 import { Route as AiTemplatesRouteImport } from './routes/ai-templates'
 import { Route as AiManagerRouteImport } from './routes/ai-manager'
 import { Route as AiChatRouteImport } from './routes/ai-chat'
+import { Route as AdvancedAiRouteImport } from './routes/advanced-ai'
 import { Route as AbTestsRouteImport } from './routes/ab-tests'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as SettingsIndexRouteImport } from './routes/settings.index'
@@ -154,6 +155,11 @@ const AiChatRoute = AiChatRouteImport.update({
   path: '/ai-chat',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdvancedAiRoute = AdvancedAiRouteImport.update({
+  id: '/advanced-ai',
+  path: '/advanced-ai',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AbTestsRoute = AbTestsRouteImport.update({
   id: '/ab-tests',
   path: '/ab-tests',
@@ -188,6 +194,7 @@ const ClientTokenRoute = ClientTokenRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/ab-tests': typeof AbTestsRoute
+  '/advanced-ai': typeof AdvancedAiRoute
   '/ai-chat': typeof AiChatRoute
   '/ai-manager': typeof AiManagerRoute
   '/ai-templates': typeof AiTemplatesRoute
@@ -219,6 +226,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/ab-tests': typeof AbTestsRoute
+  '/advanced-ai': typeof AdvancedAiRoute
   '/ai-chat': typeof AiChatRoute
   '/ai-manager': typeof AiManagerRoute
   '/ai-templates': typeof AiTemplatesRoute
@@ -250,6 +258,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/ab-tests': typeof AbTestsRoute
+  '/advanced-ai': typeof AdvancedAiRoute
   '/ai-chat': typeof AiChatRoute
   '/ai-manager': typeof AiManagerRoute
   '/ai-templates': typeof AiTemplatesRoute
@@ -283,6 +292,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/ab-tests'
+    | '/advanced-ai'
     | '/ai-chat'
     | '/ai-manager'
     | '/ai-templates'
@@ -314,6 +324,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/ab-tests'
+    | '/advanced-ai'
     | '/ai-chat'
     | '/ai-manager'
     | '/ai-templates'
@@ -344,6 +355,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/ab-tests'
+    | '/advanced-ai'
     | '/ai-chat'
     | '/ai-manager'
     | '/ai-templates'
@@ -376,6 +388,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AbTestsRoute: typeof AbTestsRoute
+  AdvancedAiRoute: typeof AdvancedAiRoute
   AiChatRoute: typeof AiChatRoute
   AiManagerRoute: typeof AiManagerRoute
   AiTemplatesRoute: typeof AiTemplatesRoute
@@ -565,6 +578,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AiChatRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/advanced-ai': {
+      id: '/advanced-ai'
+      path: '/advanced-ai'
+      fullPath: '/advanced-ai'
+      preLoaderRoute: typeof AdvancedAiRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/ab-tests': {
       id: '/ab-tests'
       path: '/ab-tests'
@@ -639,6 +659,7 @@ const SettingsRouteWithChildren = SettingsRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AbTestsRoute: AbTestsRoute,
+  AdvancedAiRoute: AdvancedAiRoute,
   AiChatRoute: AiChatRoute,
   AiManagerRoute: AiManagerRoute,
   AiTemplatesRoute: AiTemplatesRoute,
