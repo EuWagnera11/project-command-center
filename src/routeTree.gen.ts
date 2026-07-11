@@ -22,6 +22,7 @@ import { Route as MediaLibraryRouteImport } from './routes/media-library'
 import { Route as InboxRouteImport } from './routes/inbox'
 import { Route as HistoryRouteImport } from './routes/history'
 import { Route as FreepikStudioRouteImport } from './routes/freepik-studio'
+import { Route as CanvaStudioRouteImport } from './routes/canva-studio'
 import { Route as CalendarRouteImport } from './routes/calendar'
 import { Route as BulkRouteImport } from './routes/bulk'
 import { Route as AuditRouteImport } from './routes/audit'
@@ -101,6 +102,11 @@ const FreepikStudioRoute = FreepikStudioRouteImport.update({
   path: '/freepik-studio',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CanvaStudioRoute = CanvaStudioRouteImport.update({
+  id: '/canva-studio',
+  path: '/canva-studio',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CalendarRoute = CalendarRouteImport.update({
   id: '/calendar',
   path: '/calendar',
@@ -177,6 +183,7 @@ export interface FileRoutesByFullPath {
   '/audit': typeof AuditRoute
   '/bulk': typeof BulkRoute
   '/calendar': typeof CalendarRoute
+  '/canva-studio': typeof CanvaStudioRoute
   '/freepik-studio': typeof FreepikStudioRoute
   '/history': typeof HistoryRoute
   '/inbox': typeof InboxRoute
@@ -205,6 +212,7 @@ export interface FileRoutesByTo {
   '/audit': typeof AuditRoute
   '/bulk': typeof BulkRoute
   '/calendar': typeof CalendarRoute
+  '/canva-studio': typeof CanvaStudioRoute
   '/freepik-studio': typeof FreepikStudioRoute
   '/history': typeof HistoryRoute
   '/inbox': typeof InboxRoute
@@ -233,6 +241,7 @@ export interface FileRoutesById {
   '/audit': typeof AuditRoute
   '/bulk': typeof BulkRoute
   '/calendar': typeof CalendarRoute
+  '/canva-studio': typeof CanvaStudioRoute
   '/freepik-studio': typeof FreepikStudioRoute
   '/history': typeof HistoryRoute
   '/inbox': typeof InboxRoute
@@ -263,6 +272,7 @@ export interface FileRouteTypes {
     | '/audit'
     | '/bulk'
     | '/calendar'
+    | '/canva-studio'
     | '/freepik-studio'
     | '/history'
     | '/inbox'
@@ -291,6 +301,7 @@ export interface FileRouteTypes {
     | '/audit'
     | '/bulk'
     | '/calendar'
+    | '/canva-studio'
     | '/freepik-studio'
     | '/history'
     | '/inbox'
@@ -318,6 +329,7 @@ export interface FileRouteTypes {
     | '/audit'
     | '/bulk'
     | '/calendar'
+    | '/canva-studio'
     | '/freepik-studio'
     | '/history'
     | '/inbox'
@@ -347,6 +359,7 @@ export interface RootRouteChildren {
   AuditRoute: typeof AuditRoute
   BulkRoute: typeof BulkRoute
   CalendarRoute: typeof CalendarRoute
+  CanvaStudioRoute: typeof CanvaStudioRoute
   FreepikStudioRoute: typeof FreepikStudioRoute
   HistoryRoute: typeof HistoryRoute
   InboxRoute: typeof InboxRoute
@@ -454,6 +467,13 @@ declare module '@tanstack/react-router' {
       path: '/freepik-studio'
       fullPath: '/freepik-studio'
       preLoaderRoute: typeof FreepikStudioRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/canva-studio': {
+      id: '/canva-studio'
+      path: '/canva-studio'
+      fullPath: '/canva-studio'
+      preLoaderRoute: typeof CanvaStudioRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/calendar': {
@@ -586,6 +606,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuditRoute: AuditRoute,
   BulkRoute: BulkRoute,
   CalendarRoute: CalendarRoute,
+  CanvaStudioRoute: CanvaStudioRoute,
   FreepikStudioRoute: FreepikStudioRoute,
   HistoryRoute: HistoryRoute,
   InboxRoute: InboxRoute,
