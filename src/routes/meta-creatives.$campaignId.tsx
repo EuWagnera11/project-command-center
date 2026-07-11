@@ -42,21 +42,24 @@ function Page() {
 
       <div className="space-y-8 p-6">
         {isLoading && <div className="text-sm text-muted-foreground">Carregando criativos…</div>}
-        {(adsets ?? []).map((set) => (
-          <div key={set.id}>
+        {(adsets ?? []).map(({ adset, ads }) => (
+          <div key={adset.id}>
             <div className="mb-3 flex items-center gap-2">
-              <h3 className="text-lg font-semibold">{set.name}</h3>
-              <Badge variant="outline">{set.status}</Badge>
+              <h3 className="text-lg font-semibold">{adset.name}</h3>
+              <Badge variant="outline">{adset.status}</Badge>
+              {adset.daily_budget != null && (
+                <Badge variant="outline">R$ {adset.daily_budget}/dia</Badge>
+              )}
               <span className="ml-auto text-sm text-muted-foreground">
-                {set.ads.length} {set.ads.length === 1 ? "criativo" : "criativos"}
+                {ads.length} {ads.length === 1 ? "criativo" : "criativos"}
               </span>
             </div>
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-              {set.ads.map((ad) => (
+              {ads.map((ad) => (
                 <Card key={ad.id} className="overflow-hidden">
                   <div className="aspect-square overflow-hidden bg-muted">
-                    {ad.creative_url ? (
-                      <img src={ad.creative_url} alt={ad.name} loading="lazy" className="h-full w-full object-cover" />
+                    {ad.image_url ? (
+                      <img src={ad.image_url} alt={ad.name} loading="lazy" className="h-full w-full object-cover" />
                     ) : (
                       <div className="grid h-full place-items-center text-xs text-muted-foreground">Sem preview</div>
                     )}
@@ -66,12 +69,8 @@ function Page() {
                       <div className="min-w-0 flex-1 truncate text-sm font-medium">{ad.name}</div>
                       <Badge variant="outline" className="text-[10px]">{ad.status}</Badge>
                     </div>
-                    {ad.headline && <p className="mt-1 truncate text-xs text-muted-foreground">{ad.headline}</p>}
-                    {ad.preview_url && (
-                      <a href={ad.preview_url} target="_blank" rel="noreferrer" className="mt-2 inline-flex items-center gap-1 text-xs text-primary hover:underline">
-                        Ver no Meta <ExternalLink className="h-3 w-3" />
-                      </a>
-                    )}
+                    {ad.title && <p className="mt-1 truncate text-xs font-medium">{ad.title}</p>}
+                    {ad.body && <p className="line-clamp-2 text-[11px] text-muted-foreground">{ad.body}</p>}
                   </div>
                 </Card>
               ))}
