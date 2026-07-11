@@ -9,6 +9,7 @@ import type {
   Post, Profile, Template, HashtagGroup, MetaAccount, MetaCampaign,
   MetaKPI, MetaComparison, MetaAlert, Notification, BotStatus, Settings, Backup,
   SharedLink, SharedLinkScope, Organization, ClientDashboardData,
+  AIAction, AIAnalysis, AdSetWithAds, MediaInfo, HistoryBundle, MarketingSkill,
 } from "./types";
 
 const BASE_URL = (import.meta.env.VITE_API_URL as string | undefined)?.replace(/\/$/, "") ?? "";
