@@ -401,3 +401,55 @@ export interface IdPStatus {
   clients_count: number;
   users_count: number;
 }
+
+// ---------- Rodada final ----------
+
+export interface AITemplate {
+  id: number; slug: string; title: string; description: string;
+  category: "caption" | "hashtag" | "campaign" | "analysis" | "reply";
+  prompt: string; uses: number;
+}
+
+export interface DeepAnalysisResult {
+  summary: string;
+  strengths: string[];
+  weaknesses: string[];
+  opportunities: string[];
+  recommendations: string[];
+}
+
+export interface TranscriptionResult {
+  text: string; language: string; duration_sec: number;
+}
+
+export interface GoogleIntegrationStatus {
+  connected: boolean; email?: string; sheets: number; last_sync?: string;
+}
+
+export interface IntegrationCard {
+  id: string; name: string; category: "canva" | "google" | "freepik" | "meta" | "idp" | "instagram";
+  status: "connected" | "disconnected" | "error"; description: string; last_activity?: string;
+}
+
+export interface ExportJob {
+  id: number; name: string; kind: "posts" | "meta" | "history" | "audit";
+  format: "csv" | "pdf" | "xlsx"; size_kb: number; created_at: string; url: string;
+}
+
+export type RoleName = "owner" | "admin" | "editor" | "viewer";
+
+export interface RoleMember {
+  id: number; name: string; email: string; role: RoleName; last_seen?: string; avatar_seed: string;
+}
+
+export interface RoleDefinition {
+  name: RoleName; label: string; permissions: string[];
+}
+
+export interface MediaTool {
+  id: string; label: string; description: string; icon: "compress" | "watermark" | "removebg" | "crop" | "convert" | "audio";
+}
+
+export interface VideoEditorTool {
+  id: string; label: string; description: string;
+}
