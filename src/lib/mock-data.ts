@@ -138,3 +138,60 @@ export const mockSharedLinks: SharedLink[] = [
   { id: 2, token: "7pQxNb2ycDe8Rt5Mn4Ku9Lah", name: "Cliente XYZ — Conta LojaAds", scope: "meta_account", scope_id: "act_2", view_count: 47, created_at: iso(-30), last_accessed: iso(0, 8, 15), view_password: "1234", is_active: true, public_url: `${publicBase}/client/7pQxNb2ycDe8Rt5Mn4Ku9Lah` },
   { id: 3, token: "K3rL9pWmZa2FvHt7QsBd6Xnu", name: "VIP Trimestral", scope: "overview", view_count: 0, created_at: iso(-2), is_active: false, public_url: `${publicBase}/client/K3rL9pWmZa2FvHt7QsBd6Xnu` },
 ];
+
+// -------- PARTE FINAL: IA + Marketing --------
+
+export const mockAIActions: AIAction[] = [
+  { id: 1001, campaign_id: "c2", campaign_name: "Remarketing Site — 7d", type: "pause_campaign", severity: "high", description: "CTR de 0.32% abaixo do threshold. Sugerido pausar e testar novo criativo.", status: "pending", created_at: iso(0, 11, 15) },
+  { id: 1002, campaign_id: "c1", campaign_name: "Black Friday 2025 — Loja Wagner", type: "scale_budget", severity: "info", description: "CTR de 3.24% acima do ideal. Sugerido escalar budget em 25%.", status: "pending", created_at: iso(0, 10, 0) },
+  { id: 1003, campaign_id: "c3", campaign_name: "Advantage+ Shopping", type: "refine_audience", severity: "info", description: "CPC de R$ 6,20 acima do esperado. Refinar público.", status: "approved", created_at: iso(-1, 15, 30), feedback: { rating: 4, comment: "Boa análise" } },
+  { id: 1004, campaign_id: "c1", campaign_name: "Black Friday 2025 — Loja Wagner", type: "healthy", severity: "ok", description: "Performance saudável — nenhuma ação necessária.", status: "executed", created_at: iso(-2, 12, 0) },
+  { id: 1005, campaign_id: "c2", campaign_name: "Remarketing Site — 7d", type: "new_creative", severity: "high", description: "Impressões caindo 40% em 3 dias. Renovar criativo.", status: "rejected", created_at: iso(-2, 9, 45), reason: "Já testamos essa hipótese semana passada" },
+];
+
+const adImg = (i: number) => `https://picsum.photos/seed/instabot-ad-${i}/280/280`;
+
+export const mockAdSetsWithAds: Record<string, AdSetWithAds[]> = {
+  c1: [
+    { adset: { id: "as1", name: "Público quente 25-45", status: "ACTIVE", daily_budget: 3000, optimization_goal: "OFFSITE_CONVERSIONS" },
+      ads: [
+        { id: "ad1", name: "Criativo A - Video", title: "Black Friday é agora 🔥", body: "Descontos de até 70% em toda a loja. Corre!", image_url: adImg(1), status: "ACTIVE" },
+        { id: "ad2", name: "Criativo B - Estática", title: "Última chance", body: "Frete grátis para pedidos acima de R$ 199.", image_url: adImg(2), status: "ACTIVE" },
+      ] },
+    { adset: { id: "as2", name: "Lookalike 1% Compradores", status: "PAUSED", daily_budget: 2000, optimization_goal: "LINK_CLICKS" },
+      ads: [
+        { id: "ad3", name: "Criativo C - Carrossel", title: "Nossos best-sellers", body: "Deslize e veja os mais vendidos da semana.", image_url: adImg(3), status: "PAUSED" },
+      ] },
+  ],
+  c2: [
+    { adset: { id: "as3", name: "Remarketing 7d - Site", status: "PAUSED", daily_budget: 1500, optimization_goal: "LINK_CLICKS" },
+      ads: [
+        { id: "ad4", name: "RMK - Sem preço", title: "Você esqueceu algo?", body: "Volte e finalize sua compra com um cupom exclusivo.", image_url: adImg(4), status: "PAUSED" },
+      ] },
+  ],
+  c3: [
+    { adset: { id: "as4", name: "Advantage+ Auto", status: "PAUSED", optimization_goal: "OFFSITE_CONVERSIONS" },
+      ads: [
+        { id: "ad5", name: "Dynamic Feed", title: "Recomendado para você", body: "Ofertas personalizadas selecionadas pela IA da Meta.", image_url: adImg(5), status: "PAUSED" },
+        { id: "ad6", name: "Reels Vertical", title: "Descubra novidades", body: "Nova coleção de verão disponível agora.", image_url: adImg(6), status: "PAUSED" },
+      ] },
+  ],
+};
+
+export const mockSkills: MarketingSkill[] = [
+  { slug: "meta-ads", title: "Meta Ads", description: "Métricas, objetivos e boas práticas de otimização." },
+  { slug: "copywriting-frameworks", title: "Copywriting", description: "AIDA, PAS, BAB e hooks para Instagram." },
+  { slug: "instagram-algorithm", title: "Algoritmo IG 2025", description: "Como o algoritmo do Instagram funciona hoje." },
+  { slug: "traffic-funnels", title: "Funis de tráfego", description: "TOFU/MOFU/BOFU e remarketing." },
+  { slug: "social-media-trends-2025", title: "Tendências 2025", description: "Reels, Threads, Shorts, TikTok." },
+  { slug: "design-fundamentals", title: "Design Fundamentals", description: "Hierarquia visual, contraste, tipografia." },
+  { slug: "analytics-kpis", title: "Analytics & KPIs", description: "Métricas por setor e attribution models." },
+  { slug: "lead-generation", title: "Lead Generation", description: "Lead magnets, nutrição e scoring." },
+  { slug: "creative-direction", title: "Creative Direction", description: "Briefs, tipos de criativos e testes A/B." },
+  { slug: "email-marketing", title: "Email Marketing", description: "Deliverability, segmentação e automação." },
+  { slug: "cro-conversion", title: "CRO", description: "Otimização de landing pages e testes A/B." },
+  { slug: "pricing-strategy", title: "Pricing Strategy", description: "Freemium, tiers e value-based." },
+  { slug: "content-strategy", title: "Content Strategy", description: "Pilares e calendário editorial 80/20." },
+  { slug: "sales-automation", title: "Sales Automation", description: "Make, n8n, Zapier e workflows." },
+  { slug: "brand-positioning", title: "Brand Positioning", description: "Brand statement e arquétipos." },
+];
