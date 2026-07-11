@@ -110,7 +110,7 @@ function AITemplatesPage() {
               if (!selected) return;
               setLoading(true);
               const parsed = Object.fromEntries(vars.split("\n").filter(Boolean).map(l => l.split("=")));
-              const res = await api.aiRunTemplate(selected.id, parsed);
+              const res = await api.aiRunTemplate(selected.id, parsed) as { output: string };
               setOutput(res.output);
               setLoading(false);
               toast.success("Template executado");

@@ -29,6 +29,7 @@ import { Route as BulkRouteImport } from './routes/bulk'
 import { Route as AuditRouteImport } from './routes/audit'
 import { Route as ApprovalsRouteImport } from './routes/approvals'
 import { Route as AnalyticsRouteImport } from './routes/analytics'
+import { Route as AiTemplatesRouteImport } from './routes/ai-templates'
 import { Route as AiManagerRouteImport } from './routes/ai-manager'
 import { Route as AiChatRouteImport } from './routes/ai-chat'
 import { Route as AbTestsRouteImport } from './routes/ab-tests'
@@ -138,6 +139,11 @@ const AnalyticsRoute = AnalyticsRouteImport.update({
   path: '/analytics',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AiTemplatesRoute = AiTemplatesRouteImport.update({
+  id: '/ai-templates',
+  path: '/ai-templates',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AiManagerRoute = AiManagerRouteImport.update({
   id: '/ai-manager',
   path: '/ai-manager',
@@ -184,6 +190,7 @@ export interface FileRoutesByFullPath {
   '/ab-tests': typeof AbTestsRoute
   '/ai-chat': typeof AiChatRoute
   '/ai-manager': typeof AiManagerRoute
+  '/ai-templates': typeof AiTemplatesRoute
   '/analytics': typeof AnalyticsRoute
   '/approvals': typeof ApprovalsRoute
   '/audit': typeof AuditRoute
@@ -214,6 +221,7 @@ export interface FileRoutesByTo {
   '/ab-tests': typeof AbTestsRoute
   '/ai-chat': typeof AiChatRoute
   '/ai-manager': typeof AiManagerRoute
+  '/ai-templates': typeof AiTemplatesRoute
   '/analytics': typeof AnalyticsRoute
   '/approvals': typeof ApprovalsRoute
   '/audit': typeof AuditRoute
@@ -244,6 +252,7 @@ export interface FileRoutesById {
   '/ab-tests': typeof AbTestsRoute
   '/ai-chat': typeof AiChatRoute
   '/ai-manager': typeof AiManagerRoute
+  '/ai-templates': typeof AiTemplatesRoute
   '/analytics': typeof AnalyticsRoute
   '/approvals': typeof ApprovalsRoute
   '/audit': typeof AuditRoute
@@ -276,6 +285,7 @@ export interface FileRouteTypes {
     | '/ab-tests'
     | '/ai-chat'
     | '/ai-manager'
+    | '/ai-templates'
     | '/analytics'
     | '/approvals'
     | '/audit'
@@ -306,6 +316,7 @@ export interface FileRouteTypes {
     | '/ab-tests'
     | '/ai-chat'
     | '/ai-manager'
+    | '/ai-templates'
     | '/analytics'
     | '/approvals'
     | '/audit'
@@ -335,6 +346,7 @@ export interface FileRouteTypes {
     | '/ab-tests'
     | '/ai-chat'
     | '/ai-manager'
+    | '/ai-templates'
     | '/analytics'
     | '/approvals'
     | '/audit'
@@ -366,6 +378,7 @@ export interface RootRouteChildren {
   AbTestsRoute: typeof AbTestsRoute
   AiChatRoute: typeof AiChatRoute
   AiManagerRoute: typeof AiManagerRoute
+  AiTemplatesRoute: typeof AiTemplatesRoute
   AnalyticsRoute: typeof AnalyticsRoute
   ApprovalsRoute: typeof ApprovalsRoute
   AuditRoute: typeof AuditRoute
@@ -531,6 +544,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AnalyticsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/ai-templates': {
+      id: '/ai-templates'
+      path: '/ai-templates'
+      fullPath: '/ai-templates'
+      preLoaderRoute: typeof AiTemplatesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/ai-manager': {
       id: '/ai-manager'
       path: '/ai-manager'
@@ -621,6 +641,7 @@ const rootRouteChildren: RootRouteChildren = {
   AbTestsRoute: AbTestsRoute,
   AiChatRoute: AiChatRoute,
   AiManagerRoute: AiManagerRoute,
+  AiTemplatesRoute: AiTemplatesRoute,
   AnalyticsRoute: AnalyticsRoute,
   ApprovalsRoute: ApprovalsRoute,
   AuditRoute: AuditRoute,
