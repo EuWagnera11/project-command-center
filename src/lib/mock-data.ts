@@ -476,6 +476,9 @@ export const mockVideoEditorTools: VideoEditorTool[] = [
   { id: "detect-cuts", label: "Detectar Cortes", description: "Marcadores de mudança de cena" },
   { id: "run-pipeline", label: "Pipeline Completa", description: "Analisa + corta + normaliza áudio" },
   { id: "premiere-export", label: "Instruções Premiere", description: "Exporta XML/EDL para Adobe Premiere" },
+];
+
+
 
 // -------- Calendar V2 --------
 export const availablePeriods: CalendarV2PeriodOption[] = [
