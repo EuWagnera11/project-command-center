@@ -15,6 +15,7 @@ import { Route as ScheduleRouteImport } from './routes/schedule'
 import { Route as PostsRouteImport } from './routes/posts'
 import { Route as OrganizacoesRouteImport } from './routes/organizacoes'
 import { Route as MetaDashboardRouteImport } from './routes/meta-dashboard'
+import { Route as HistoryRouteImport } from './routes/history'
 import { Route as CalendarRouteImport } from './routes/calendar'
 import { Route as BulkRouteImport } from './routes/bulk'
 import { Route as AiManagerRouteImport } from './routes/ai-manager'
@@ -52,6 +53,11 @@ const OrganizacoesRoute = OrganizacoesRouteImport.update({
 const MetaDashboardRoute = MetaDashboardRouteImport.update({
   id: '/meta-dashboard',
   path: '/meta-dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HistoryRoute = HistoryRouteImport.update({
+  id: '/history',
+  path: '/history',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CalendarRoute = CalendarRouteImport.update({
@@ -101,6 +107,7 @@ export interface FileRoutesByFullPath {
   '/ai-manager': typeof AiManagerRoute
   '/bulk': typeof BulkRoute
   '/calendar': typeof CalendarRoute
+  '/history': typeof HistoryRoute
   '/meta-dashboard': typeof MetaDashboardRoute
   '/organizacoes': typeof OrganizacoesRoute
   '/posts': typeof PostsRoute
@@ -117,6 +124,7 @@ export interface FileRoutesByTo {
   '/ai-manager': typeof AiManagerRoute
   '/bulk': typeof BulkRoute
   '/calendar': typeof CalendarRoute
+  '/history': typeof HistoryRoute
   '/meta-dashboard': typeof MetaDashboardRoute
   '/organizacoes': typeof OrganizacoesRoute
   '/posts': typeof PostsRoute
@@ -133,6 +141,7 @@ export interface FileRoutesById {
   '/ai-manager': typeof AiManagerRoute
   '/bulk': typeof BulkRoute
   '/calendar': typeof CalendarRoute
+  '/history': typeof HistoryRoute
   '/meta-dashboard': typeof MetaDashboardRoute
   '/organizacoes': typeof OrganizacoesRoute
   '/posts': typeof PostsRoute
@@ -151,6 +160,7 @@ export interface FileRouteTypes {
     | '/ai-manager'
     | '/bulk'
     | '/calendar'
+    | '/history'
     | '/meta-dashboard'
     | '/organizacoes'
     | '/posts'
@@ -167,6 +177,7 @@ export interface FileRouteTypes {
     | '/ai-manager'
     | '/bulk'
     | '/calendar'
+    | '/history'
     | '/meta-dashboard'
     | '/organizacoes'
     | '/posts'
@@ -182,6 +193,7 @@ export interface FileRouteTypes {
     | '/ai-manager'
     | '/bulk'
     | '/calendar'
+    | '/history'
     | '/meta-dashboard'
     | '/organizacoes'
     | '/posts'
@@ -199,6 +211,7 @@ export interface RootRouteChildren {
   AiManagerRoute: typeof AiManagerRoute
   BulkRoute: typeof BulkRoute
   CalendarRoute: typeof CalendarRoute
+  HistoryRoute: typeof HistoryRoute
   MetaDashboardRoute: typeof MetaDashboardRoute
   OrganizacoesRoute: typeof OrganizacoesRoute
   PostsRoute: typeof PostsRoute
@@ -250,6 +263,13 @@ declare module '@tanstack/react-router' {
       path: '/meta-dashboard'
       fullPath: '/meta-dashboard'
       preLoaderRoute: typeof MetaDashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/history': {
+      id: '/history'
+      path: '/history'
+      fullPath: '/history'
+      preLoaderRoute: typeof HistoryRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/calendar': {
@@ -331,6 +351,7 @@ const rootRouteChildren: RootRouteChildren = {
   AiManagerRoute: AiManagerRoute,
   BulkRoute: BulkRoute,
   CalendarRoute: CalendarRoute,
+  HistoryRoute: HistoryRoute,
   MetaDashboardRoute: MetaDashboardRoute,
   OrganizacoesRoute: OrganizacoesRoute,
   PostsRoute: PostsRoute,
