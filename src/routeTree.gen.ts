@@ -15,6 +15,7 @@ import { Route as ScheduleRouteImport } from './routes/schedule'
 import { Route as RulesRouteImport } from './routes/rules'
 import { Route as RolesRouteImport } from './routes/roles'
 import { Route as QuickShareRouteImport } from './routes/quick-share'
+import { Route as PreviewRouteImport } from './routes/preview'
 import { Route as PostsRouteImport } from './routes/posts'
 import { Route as OrganizacoesRouteImport } from './routes/organizacoes'
 import { Route as MetaDashboardRouteImport } from './routes/meta-dashboard'
@@ -71,6 +72,11 @@ const RolesRoute = RolesRouteImport.update({
 const QuickShareRoute = QuickShareRouteImport.update({
   id: '/quick-share',
   path: '/quick-share',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PreviewRoute = PreviewRouteImport.update({
+  id: '/preview',
+  path: '/preview',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PostsRoute = PostsRouteImport.update({
@@ -233,6 +239,7 @@ export interface FileRoutesByFullPath {
   '/meta-dashboard': typeof MetaDashboardRoute
   '/organizacoes': typeof OrganizacoesRoute
   '/posts': typeof PostsRoute
+  '/preview': typeof PreviewRoute
   '/quick-share': typeof QuickShareRoute
   '/roles': typeof RolesRoute
   '/rules': typeof RulesRoute
@@ -268,6 +275,7 @@ export interface FileRoutesByTo {
   '/meta-dashboard': typeof MetaDashboardRoute
   '/organizacoes': typeof OrganizacoesRoute
   '/posts': typeof PostsRoute
+  '/preview': typeof PreviewRoute
   '/quick-share': typeof QuickShareRoute
   '/roles': typeof RolesRoute
   '/rules': typeof RulesRoute
@@ -303,6 +311,7 @@ export interface FileRoutesById {
   '/meta-dashboard': typeof MetaDashboardRoute
   '/organizacoes': typeof OrganizacoesRoute
   '/posts': typeof PostsRoute
+  '/preview': typeof PreviewRoute
   '/quick-share': typeof QuickShareRoute
   '/roles': typeof RolesRoute
   '/rules': typeof RulesRoute
@@ -340,6 +349,7 @@ export interface FileRouteTypes {
     | '/meta-dashboard'
     | '/organizacoes'
     | '/posts'
+    | '/preview'
     | '/quick-share'
     | '/roles'
     | '/rules'
@@ -375,6 +385,7 @@ export interface FileRouteTypes {
     | '/meta-dashboard'
     | '/organizacoes'
     | '/posts'
+    | '/preview'
     | '/quick-share'
     | '/roles'
     | '/rules'
@@ -409,6 +420,7 @@ export interface FileRouteTypes {
     | '/meta-dashboard'
     | '/organizacoes'
     | '/posts'
+    | '/preview'
     | '/quick-share'
     | '/roles'
     | '/rules'
@@ -445,6 +457,7 @@ export interface RootRouteChildren {
   MetaDashboardRoute: typeof MetaDashboardRoute
   OrganizacoesRoute: typeof OrganizacoesRoute
   PostsRoute: typeof PostsRoute
+  PreviewRoute: typeof PreviewRoute
   QuickShareRoute: typeof QuickShareRoute
   RolesRoute: typeof RolesRoute
   RulesRoute: typeof RulesRoute
@@ -496,6 +509,13 @@ declare module '@tanstack/react-router' {
       path: '/quick-share'
       fullPath: '/quick-share'
       preLoaderRoute: typeof QuickShareRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/preview': {
+      id: '/preview'
+      path: '/preview'
+      fullPath: '/preview'
+      preLoaderRoute: typeof PreviewRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/posts': {
@@ -740,6 +760,7 @@ const rootRouteChildren: RootRouteChildren = {
   MetaDashboardRoute: MetaDashboardRoute,
   OrganizacoesRoute: OrganizacoesRoute,
   PostsRoute: PostsRoute,
+  PreviewRoute: PreviewRoute,
   QuickShareRoute: QuickShareRoute,
   RolesRoute: RolesRoute,
   RulesRoute: RulesRoute,
