@@ -14,6 +14,8 @@ import type {
   CaptionABTest, InboxMessage, MediaLibraryItem, AuditLog, FreepikImage, ApprovalStatus,
   CanvaDesign, CanvaIntentLog, CanvaAppStatus, CanvaIntentKind,
   OAuthClient, OAuthUser, OAuthToken, IdPStatus,
+  AITemplate, DeepAnalysisResult, TranscriptionResult, GoogleIntegrationStatus,
+  IntegrationCard, ExportJob, RoleMember, RoleDefinition, MediaTool, VideoEditorTool,
 } from "./types";
 
 const BASE_URL = (import.meta.env.VITE_API_URL as string | undefined)?.replace(/\/$/, "") ?? "";
