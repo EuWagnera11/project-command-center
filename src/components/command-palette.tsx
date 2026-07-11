@@ -21,6 +21,7 @@ const items: Item[] = [
   { title: "Agendar post", url: "/schedule", icon: PlusCircle, group: "Workspace" },
   { title: "Agendar em massa", url: "/bulk", icon: Package, group: "Workspace" },
   { title: "Calendário", url: "/calendar", icon: CalendarDays, group: "Workspace" },
+  { title: "Calendário v2 (filtros + drag&drop)", url: "/calendar-v2", icon: CalendarDays, group: "Workspace" },
   { title: "Analytics", url: "/analytics", icon: LineChart, group: "Workspace" },
   { title: "Biblioteca de mídia", url: "/media-library", icon: FolderOpen, group: "Workspace" },
   { title: "Inbox", url: "/inbox", icon: Inbox, group: "Workspace" },
