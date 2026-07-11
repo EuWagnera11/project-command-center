@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as SharedLinksRouteImport } from './routes/shared-links'
 import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as ScheduleRouteImport } from './routes/schedule'
+import { Route as QuickShareRouteImport } from './routes/quick-share'
 import { Route as PostsRouteImport } from './routes/posts'
 import { Route as OrganizacoesRouteImport } from './routes/organizacoes'
 import { Route as MetaDashboardRouteImport } from './routes/meta-dashboard'
@@ -40,6 +41,11 @@ const SettingsRoute = SettingsRouteImport.update({
 const ScheduleRoute = ScheduleRouteImport.update({
   id: '/schedule',
   path: '/schedule',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const QuickShareRoute = QuickShareRouteImport.update({
+  id: '/quick-share',
+  path: '/quick-share',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PostsRoute = PostsRouteImport.update({
@@ -124,6 +130,7 @@ export interface FileRoutesByFullPath {
   '/meta-dashboard': typeof MetaDashboardRoute
   '/organizacoes': typeof OrganizacoesRoute
   '/posts': typeof PostsRoute
+  '/quick-share': typeof QuickShareRoute
   '/schedule': typeof ScheduleRoute
   '/settings': typeof SettingsRouteWithChildren
   '/shared-links': typeof SharedLinksRoute
@@ -143,6 +150,7 @@ export interface FileRoutesByTo {
   '/meta-dashboard': typeof MetaDashboardRoute
   '/organizacoes': typeof OrganizacoesRoute
   '/posts': typeof PostsRoute
+  '/quick-share': typeof QuickShareRoute
   '/schedule': typeof ScheduleRoute
   '/shared-links': typeof SharedLinksRoute
   '/client/$token': typeof ClientTokenRoute
@@ -162,6 +170,7 @@ export interface FileRoutesById {
   '/meta-dashboard': typeof MetaDashboardRoute
   '/organizacoes': typeof OrganizacoesRoute
   '/posts': typeof PostsRoute
+  '/quick-share': typeof QuickShareRoute
   '/schedule': typeof ScheduleRoute
   '/settings': typeof SettingsRouteWithChildren
   '/shared-links': typeof SharedLinksRoute
@@ -183,6 +192,7 @@ export interface FileRouteTypes {
     | '/meta-dashboard'
     | '/organizacoes'
     | '/posts'
+    | '/quick-share'
     | '/schedule'
     | '/settings'
     | '/shared-links'
@@ -202,6 +212,7 @@ export interface FileRouteTypes {
     | '/meta-dashboard'
     | '/organizacoes'
     | '/posts'
+    | '/quick-share'
     | '/schedule'
     | '/shared-links'
     | '/client/$token'
@@ -220,6 +231,7 @@ export interface FileRouteTypes {
     | '/meta-dashboard'
     | '/organizacoes'
     | '/posts'
+    | '/quick-share'
     | '/schedule'
     | '/settings'
     | '/shared-links'
@@ -240,6 +252,7 @@ export interface RootRouteChildren {
   MetaDashboardRoute: typeof MetaDashboardRoute
   OrganizacoesRoute: typeof OrganizacoesRoute
   PostsRoute: typeof PostsRoute
+  QuickShareRoute: typeof QuickShareRoute
   ScheduleRoute: typeof ScheduleRoute
   SettingsRoute: typeof SettingsRouteWithChildren
   SharedLinksRoute: typeof SharedLinksRoute
@@ -267,6 +280,13 @@ declare module '@tanstack/react-router' {
       path: '/schedule'
       fullPath: '/schedule'
       preLoaderRoute: typeof ScheduleRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/quick-share': {
+      id: '/quick-share'
+      path: '/quick-share'
+      fullPath: '/quick-share'
+      preLoaderRoute: typeof QuickShareRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/posts': {
@@ -407,6 +427,7 @@ const rootRouteChildren: RootRouteChildren = {
   MetaDashboardRoute: MetaDashboardRoute,
   OrganizacoesRoute: OrganizacoesRoute,
   PostsRoute: PostsRoute,
+  QuickShareRoute: QuickShareRoute,
   ScheduleRoute: ScheduleRoute,
   SettingsRoute: SettingsRouteWithChildren,
   SharedLinksRoute: SharedLinksRoute,
