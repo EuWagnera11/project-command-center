@@ -1,61 +1,52 @@
-## Objetivo
-Fechar 100% das specs implementando as 5 features finais do `PARTE_FINAL_MARKETING.md` (front-only, com mocks realistas seguindo o padrão atual).
 
-## Novas rotas
+# Plano — completar 100% do frontend InstaBot
 
-### 1. `/ai-manager` — IA Campaign Manager
-- Lista de campanhas Meta Ads (1 por linha) com botão **🤖 Analisar**.
-- Ao analisar: card com métricas (Gasto, Impressões, Cliques, CTR) + sugestões coloridas por severity (high/info/ok).
-- Regras mockadas: CTR<0.5% → novo criativo; CTR>3% → escalar budget; CPC>R$5 → refinar público; spend>R$200 low impressions → segmentação; else "saudável".
-- Painel lateral **Ações Pendentes** com Aprovar / Rejeitar (com reason) / Feedback (rating 1-5 + texto).
-- Tabela histórica ao final (todas as ações com status).
+## Estado atual (já pronto)
+Dashboard, Posts, Schedule, Bulk, Calendar, Settings, Meta Dashboard, Meta Creatives, AI Manager, AI Chat, History, Shared Links, Organizações, Client view, Quick Share, Notifications Bell, SSE hook, Dark-only.
 
-### 2. `/ai-chat` — Chat IA com RAG
-- UI estilo WhatsApp: bolhas user/assistant, typing indicator, auto-scroll, Enter envia.
-- Markdown rendering (react-markdown já no stack? senão adicionar).
-- 6 suggestion chips: Contas, Campanhas, Gasto 7d, Posts, Melhor CTR, Melhorias.
-- Mock: respostas baseadas em `mock-data` + skills faker; latência 800ms.
-- Chip lateral mostrando "14 skills carregadas" (lista expansível com os 14 nomes de `data/skills/*.md`).
+## Faltando (dos 6 MDs)
 
-### 3. `/history` — Histórico Consolidado
-- 3 colunas: Ações da IA (status colorido) · Notificações (timeline) · Posts recentes (tabela compacta).
-- Filtros de período (7d/30d/tudo).
+### Rotas novas (8)
+1. `/analytics` — Heatmap de engajamento + Top posts + Growth chart
+2. `/rules` — Automação if-then (metric/operator/threshold/action) com CRUD
+3. `/approvals` — Fila de aprovação de posts (aprovar/rejeitar com motivo)
+4. `/ab-tests` — A/B test de captions com winner automático (CTR A vs B)
+5. `/inbox` — DMs + comentários unificados com sugestão IA de resposta
+6. `/media-library` — Biblioteca de mídia com tags, filtros, preview, upload
+7. `/audit` — Logs de auditoria (quem fez o quê)
+8. `/freepik-studio` — Busca/gera imagens (Freepik + IA fallback Picsum)
 
-### 4. `/meta-creatives/$campaignId` — Preview de Criativos
-- Header gradient da campanha.
-- Cards de AdSets com border-left verde/amarelo (ativo/pausado).
-- Grid de Ads aninhados: image 140×140, título+body truncados, badge status.
-- Botão "voltar" para `/meta-dashboard`.
+### Features globais (5)
+9. **Command Palette (⌘K)** — busca global em posts/campanhas/contas/rotas
+10. **Toast system** já existe (sonner) → padronizar helpers em `src/lib/toast.ts`
+11. **Export CSV/PDF** — helpers em `src/lib/export.ts` + botões em Posts/Meta/History
+12. **Preview realista Instagram** — componente `<InstagramPreview>` (feed/reel/story/carrossel) usado em Schedule/Bulk
+13. **Login via Browser modal** — estados `browser_login`, `2fa_pending`, `checkpoint` com polling em Settings
 
-### 5. `/quick-share` — Quick Share
-- Grid de contas Meta; cada card com botão **Gerar link** que cria SharedLink instantâneo e mostra URL + copy button + QR.
+### Tipos e mocks
+- Estender `src/lib/types.ts`: `CaptionABTest`, `PostApproval`, `AutomationRule`, `InboxMessage`, `MediaLibraryItem`, `FreepikImage`, `AuditLog`, `EngagementHeatmap`
+- Adicionar mocks correspondentes em `src/lib/mock-data.ts`
+- Adicionar endpoints (stub mock) em `src/lib/api.ts`
 
-## Tipos & API (`src/lib/types.ts` + `api.ts` + `mock-data.ts`)
-Adicionar:
-- `AIAction { id, type, campaign_id, description, severity, status: pending|approved|rejected|executed, created_at, feedback? }`
-- `AIAnalysis { campaign_id, metrics, suggestions: {severity, title, body}[] }`
-- `ChatMessage { role, content, ts }`
-- `MediaInfo { post_id, url, type, size }`
-- `AdSetWithAds { adset, ads: Ad[] }` / `Ad { id, name, title, body, image_url, status }`
-- Endpoints mockados: `analyzeCampaign`, `aiActions`, `approveAction`, `rejectAction`, `feedbackAction`, `aiChat`, `getHistory`, `postMedia`, `campaignAdsetsWithAds`.
+### Sidebar
+Reorganizar em 4 grupos:
+- **Workspace**: Dashboard, Posts, Agendar, Em Massa, Calendário, Aprovações, Inbox
+- **IA & Automação**: AI Manager, Chat IA, Regras, A/B Tests, Histórico, Freepik
+- **Anúncios**: Meta Dashboard, Criativos, Analytics
+- **Sistema**: Media Library, Organizações, Shared Links, Quick Share, Auditoria, Configurações
 
-## Sidebar
-Novo grupo **IA & Automação**:
-- 🤖 IA Manager → `/ai-manager`
-- 💬 Chat IA → `/ai-chat`
-- 📜 Histórico → `/history`
-- 🎨 Criativos → `/meta-creatives` (redireciona para primeira campanha, ou lista)
-- ⚡ Quick Share → `/quick-share`
-
-## Dependências
-- Adicionar `react-markdown` (para Chat IA) e `qrcode.react` (para Quick Share) via `bun add`.
-
-## Detalhes técnicos
-- Todas rotas seguem TanStack file-based routing com `head()` próprio, `errorComponent`, `notFoundComponent`.
-- Usar `useSuspenseQuery` + `queryOptions` no padrão já estabelecido.
-- Cards, tabelas e badges reutilizam shadcn existentes.
-- Segue tema dark-first já configurado; sem hardcoded colors.
+Adicionar botão ⌘K no header/sidebar.
 
 ## Fora de escopo
-- Backend real (permanece Flask no Claude Code).
-- Persistência real de feedback/ações (só mock em memória com estado React Query).
+PWA/service worker, push notifications, offline sync, i18n PT/EN — omitidos para manter foco no core. Podem ser feitos numa segunda rodada se quiser.
+
+## Detalhes técnicos
+- Tudo frontend, sem backend. Mocks via `src/lib/api.ts` (respeita toggle `VITE_API_URL`)
+- TanStack Query com `queryOptions` + `useQuery`
+- shadcn/ui existente (Card, Table, Dialog, Tabs, Badge, Button)
+- Recharts para heatmap/growth
+- `cmdk` (já vem com shadcn) para command palette
+- `jspdf` + `papaparse` para export (adicionar deps)
+
+## Entrega
+1 wave só, todas as 8 rotas + 5 features globais + sidebar reorganizada. Ao final, atualizo o prompt do Claude Code com os novos endpoints necessários.

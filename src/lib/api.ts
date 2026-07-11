@@ -10,6 +10,8 @@ import type {
   MetaKPI, MetaComparison, MetaAlert, Notification, BotStatus, Settings, Backup,
   SharedLink, SharedLinkScope, Organization, ClientDashboardData,
   AIAction, AIAnalysis, AdSetWithAds, MediaInfo, HistoryBundle, MarketingSkill,
+  EngagementHeatmapCell, TopPostRow, GrowthPoint, AutomationRule, PostApproval,
+  CaptionABTest, InboxMessage, MediaLibraryItem, AuditLog, FreepikImage, ApprovalStatus,
 } from "./types";
 
 const BASE_URL = (import.meta.env.VITE_API_URL as string | undefined)?.replace(/\/$/, "") ?? "";
@@ -279,6 +281,43 @@ export const api = {
   campaignAdsetsWithAds: (campaignId: string): Promise<AdSetWithAds[]> => USE_MOCK
     ? delay(mock.mockAdSetsWithAds[campaignId] ?? [])
     : req(`/api/meta-ads/campaigns/${campaignId}/adsets-with-ads`),
+
+  // -------- Fase avançada --------
+  analyticsHeatmap: (): Promise<EngagementHeatmapCell[]> => USE_MOCK ? delay(mock.mockHeatmap) : req("/api/analytics/heatmap"),
+  analyticsTopPosts: (): Promise<TopPostRow[]> => USE_MOCK ? delay(mock.mockTopPosts) : req("/api/analytics/top-posts"),
+  analyticsGrowth: (): Promise<GrowthPoint[]> => USE_MOCK ? delay(mock.mockGrowth) : req("/api/analytics/growth"),
+
+  listRules: (): Promise<AutomationRule[]> => USE_MOCK ? delay(mock.mockRules) : req("/api/rules"),
+  createRule: (data: Omit<AutomationRule, "id" | "trigger_count">) => USE_MOCK ? delay({ success: true, id: Date.now() }) : req("/api/rules", { method: "POST", body: JSON.stringify(data) }),
+  toggleRule: (id: number, is_active: boolean) => USE_MOCK ? delay({ success: true }) : req(`/api/rules/${id}`, { method: "PATCH", body: JSON.stringify({ is_active }) }),
+  deleteRule: (id: number) => USE_MOCK ? delay({ success: true }) : req(`/api/rules/${id}`, { method: "DELETE" }),
+
+  listApprovals: (): Promise<PostApproval[]> => USE_MOCK ? delay(mock.mockApprovals) : req("/api/approvals"),
+  decideApproval: (id: number, status: ApprovalStatus, reason?: string) =>
+    USE_MOCK ? delay({ success: true }) : req(`/api/approvals/${id}`, { method: "POST", body: JSON.stringify({ status, reason }) }),
+
+  listABTests: (): Promise<CaptionABTest[]> => USE_MOCK ? delay(mock.mockABTests) : req("/api/ab-tests"),
+  createABTest: (post_id: number, caption_a: string, caption_b: string) =>
+    USE_MOCK ? delay({ success: true, id: Date.now() }) : req("/api/ab-tests", { method: "POST", body: JSON.stringify({ post_id, caption_a, caption_b }) }),
+  decideABTest: (id: number, winner: "a" | "b") =>
+    USE_MOCK ? delay({ success: true }) : req(`/api/ab-tests/${id}/decide`, { method: "POST", body: JSON.stringify({ winner }) }),
+
+  listInbox: (status?: "pending" | "sent" | "archived"): Promise<InboxMessage[]> => USE_MOCK
+    ? delay(status ? mock.mockInbox.filter((m) => m.status === status) : mock.mockInbox)
+    : req(`/api/inbox${status ? `?status=${status}` : ""}`),
+  replyInbox: (id: number, text: string) => USE_MOCK ? delay({ success: true }) : req(`/api/inbox/${id}/reply`, { method: "POST", body: JSON.stringify({ text }) }),
+  suggestReplyInbox: (id: number): Promise<{ suggestion: string }> =>
+    USE_MOCK ? delay({ suggestion: "Olá! Obrigado pela mensagem. Um consultor entrará em contato em breve. 🙌" }) : req(`/api/inbox/${id}/suggest`, { method: "POST" }),
+
+  listMediaLibrary: (): Promise<MediaLibraryItem[]> => USE_MOCK ? delay(mock.mockMediaLibrary) : req("/api/media-library"),
+  deleteMediaItem: (id: number) => USE_MOCK ? delay({ success: true }) : req(`/api/media-library/${id}`, { method: "DELETE" }),
+
+  listAuditLogs: (): Promise<AuditLog[]> => USE_MOCK ? delay(mock.mockAuditLogs) : req("/api/audit"),
+
+  freepikSearch: (query: string): Promise<FreepikImage[]> =>
+    USE_MOCK ? delay(mock.mockFreepik.filter((f) => f.title.toLowerCase().includes(query.toLowerCase()) || query === "")) : req(`/api/freepik/search?q=${encodeURIComponent(query)}`),
+  freepikGenerate: (prompt: string): Promise<FreepikImage> =>
+    USE_MOCK ? delay({ id: `gen_${Date.now()}`, title: prompt, thumbnail_url: `https://picsum.photos/seed/${Date.now()}/280/280`, image_url: `https://picsum.photos/seed/${Date.now()}/1024/1024`, source: "freepik-ai" }) : req("/api/freepik/generate", { method: "POST", body: JSON.stringify({ prompt }) }),
 };
 
 function iso(dOffset: number) {

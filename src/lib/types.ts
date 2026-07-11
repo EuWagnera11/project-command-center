@@ -265,3 +265,65 @@ export interface MarketingSkill {
   title: string;
   description: string;
 }
+
+// ---------- Fase avançada ----------
+
+export interface EngagementHeatmapCell { day: number; hour: number; score: number; }
+
+export interface TopPostRow {
+  post_id: number; caption: string; profile_name: string; post_type: PostType;
+  likes: number; comments: number; reach: number; engagement_rate: number; published_at: string;
+}
+
+export interface GrowthPoint { date: string; followers: number; reach: number; engagement: number; }
+
+export type AutomationMetric = "ctr" | "cpc" | "spend" | "engagement";
+export type AutomationOperator = "<" | ">" | "==" | "<=" | ">=";
+export type AutomationWindow = "24h" | "48h" | "7d";
+export type AutomationActionKind = "pause_campaign" | "resume_campaign" | "notify" | "scale_budget" | "reduce_budget";
+
+export interface AutomationRule {
+  id: number; name: string; description: string;
+  scope: "campaign" | "post" | "account"; scope_id: string;
+  metric: AutomationMetric; operator: AutomationOperator; threshold: number;
+  time_window: AutomationWindow; action: AutomationActionKind;
+  is_active: boolean; trigger_count: number; last_triggered_at?: string;
+}
+
+export type ApprovalStatus = "pending" | "approved" | "rejected";
+
+export interface PostApproval {
+  id: number; post_id: number; post: Post; status: ApprovalStatus;
+  requested_by: string; requested_at: string;
+  approved_by?: string; approved_at?: string; rejection_reason?: string;
+}
+
+export interface CaptionABTest {
+  id: number; post_id: number; caption_a: string; caption_b: string;
+  impressions_a: number; clicks_a: number; impressions_b: number; clicks_b: number;
+  ctr_a: number; ctr_b: number; winner?: "a" | "b"; winner_decided_at?: string;
+  status: "running" | "decided"; created_at: string;
+}
+
+export interface InboxMessage {
+  id: number; profile_id: number; profile_name: string;
+  source: "dm" | "comment"; sender: string; message_text: string;
+  ai_reply?: string; status: "pending" | "sent" | "archived"; received_at: string;
+}
+
+export interface MediaLibraryItem {
+  id: number; name: string; path: string; url: string; size: number;
+  tags: string[]; used: boolean; is_video: boolean; uploaded_at: string;
+}
+
+export interface AuditLog {
+  id: number; actor: string; action: string;
+  target_type: "post" | "campaign" | "profile" | "settings" | "rule" | "shared_link";
+  target_id: string; meta?: Record<string, string | number | boolean>;
+  ip?: string; created_at: string;
+}
+
+export interface FreepikImage {
+  id: string; title: string; thumbnail_url: string; image_url: string;
+  source: "freepik" | "freepik-ai" | "fallback-picsum";
+}

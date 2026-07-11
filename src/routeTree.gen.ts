@@ -12,16 +12,24 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as SharedLinksRouteImport } from './routes/shared-links'
 import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as ScheduleRouteImport } from './routes/schedule'
+import { Route as RulesRouteImport } from './routes/rules'
 import { Route as QuickShareRouteImport } from './routes/quick-share'
 import { Route as PostsRouteImport } from './routes/posts'
 import { Route as OrganizacoesRouteImport } from './routes/organizacoes'
 import { Route as MetaDashboardRouteImport } from './routes/meta-dashboard'
 import { Route as MetaCreativesRouteImport } from './routes/meta-creatives'
+import { Route as MediaLibraryRouteImport } from './routes/media-library'
+import { Route as InboxRouteImport } from './routes/inbox'
 import { Route as HistoryRouteImport } from './routes/history'
+import { Route as FreepikStudioRouteImport } from './routes/freepik-studio'
 import { Route as CalendarRouteImport } from './routes/calendar'
 import { Route as BulkRouteImport } from './routes/bulk'
+import { Route as AuditRouteImport } from './routes/audit'
+import { Route as ApprovalsRouteImport } from './routes/approvals'
+import { Route as AnalyticsRouteImport } from './routes/analytics'
 import { Route as AiManagerRouteImport } from './routes/ai-manager'
 import { Route as AiChatRouteImport } from './routes/ai-chat'
+import { Route as AbTestsRouteImport } from './routes/ab-tests'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as SettingsIndexRouteImport } from './routes/settings.index'
 import { Route as SettingsMetaAdsRouteImport } from './routes/settings.meta-ads'
@@ -41,6 +49,11 @@ const SettingsRoute = SettingsRouteImport.update({
 const ScheduleRoute = ScheduleRouteImport.update({
   id: '/schedule',
   path: '/schedule',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RulesRoute = RulesRouteImport.update({
+  id: '/rules',
+  path: '/rules',
   getParentRoute: () => rootRouteImport,
 } as any)
 const QuickShareRoute = QuickShareRouteImport.update({
@@ -68,9 +81,24 @@ const MetaCreativesRoute = MetaCreativesRouteImport.update({
   path: '/meta-creatives',
   getParentRoute: () => rootRouteImport,
 } as any)
+const MediaLibraryRoute = MediaLibraryRouteImport.update({
+  id: '/media-library',
+  path: '/media-library',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const InboxRoute = InboxRouteImport.update({
+  id: '/inbox',
+  path: '/inbox',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const HistoryRoute = HistoryRouteImport.update({
   id: '/history',
   path: '/history',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FreepikStudioRoute = FreepikStudioRouteImport.update({
+  id: '/freepik-studio',
+  path: '/freepik-studio',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CalendarRoute = CalendarRouteImport.update({
@@ -83,6 +111,21 @@ const BulkRoute = BulkRouteImport.update({
   path: '/bulk',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuditRoute = AuditRouteImport.update({
+  id: '/audit',
+  path: '/audit',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApprovalsRoute = ApprovalsRouteImport.update({
+  id: '/approvals',
+  path: '/approvals',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AnalyticsRoute = AnalyticsRouteImport.update({
+  id: '/analytics',
+  path: '/analytics',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AiManagerRoute = AiManagerRouteImport.update({
   id: '/ai-manager',
   path: '/ai-manager',
@@ -91,6 +134,11 @@ const AiManagerRoute = AiManagerRouteImport.update({
 const AiChatRoute = AiChatRouteImport.update({
   id: '/ai-chat',
   path: '/ai-chat',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AbTestsRoute = AbTestsRouteImport.update({
+  id: '/ab-tests',
+  path: '/ab-tests',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -121,16 +169,24 @@ const ClientTokenRoute = ClientTokenRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/ab-tests': typeof AbTestsRoute
   '/ai-chat': typeof AiChatRoute
   '/ai-manager': typeof AiManagerRoute
+  '/analytics': typeof AnalyticsRoute
+  '/approvals': typeof ApprovalsRoute
+  '/audit': typeof AuditRoute
   '/bulk': typeof BulkRoute
   '/calendar': typeof CalendarRoute
+  '/freepik-studio': typeof FreepikStudioRoute
   '/history': typeof HistoryRoute
+  '/inbox': typeof InboxRoute
+  '/media-library': typeof MediaLibraryRoute
   '/meta-creatives': typeof MetaCreativesRouteWithChildren
   '/meta-dashboard': typeof MetaDashboardRoute
   '/organizacoes': typeof OrganizacoesRoute
   '/posts': typeof PostsRoute
   '/quick-share': typeof QuickShareRoute
+  '/rules': typeof RulesRoute
   '/schedule': typeof ScheduleRoute
   '/settings': typeof SettingsRouteWithChildren
   '/shared-links': typeof SharedLinksRoute
@@ -141,16 +197,24 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/ab-tests': typeof AbTestsRoute
   '/ai-chat': typeof AiChatRoute
   '/ai-manager': typeof AiManagerRoute
+  '/analytics': typeof AnalyticsRoute
+  '/approvals': typeof ApprovalsRoute
+  '/audit': typeof AuditRoute
   '/bulk': typeof BulkRoute
   '/calendar': typeof CalendarRoute
+  '/freepik-studio': typeof FreepikStudioRoute
   '/history': typeof HistoryRoute
+  '/inbox': typeof InboxRoute
+  '/media-library': typeof MediaLibraryRoute
   '/meta-creatives': typeof MetaCreativesRouteWithChildren
   '/meta-dashboard': typeof MetaDashboardRoute
   '/organizacoes': typeof OrganizacoesRoute
   '/posts': typeof PostsRoute
   '/quick-share': typeof QuickShareRoute
+  '/rules': typeof RulesRoute
   '/schedule': typeof ScheduleRoute
   '/shared-links': typeof SharedLinksRoute
   '/client/$token': typeof ClientTokenRoute
@@ -161,16 +225,24 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/ab-tests': typeof AbTestsRoute
   '/ai-chat': typeof AiChatRoute
   '/ai-manager': typeof AiManagerRoute
+  '/analytics': typeof AnalyticsRoute
+  '/approvals': typeof ApprovalsRoute
+  '/audit': typeof AuditRoute
   '/bulk': typeof BulkRoute
   '/calendar': typeof CalendarRoute
+  '/freepik-studio': typeof FreepikStudioRoute
   '/history': typeof HistoryRoute
+  '/inbox': typeof InboxRoute
+  '/media-library': typeof MediaLibraryRoute
   '/meta-creatives': typeof MetaCreativesRouteWithChildren
   '/meta-dashboard': typeof MetaDashboardRoute
   '/organizacoes': typeof OrganizacoesRoute
   '/posts': typeof PostsRoute
   '/quick-share': typeof QuickShareRoute
+  '/rules': typeof RulesRoute
   '/schedule': typeof ScheduleRoute
   '/settings': typeof SettingsRouteWithChildren
   '/shared-links': typeof SharedLinksRoute
@@ -183,16 +255,24 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/ab-tests'
     | '/ai-chat'
     | '/ai-manager'
+    | '/analytics'
+    | '/approvals'
+    | '/audit'
     | '/bulk'
     | '/calendar'
+    | '/freepik-studio'
     | '/history'
+    | '/inbox'
+    | '/media-library'
     | '/meta-creatives'
     | '/meta-dashboard'
     | '/organizacoes'
     | '/posts'
     | '/quick-share'
+    | '/rules'
     | '/schedule'
     | '/settings'
     | '/shared-links'
@@ -203,16 +283,24 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/ab-tests'
     | '/ai-chat'
     | '/ai-manager'
+    | '/analytics'
+    | '/approvals'
+    | '/audit'
     | '/bulk'
     | '/calendar'
+    | '/freepik-studio'
     | '/history'
+    | '/inbox'
+    | '/media-library'
     | '/meta-creatives'
     | '/meta-dashboard'
     | '/organizacoes'
     | '/posts'
     | '/quick-share'
+    | '/rules'
     | '/schedule'
     | '/shared-links'
     | '/client/$token'
@@ -222,16 +310,24 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/ab-tests'
     | '/ai-chat'
     | '/ai-manager'
+    | '/analytics'
+    | '/approvals'
+    | '/audit'
     | '/bulk'
     | '/calendar'
+    | '/freepik-studio'
     | '/history'
+    | '/inbox'
+    | '/media-library'
     | '/meta-creatives'
     | '/meta-dashboard'
     | '/organizacoes'
     | '/posts'
     | '/quick-share'
+    | '/rules'
     | '/schedule'
     | '/settings'
     | '/shared-links'
@@ -243,16 +339,24 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AbTestsRoute: typeof AbTestsRoute
   AiChatRoute: typeof AiChatRoute
   AiManagerRoute: typeof AiManagerRoute
+  AnalyticsRoute: typeof AnalyticsRoute
+  ApprovalsRoute: typeof ApprovalsRoute
+  AuditRoute: typeof AuditRoute
   BulkRoute: typeof BulkRoute
   CalendarRoute: typeof CalendarRoute
+  FreepikStudioRoute: typeof FreepikStudioRoute
   HistoryRoute: typeof HistoryRoute
+  InboxRoute: typeof InboxRoute
+  MediaLibraryRoute: typeof MediaLibraryRoute
   MetaCreativesRoute: typeof MetaCreativesRouteWithChildren
   MetaDashboardRoute: typeof MetaDashboardRoute
   OrganizacoesRoute: typeof OrganizacoesRoute
   PostsRoute: typeof PostsRoute
   QuickShareRoute: typeof QuickShareRoute
+  RulesRoute: typeof RulesRoute
   ScheduleRoute: typeof ScheduleRoute
   SettingsRoute: typeof SettingsRouteWithChildren
   SharedLinksRoute: typeof SharedLinksRoute
@@ -280,6 +384,13 @@ declare module '@tanstack/react-router' {
       path: '/schedule'
       fullPath: '/schedule'
       preLoaderRoute: typeof ScheduleRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/rules': {
+      id: '/rules'
+      path: '/rules'
+      fullPath: '/rules'
+      preLoaderRoute: typeof RulesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/quick-share': {
@@ -317,11 +428,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MetaCreativesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/media-library': {
+      id: '/media-library'
+      path: '/media-library'
+      fullPath: '/media-library'
+      preLoaderRoute: typeof MediaLibraryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/inbox': {
+      id: '/inbox'
+      path: '/inbox'
+      fullPath: '/inbox'
+      preLoaderRoute: typeof InboxRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/history': {
       id: '/history'
       path: '/history'
       fullPath: '/history'
       preLoaderRoute: typeof HistoryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/freepik-studio': {
+      id: '/freepik-studio'
+      path: '/freepik-studio'
+      fullPath: '/freepik-studio'
+      preLoaderRoute: typeof FreepikStudioRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/calendar': {
@@ -338,6 +470,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BulkRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/audit': {
+      id: '/audit'
+      path: '/audit'
+      fullPath: '/audit'
+      preLoaderRoute: typeof AuditRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/approvals': {
+      id: '/approvals'
+      path: '/approvals'
+      fullPath: '/approvals'
+      preLoaderRoute: typeof ApprovalsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/analytics': {
+      id: '/analytics'
+      path: '/analytics'
+      fullPath: '/analytics'
+      preLoaderRoute: typeof AnalyticsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/ai-manager': {
       id: '/ai-manager'
       path: '/ai-manager'
@@ -350,6 +503,13 @@ declare module '@tanstack/react-router' {
       path: '/ai-chat'
       fullPath: '/ai-chat'
       preLoaderRoute: typeof AiChatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ab-tests': {
+      id: '/ab-tests'
+      path: '/ab-tests'
+      fullPath: '/ab-tests'
+      preLoaderRoute: typeof AbTestsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -418,16 +578,24 @@ const SettingsRouteWithChildren = SettingsRoute._addFileChildren(
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AbTestsRoute: AbTestsRoute,
   AiChatRoute: AiChatRoute,
   AiManagerRoute: AiManagerRoute,
+  AnalyticsRoute: AnalyticsRoute,
+  ApprovalsRoute: ApprovalsRoute,
+  AuditRoute: AuditRoute,
   BulkRoute: BulkRoute,
   CalendarRoute: CalendarRoute,
+  FreepikStudioRoute: FreepikStudioRoute,
   HistoryRoute: HistoryRoute,
+  InboxRoute: InboxRoute,
+  MediaLibraryRoute: MediaLibraryRoute,
   MetaCreativesRoute: MetaCreativesRouteWithChildren,
   MetaDashboardRoute: MetaDashboardRoute,
   OrganizacoesRoute: OrganizacoesRoute,
   PostsRoute: PostsRoute,
   QuickShareRoute: QuickShareRoute,
+  RulesRoute: RulesRoute,
   ScheduleRoute: ScheduleRoute,
   SettingsRoute: SettingsRouteWithChildren,
   SharedLinksRoute: SharedLinksRoute,

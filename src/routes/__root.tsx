@@ -17,6 +17,7 @@ import { AppSidebar, StatusPill } from "@/components/app-sidebar";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
 import { NotificationsBell } from "@/components/notifications-bell";
+import { CommandPalette, CommandPaletteTrigger } from "@/components/command-palette";
 
 function NotFoundComponent() {
   return (
@@ -145,7 +146,8 @@ function RootComponent() {
                     <StatusPill tone="success">Meta Ads · 60s</StatusPill>
                     <StatusPill tone="warning">IG 2/3</StatusPill>
                   </div>
-                  <div className="ml-auto flex items-center gap-1">
+                  <div className="ml-auto flex items-center gap-2">
+                    <CommandPaletteTrigger />
                     <span className="hidden text-xs text-muted-foreground sm:inline">Atualizado agora</span>
                     <NotificationsBell />
                   </div>
@@ -153,6 +155,7 @@ function RootComponent() {
                 <main className="min-w-0 flex-1">
                   <Outlet />
                 </main>
+                <CommandPalette />
               </div>
             </div>
             <Toaster position="bottom-right" richColors />
