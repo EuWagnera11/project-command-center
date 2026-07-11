@@ -1,5 +1,5 @@
 // Domain types for InstaBot frontend.
-// Mirrors backend Flask API contracts (section 5 of the spec).
+// Mirrors backend Flask API contracts (section 5 of the spec) + PARTE 10.
 
 export type PostType = "photo" | "reel" | "carousel" | "story";
 export type PostStatus = "pending" | "publishing" | "published" | "failed";
@@ -137,4 +137,44 @@ export interface Backup {
   size: number;
   created_at: string;
   created: string;
+}
+
+// ---------- PARTE 10 ----------
+
+export type SharedLinkScope = "overview" | "meta_account";
+
+export interface SharedLink {
+  id: number;
+  token: string;
+  name: string;
+  scope: SharedLinkScope;
+  scope_id?: string;
+  expires_at?: string;
+  view_password?: string;
+  view_count: number;
+  created_at: string;
+  last_accessed?: string;
+  is_active: boolean;
+  public_url: string;
+}
+
+export interface Organization {
+  id: number;
+  name: string;
+  slug: string;
+  logo_url?: string;
+  primary_color?: string;
+  is_active: boolean;
+  created_at: string;
+  profiles_count: number;
+  meta_accounts_count: number;
+}
+
+export interface ClientDashboardData {
+  organization: { name: string; primary_color: string; logo_url?: string };
+  kpi: MetaKPI;
+  campaigns: MetaCampaign[];
+  timeseries: Array<{ date: string; label: string; spend: number; impressions: number; clicks: number; ctr: number }>;
+  scope: SharedLinkScope;
+  generated_at: string;
 }

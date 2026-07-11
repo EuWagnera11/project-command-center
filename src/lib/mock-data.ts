@@ -1,6 +1,7 @@
 import type {
   Post, Profile, Template, HashtagGroup, MetaAccount, MetaCampaign,
   MetaKPI, MetaComparison, MetaAlert, Notification, BotStatus, Settings, Backup,
+  SharedLink, Organization,
 } from "./types";
 
 // -------- Profiles --------
@@ -30,14 +31,8 @@ export const mockPosts: Post[] = [
   { id: 27, profile_id: 2, media_path: "/uploads/p8.jpg", post_type: "photo", caption: "Falha na sessão — refazer login.", scheduled_at: iso(-2, 14, 0), status: "failed", profile_name: "Alves Consultoria", instagram_username: "alvesconsultoriajuridica" },
 ];
 
-export const mockStats = {
-  total: 27,
-  published: 17,
-  pending: 9,
-  failed: 1,
-};
+export const mockStats = { total: 27, published: 17, pending: 9, failed: 1 };
 
-// -------- Templates & Hashtags --------
 export const mockTemplates: Template[] = [
   { id: 1, name: "Segunda Motivacional", tone: "engajamento", content: "🚀 Bora começar a semana! O que você vai conquistar hoje?" },
   { id: 2, name: "Case Jurídico", tone: "profissional", content: "📋 Novo case: como resolvemos {problema} para nosso cliente." },
@@ -50,7 +45,6 @@ export const mockHashtags: HashtagGroup[] = [
   { id: 3, name: "Design & Produto", hashtags: "#uxdesign #productdesign #saas #ui #uidesign #figma" },
 ];
 
-// -------- Meta Ads --------
 export const mockMetaAccounts: MetaAccount[] = [
   { id: "act_1", name: "Wagner Constanteads", business_name: "Wagner Melgarejo", amount_spent: 37954, balance: 0, currency: "BRL", account_status: 1, can_be_used_as_ad_account: true },
   { id: "act_2", name: "CA 1 - LojaAds", business_name: "Henrique Diniz", amount_spent: 339147, balance: 92, currency: "BRL", account_status: 1, can_be_used_as_ad_account: true },
@@ -75,9 +69,7 @@ export const mockMetaKPI: MetaKPI = {
 };
 
 export const mockMetaComparison: MetaComparison[] = mockMetaAccounts.map((a, i) => ({
-  account_id: a.id,
-  name: a.name,
-  business_name: a.business_name,
+  account_id: a.id, name: a.name, business_name: a.business_name,
   lifetime_spent: a.amount_spent,
   period_spend: [120, 180, 0, 155, 50][i] ?? 0,
   period_impressions: [3200, 5400, 0, 4900, 1462][i] ?? 0,
@@ -96,7 +88,6 @@ export const mockCampaigns: MetaCampaign[] = [
   { id: "c3", ad_account_id: "act_4", ad_account_name: "CA - 001 LOJA ADS", name: "Advantage+ Shopping", status: "PAUSED", objective: "OUTCOME_SALES", lifetime_budget: 100000 },
 ];
 
-// -------- Notifications --------
 export const mockNotifications: Notification[] = [
   { timestamp: iso(0, 13, 40), level: "info", title: "Publicação concluída", message: "@euwagnera — post #29 publicado com sucesso" },
   { timestamp: iso(0, 12, 30), level: "warn", title: "Alerta Meta Ads", message: "Alto gasto detectado em CA 1 - LojaAds" },
@@ -104,13 +95,8 @@ export const mockNotifications: Notification[] = [
   { timestamp: iso(-1, 8, 0), level: "info", title: "Novo agendamento", message: "3 posts agendados para 11/07" },
 ];
 
-// -------- Bot / Settings --------
 export const mockBotStatus: BotStatus = {
-  scheduler_running: true,
-  profiles_count: 3,
-  profiles_logged_in: 2,
-  pending_posts: 9,
-  next_post_at: iso(0, 15, 0),
+  scheduler_running: true, profiles_count: 3, profiles_logged_in: 2, pending_posts: 9, next_post_at: iso(0, 15, 0),
 };
 
 export const mockSettings: Settings = {
@@ -123,9 +109,9 @@ export const mockSettings: Settings = {
 export const mockBackups: Backup[] = [
   { filename: "instabot_2026-07-10_23-00.db", size: 2_450_120, created_at: iso(-1, 23, 0), created: "10/07 23:00" },
   { filename: "instabot_2026-07-09_23-00.db", size: 2_331_884, created_at: iso(-2, 23, 0), created: "09/07 23:00" },
+  { filename: "instabot_2026-07-08_23-00.db", size: 2_212_308, created_at: iso(-3, 23, 0), created: "08/07 23:00" },
 ];
 
-// 7-day time series for the meta dashboard
 export const mockMetaTimeseries = Array.from({ length: 7 }, (_, i) => {
   const d = new Date(now);
   d.setDate(d.getDate() - (6 - i));
@@ -138,3 +124,17 @@ export const mockMetaTimeseries = Array.from({ length: 7 }, (_, i) => {
     ctr: [1.22, 1.25, 1.24, 1.17, 1.12, 1.11, 1.44][i],
   };
 });
+
+// -------- PARTE 10 --------
+export const mockOrganizations: Organization[] = [
+  { id: 1, name: "Constanteads (matriz)", slug: "constanteads", primary_color: "#321fdb", is_active: true, created_at: iso(-90), profiles_count: 3, meta_accounts_count: 5 },
+  { id: 2, name: "Alves Consultoria", slug: "alves", primary_color: "#8b5cf6", is_active: true, created_at: iso(-45), profiles_count: 1, meta_accounts_count: 1 },
+  { id: 3, name: "Refine Cubo", slug: "refine", primary_color: "#14b8a6", is_active: false, created_at: iso(-20), profiles_count: 1, meta_accounts_count: 0 },
+];
+
+const publicBase = typeof window !== "undefined" ? window.location.origin : "https://app.local";
+export const mockSharedLinks: SharedLink[] = [
+  { id: 1, token: "0oVSsl6W1mysi4AhgqzPjaEe", name: "Cliente ACME — Relatório Mensal", scope: "overview", view_count: 12, created_at: iso(-14), last_accessed: iso(-1, 10, 20), is_active: true, expires_at: iso(30), public_url: `${publicBase}/client/0oVSsl6W1mysi4AhgqzPjaEe` },
+  { id: 2, token: "7pQxNb2ycDe8Rt5Mn4Ku9Lah", name: "Cliente XYZ — Conta LojaAds", scope: "meta_account", scope_id: "act_2", view_count: 47, created_at: iso(-30), last_accessed: iso(0, 8, 15), view_password: "1234", is_active: true, public_url: `${publicBase}/client/7pQxNb2ycDe8Rt5Mn4Ku9Lah` },
+  { id: 3, token: "K3rL9pWmZa2FvHt7QsBd6Xnu", name: "VIP Trimestral", scope: "overview", view_count: 0, created_at: iso(-2), is_active: false, public_url: `${publicBase}/client/K3rL9pWmZa2FvHt7QsBd6Xnu` },
+];
