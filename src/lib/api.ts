@@ -71,7 +71,7 @@ export const api = {
   saveSettings: (data: Partial<Settings>) => USE_MOCK ? delay({ success: true }) : req("/api/settings", { method: "POST", body: JSON.stringify(data) }),
 
   // AI
-  generateCaption: (data: { media_path: string; tone: string; context?: string }) =>
+  generateCaption: (data: { media_path: string; tone: string; context?: string }): Promise<{ caption: string }> =>
     USE_MOCK ? delay({ caption: `[IA] Caption gerada com tom ${data.tone} 🚀 #instabot #ai` }) : req("/api/ai/caption", { method: "POST", body: JSON.stringify(data) }),
 
   // Notifications
