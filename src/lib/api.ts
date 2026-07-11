@@ -320,6 +320,26 @@ export const api = {
     USE_MOCK ? delay(mock.mockFreepik.filter((f) => f.title.toLowerCase().includes(query.toLowerCase()) || query === "")) : req(`/api/freepik/search?q=${encodeURIComponent(query)}`),
   freepikGenerate: (prompt: string): Promise<FreepikImage> =>
     USE_MOCK ? delay({ id: `gen_${Date.now()}`, title: prompt, thumbnail_url: `https://picsum.photos/seed/${Date.now()}/280/280`, image_url: `https://picsum.photos/seed/${Date.now()}/1024/1024`, source: "freepik-ai" }) : req("/api/freepik/generate", { method: "POST", body: JSON.stringify({ prompt }) }),
+
+  // -------- Canva Apps SDK --------
+  canvaStatus: (): Promise<CanvaAppStatus> => USE_MOCK ? delay(mock.mockCanvaStatus) : req("/api/canva-app/status"),
+  canvaListDesigns: (): Promise<CanvaDesign[]> => USE_MOCK ? delay(mock.mockCanvaDesigns) : req("/api/canva-app/designs"),
+  canvaIntents: (): Promise<CanvaIntentLog[]> => USE_MOCK ? delay(mock.mockCanvaIntents) : req("/api/canva-app/canva-intents"),
+  canvaSendIntent: (intent: CanvaIntentKind, design_id: string, data?: Record<string, unknown>) =>
+    USE_MOCK ? delay({ success: true, intent, design_id, ...(data ? { echo: data } : {}) })
+      : req(`/api/canva-app/intent/${intent}`, { method: "POST", body: JSON.stringify({ design_id, data }) }),
+
+  // -------- IdP OAuth2 --------
+  idpStatus: (): Promise<IdPStatus> => USE_MOCK ? delay(mock.mockIdPStatus) : req("/api/idp/status"),
+  idpClients: (): Promise<OAuthClient[]> => USE_MOCK ? delay(mock.mockOAuthClients) : req("/api/idp/clients"),
+  idpToggleClient: (id: number, is_active: boolean) =>
+    USE_MOCK ? delay({ success: true }) : req(`/api/idp/clients/${id}`, { method: "PATCH", body: JSON.stringify({ is_active }) }),
+  idpDeleteClient: (id: number) =>
+    USE_MOCK ? delay({ success: true }) : req(`/api/idp/clients/${id}`, { method: "DELETE" }),
+  idpUsers: (): Promise<OAuthUser[]> => USE_MOCK ? delay(mock.mockOAuthUsers) : req("/api/idp/users"),
+  idpTokens: (): Promise<OAuthToken[]> => USE_MOCK ? delay(mock.mockOAuthTokens) : req("/api/idp/tokens"),
+  idpRevokeToken: (id: number) =>
+    USE_MOCK ? delay({ success: true }) : req(`/api/idp/tokens/${id}/revoke`, { method: "POST" }),
 };
 
 function iso(dOffset: number) {
