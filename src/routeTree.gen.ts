@@ -17,6 +17,7 @@ import { Route as OrganizacoesRouteImport } from './routes/organizacoes'
 import { Route as MetaDashboardRouteImport } from './routes/meta-dashboard'
 import { Route as CalendarRouteImport } from './routes/calendar'
 import { Route as BulkRouteImport } from './routes/bulk'
+import { Route as AiManagerRouteImport } from './routes/ai-manager'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as SettingsIndexRouteImport } from './routes/settings.index'
 import { Route as SettingsMetaAdsRouteImport } from './routes/settings.meta-ads'
@@ -62,6 +63,11 @@ const BulkRoute = BulkRouteImport.update({
   path: '/bulk',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AiManagerRoute = AiManagerRouteImport.update({
+  id: '/ai-manager',
+  path: '/ai-manager',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -85,6 +91,7 @@ const ClientTokenRoute = ClientTokenRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/ai-manager': typeof AiManagerRoute
   '/bulk': typeof BulkRoute
   '/calendar': typeof CalendarRoute
   '/meta-dashboard': typeof MetaDashboardRoute
@@ -99,6 +106,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/ai-manager': typeof AiManagerRoute
   '/bulk': typeof BulkRoute
   '/calendar': typeof CalendarRoute
   '/meta-dashboard': typeof MetaDashboardRoute
@@ -113,6 +121,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/ai-manager': typeof AiManagerRoute
   '/bulk': typeof BulkRoute
   '/calendar': typeof CalendarRoute
   '/meta-dashboard': typeof MetaDashboardRoute
@@ -129,6 +138,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/ai-manager'
     | '/bulk'
     | '/calendar'
     | '/meta-dashboard'
@@ -143,6 +153,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/ai-manager'
     | '/bulk'
     | '/calendar'
     | '/meta-dashboard'
@@ -156,6 +167,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/ai-manager'
     | '/bulk'
     | '/calendar'
     | '/meta-dashboard'
@@ -171,6 +183,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AiManagerRoute: typeof AiManagerRoute
   BulkRoute: typeof BulkRoute
   CalendarRoute: typeof CalendarRoute
   MetaDashboardRoute: typeof MetaDashboardRoute
@@ -240,6 +253,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BulkRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/ai-manager': {
+      id: '/ai-manager'
+      path: '/ai-manager'
+      fullPath: '/ai-manager'
+      preLoaderRoute: typeof AiManagerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -287,6 +307,7 @@ const SettingsRouteWithChildren = SettingsRoute._addFileChildren(
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AiManagerRoute: AiManagerRoute,
   BulkRoute: BulkRoute,
   CalendarRoute: CalendarRoute,
   MetaDashboardRoute: MetaDashboardRoute,
