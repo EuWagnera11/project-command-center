@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo } from "react";
-import { Eye, MousePointerClick, DollarSign, TrendingUp, Zap, RefreshCcw, AlertTriangle, Key, Users, Activity } from "lucide-react";
+import { Eye, MousePointerClick, DollarSign, TrendingUp, Zap, RefreshCcw, AlertTriangle, Key, Users, Activity, Wallet, PauseCircle, PlayCircle, Sparkles, Target } from "lucide-react";
 import {
   LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, BarChart, Bar, Legend,
 } from "recharts";
@@ -29,6 +29,7 @@ function MetaDashboardPage() {
   const { data: daily } = useQuery({ queryKey: ["meta-daily"], queryFn: () => api.metaTimeseries() });
   const { data: alerts } = useQuery({ queryKey: ["meta-alerts"], queryFn: () => api.metaAlerts() });
   const { data: comparison } = useQuery({ queryKey: ["meta-comp"], queryFn: () => api.metaComparison() });
+  const { data: report } = useQuery({ queryKey: ["meta-report"], queryFn: () => api.metaWeeklyReport() });
 
   const trend = useMemo(
     () => (daily ?? []).map((d) => ({
@@ -39,6 +40,19 @@ function MetaDashboardPage() {
     })),
     [daily],
   );
+
+  const kpiCards = kpis ? [
+    { label: "Contas", value: String(kpis.total_accounts), icon: Users, color: "text-primary", grad: "bg-gradient-to-br from-primary/10 to-primary/5" },
+    { label: "Campanhas ativas", value: String(kpis.active_campaigns), icon: PlayCircle, color: "text-success", grad: "bg-gradient-to-br from-success/10 to-success/5" },
+    { label: "Campanhas pausadas", value: String(kpis.paused_campaigns), icon: PauseCircle, color: "text-muted-foreground", grad: "bg-gradient-to-br from-muted/50 to-muted/20" },
+    { label: "Saldo total", value: `R$ ${kpis.total_balance.toFixed(2)}`, icon: Wallet, color: "text-info", grad: "bg-gradient-to-br from-info/10 to-info/5" },
+    { label: "Impressões (7d)", value: kpis.period_impressions.toLocaleString("pt-BR"), icon: Eye, color: "text-info", grad: "bg-gradient-to-br from-info/10 to-info/5" },
+    { label: "Cliques (7d)", value: kpis.period_clicks.toLocaleString("pt-BR"), icon: MousePointerClick, color: "text-accent-foreground", grad: "bg-gradient-to-br from-accent/20 to-accent/5" },
+    { label: "Alcance (7d)", value: kpis.period_reach.toLocaleString("pt-BR"), icon: Target, color: "text-ig-purple", grad: "bg-gradient-to-br from-ig-purple/10 to-ig-purple/5" },
+    { label: "Gasto (7d)", value: `R$ ${kpis.period_spend.toFixed(2)}`, icon: DollarSign, color: "text-success", grad: "bg-gradient-to-br from-success/10 to-success/5" },
+    { label: "CTR médio", value: `${kpis.avg_ctr.toFixed(2)}%`, icon: TrendingUp, color: "text-warning-foreground", grad: "bg-gradient-to-br from-warning/10 to-warning/5" },
+    { label: "CPC médio", value: `R$ ${kpis.avg_cpc.toFixed(2)}`, icon: Zap, color: "text-destructive", grad: "bg-gradient-to-br from-destructive/10 to-destructive/5" },
+  ] : [];
 
   const kpiCards = kpis ? [
     { label: "Contas", value: String(kpis.total_accounts), icon: Users, color: "text-primary", grad: "bg-gradient-to-br from-primary/10 to-primary/5" },
