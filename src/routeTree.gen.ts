@@ -15,6 +15,7 @@ import { Route as ScheduleRouteImport } from './routes/schedule'
 import { Route as PostsRouteImport } from './routes/posts'
 import { Route as OrganizacoesRouteImport } from './routes/organizacoes'
 import { Route as MetaDashboardRouteImport } from './routes/meta-dashboard'
+import { Route as MetaCreativesRouteImport } from './routes/meta-creatives'
 import { Route as HistoryRouteImport } from './routes/history'
 import { Route as CalendarRouteImport } from './routes/calendar'
 import { Route as BulkRouteImport } from './routes/bulk'
@@ -53,6 +54,11 @@ const OrganizacoesRoute = OrganizacoesRouteImport.update({
 const MetaDashboardRoute = MetaDashboardRouteImport.update({
   id: '/meta-dashboard',
   path: '/meta-dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MetaCreativesRoute = MetaCreativesRouteImport.update({
+  id: '/meta-creatives',
+  path: '/meta-creatives',
   getParentRoute: () => rootRouteImport,
 } as any)
 const HistoryRoute = HistoryRouteImport.update({
@@ -108,6 +114,7 @@ export interface FileRoutesByFullPath {
   '/bulk': typeof BulkRoute
   '/calendar': typeof CalendarRoute
   '/history': typeof HistoryRoute
+  '/meta-creatives': typeof MetaCreativesRoute
   '/meta-dashboard': typeof MetaDashboardRoute
   '/organizacoes': typeof OrganizacoesRoute
   '/posts': typeof PostsRoute
@@ -125,6 +132,7 @@ export interface FileRoutesByTo {
   '/bulk': typeof BulkRoute
   '/calendar': typeof CalendarRoute
   '/history': typeof HistoryRoute
+  '/meta-creatives': typeof MetaCreativesRoute
   '/meta-dashboard': typeof MetaDashboardRoute
   '/organizacoes': typeof OrganizacoesRoute
   '/posts': typeof PostsRoute
@@ -142,6 +150,7 @@ export interface FileRoutesById {
   '/bulk': typeof BulkRoute
   '/calendar': typeof CalendarRoute
   '/history': typeof HistoryRoute
+  '/meta-creatives': typeof MetaCreativesRoute
   '/meta-dashboard': typeof MetaDashboardRoute
   '/organizacoes': typeof OrganizacoesRoute
   '/posts': typeof PostsRoute
@@ -161,6 +170,7 @@ export interface FileRouteTypes {
     | '/bulk'
     | '/calendar'
     | '/history'
+    | '/meta-creatives'
     | '/meta-dashboard'
     | '/organizacoes'
     | '/posts'
@@ -178,6 +188,7 @@ export interface FileRouteTypes {
     | '/bulk'
     | '/calendar'
     | '/history'
+    | '/meta-creatives'
     | '/meta-dashboard'
     | '/organizacoes'
     | '/posts'
@@ -194,6 +205,7 @@ export interface FileRouteTypes {
     | '/bulk'
     | '/calendar'
     | '/history'
+    | '/meta-creatives'
     | '/meta-dashboard'
     | '/organizacoes'
     | '/posts'
@@ -212,6 +224,7 @@ export interface RootRouteChildren {
   BulkRoute: typeof BulkRoute
   CalendarRoute: typeof CalendarRoute
   HistoryRoute: typeof HistoryRoute
+  MetaCreativesRoute: typeof MetaCreativesRoute
   MetaDashboardRoute: typeof MetaDashboardRoute
   OrganizacoesRoute: typeof OrganizacoesRoute
   PostsRoute: typeof PostsRoute
@@ -263,6 +276,13 @@ declare module '@tanstack/react-router' {
       path: '/meta-dashboard'
       fullPath: '/meta-dashboard'
       preLoaderRoute: typeof MetaDashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/meta-creatives': {
+      id: '/meta-creatives'
+      path: '/meta-creatives'
+      fullPath: '/meta-creatives'
+      preLoaderRoute: typeof MetaCreativesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/history': {
@@ -352,6 +372,7 @@ const rootRouteChildren: RootRouteChildren = {
   BulkRoute: BulkRoute,
   CalendarRoute: CalendarRoute,
   HistoryRoute: HistoryRoute,
+  MetaCreativesRoute: MetaCreativesRoute,
   MetaDashboardRoute: MetaDashboardRoute,
   OrganizacoesRoute: OrganizacoesRoute,
   PostsRoute: PostsRoute,
