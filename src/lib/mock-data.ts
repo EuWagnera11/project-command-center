@@ -2,6 +2,8 @@ import type {
   Post, Profile, Template, HashtagGroup, MetaAccount, MetaCampaign,
   MetaKPI, MetaComparison, MetaAlert, Notification, BotStatus, Settings, Backup,
   SharedLink, Organization, AIAction, AdSetWithAds, MarketingSkill,
+  EngagementHeatmapCell, TopPostRow, GrowthPoint, AutomationRule, PostApproval,
+  CaptionABTest, InboxMessage, MediaLibraryItem, AuditLog, FreepikImage,
 } from "./types";
 
 // -------- Profiles --------
