@@ -4,6 +4,7 @@ import {
   Settings, BarChart3, Instagram, Link2, Building2,
   Bot, MessageSquare, History, ImageIcon, Zap,
   LineChart, Workflow, CheckCheck, FlaskConical, Inbox, FolderOpen, ShieldCheck, Sparkles,
+  Palette, KeyRound,
 } from "lucide-react";
 
 import {
@@ -37,6 +38,11 @@ const ia = [
   { title: "A/B Tests", url: "/ab-tests", icon: FlaskConical },
   { title: "Freepik Studio", url: "/freepik-studio", icon: Sparkles },
   { title: "Histórico", url: "/history", icon: History },
+] as const;
+
+const integrations = [
+  { title: "Canva Studio", url: "/canva-studio", icon: Palette },
+  { title: "IdP OAuth2", url: "/idp", icon: KeyRound },
 ] as const;
 
 const agency = [
@@ -77,6 +83,7 @@ export function AppSidebar() {
           { label: "Workspace", items: nav },
           { label: "Anúncios", items: ads },
           { label: "IA & Automação", items: ia },
+          { label: "Integrações", items: integrations },
           { label: "Agência", items: agency },
           { label: "Sistema", items: system },
         ].map((group) => (
