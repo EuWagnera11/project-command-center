@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as ScheduleRouteImport } from './routes/schedule'
 import { Route as PostsRouteImport } from './routes/posts'
+import { Route as CalendarRouteImport } from './routes/calendar'
 import { Route as BulkRouteImport } from './routes/bulk'
 import { Route as IndexRouteImport } from './routes/index'
 
@@ -22,6 +23,11 @@ const ScheduleRoute = ScheduleRouteImport.update({
 const PostsRoute = PostsRouteImport.update({
   id: '/posts',
   path: '/posts',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CalendarRoute = CalendarRouteImport.update({
+  id: '/calendar',
+  path: '/calendar',
   getParentRoute: () => rootRouteImport,
 } as any)
 const BulkRoute = BulkRouteImport.update({
@@ -38,12 +44,14 @@ const IndexRoute = IndexRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/bulk': typeof BulkRoute
+  '/calendar': typeof CalendarRoute
   '/posts': typeof PostsRoute
   '/schedule': typeof ScheduleRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/bulk': typeof BulkRoute
+  '/calendar': typeof CalendarRoute
   '/posts': typeof PostsRoute
   '/schedule': typeof ScheduleRoute
 }
@@ -51,20 +59,22 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/bulk': typeof BulkRoute
+  '/calendar': typeof CalendarRoute
   '/posts': typeof PostsRoute
   '/schedule': typeof ScheduleRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/bulk' | '/posts' | '/schedule'
+  fullPaths: '/' | '/bulk' | '/calendar' | '/posts' | '/schedule'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/bulk' | '/posts' | '/schedule'
-  id: '__root__' | '/' | '/bulk' | '/posts' | '/schedule'
+  to: '/' | '/bulk' | '/calendar' | '/posts' | '/schedule'
+  id: '__root__' | '/' | '/bulk' | '/calendar' | '/posts' | '/schedule'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   BulkRoute: typeof BulkRoute
+  CalendarRoute: typeof CalendarRoute
   PostsRoute: typeof PostsRoute
   ScheduleRoute: typeof ScheduleRoute
 }
@@ -83,6 +93,13 @@ declare module '@tanstack/react-router' {
       path: '/posts'
       fullPath: '/posts'
       preLoaderRoute: typeof PostsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/calendar': {
+      id: '/calendar'
+      path: '/calendar'
+      fullPath: '/calendar'
+      preLoaderRoute: typeof CalendarRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/bulk': {
@@ -105,6 +122,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   BulkRoute: BulkRoute,
+  CalendarRoute: CalendarRoute,
   PostsRoute: PostsRoute,
   ScheduleRoute: ScheduleRoute,
 }
