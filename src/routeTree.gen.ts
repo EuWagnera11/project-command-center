@@ -19,6 +19,7 @@ import { Route as OrganizacoesRouteImport } from './routes/organizacoes'
 import { Route as MetaDashboardRouteImport } from './routes/meta-dashboard'
 import { Route as MetaCreativesRouteImport } from './routes/meta-creatives'
 import { Route as MediaLibraryRouteImport } from './routes/media-library'
+import { Route as IntegrationsRouteImport } from './routes/integrations'
 import { Route as InboxRouteImport } from './routes/inbox'
 import { Route as IdpRouteImport } from './routes/idp'
 import { Route as HistoryRouteImport } from './routes/history'
@@ -88,6 +89,11 @@ const MetaCreativesRoute = MetaCreativesRouteImport.update({
 const MediaLibraryRoute = MediaLibraryRouteImport.update({
   id: '/media-library',
   path: '/media-library',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const IntegrationsRoute = IntegrationsRouteImport.update({
+  id: '/integrations',
+  path: '/integrations',
   getParentRoute: () => rootRouteImport,
 } as any)
 const InboxRoute = InboxRouteImport.update({
@@ -208,6 +214,7 @@ export interface FileRoutesByFullPath {
   '/history': typeof HistoryRoute
   '/idp': typeof IdpRoute
   '/inbox': typeof InboxRoute
+  '/integrations': typeof IntegrationsRoute
   '/media-library': typeof MediaLibraryRoute
   '/meta-creatives': typeof MetaCreativesRouteWithChildren
   '/meta-dashboard': typeof MetaDashboardRoute
@@ -240,6 +247,7 @@ export interface FileRoutesByTo {
   '/history': typeof HistoryRoute
   '/idp': typeof IdpRoute
   '/inbox': typeof InboxRoute
+  '/integrations': typeof IntegrationsRoute
   '/media-library': typeof MediaLibraryRoute
   '/meta-creatives': typeof MetaCreativesRouteWithChildren
   '/meta-dashboard': typeof MetaDashboardRoute
@@ -272,6 +280,7 @@ export interface FileRoutesById {
   '/history': typeof HistoryRoute
   '/idp': typeof IdpRoute
   '/inbox': typeof InboxRoute
+  '/integrations': typeof IntegrationsRoute
   '/media-library': typeof MediaLibraryRoute
   '/meta-creatives': typeof MetaCreativesRouteWithChildren
   '/meta-dashboard': typeof MetaDashboardRoute
@@ -306,6 +315,7 @@ export interface FileRouteTypes {
     | '/history'
     | '/idp'
     | '/inbox'
+    | '/integrations'
     | '/media-library'
     | '/meta-creatives'
     | '/meta-dashboard'
@@ -338,6 +348,7 @@ export interface FileRouteTypes {
     | '/history'
     | '/idp'
     | '/inbox'
+    | '/integrations'
     | '/media-library'
     | '/meta-creatives'
     | '/meta-dashboard'
@@ -369,6 +380,7 @@ export interface FileRouteTypes {
     | '/history'
     | '/idp'
     | '/inbox'
+    | '/integrations'
     | '/media-library'
     | '/meta-creatives'
     | '/meta-dashboard'
@@ -402,6 +414,7 @@ export interface RootRouteChildren {
   HistoryRoute: typeof HistoryRoute
   IdpRoute: typeof IdpRoute
   InboxRoute: typeof InboxRoute
+  IntegrationsRoute: typeof IntegrationsRoute
   MediaLibraryRoute: typeof MediaLibraryRoute
   MetaCreativesRoute: typeof MetaCreativesRouteWithChildren
   MetaDashboardRoute: typeof MetaDashboardRoute
@@ -485,6 +498,13 @@ declare module '@tanstack/react-router' {
       path: '/media-library'
       fullPath: '/media-library'
       preLoaderRoute: typeof MediaLibraryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/integrations': {
+      id: '/integrations'
+      path: '/integrations'
+      fullPath: '/integrations'
+      preLoaderRoute: typeof IntegrationsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/inbox': {
@@ -673,6 +693,7 @@ const rootRouteChildren: RootRouteChildren = {
   HistoryRoute: HistoryRoute,
   IdpRoute: IdpRoute,
   InboxRoute: InboxRoute,
+  IntegrationsRoute: IntegrationsRoute,
   MediaLibraryRoute: MediaLibraryRoute,
   MetaCreativesRoute: MetaCreativesRouteWithChildren,
   MetaDashboardRoute: MetaDashboardRoute,
