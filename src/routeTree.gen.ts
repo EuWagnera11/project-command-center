@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as ScheduleRouteImport } from './routes/schedule'
 import { Route as PostsRouteImport } from './routes/posts'
+import { Route as MetaDashboardRouteImport } from './routes/meta-dashboard'
 import { Route as CalendarRouteImport } from './routes/calendar'
 import { Route as BulkRouteImport } from './routes/bulk'
 import { Route as IndexRouteImport } from './routes/index'
@@ -31,6 +32,11 @@ const ScheduleRoute = ScheduleRouteImport.update({
 const PostsRoute = PostsRouteImport.update({
   id: '/posts',
   path: '/posts',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MetaDashboardRoute = MetaDashboardRouteImport.update({
+  id: '/meta-dashboard',
+  path: '/meta-dashboard',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CalendarRoute = CalendarRouteImport.update({
@@ -63,6 +69,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/bulk': typeof BulkRoute
   '/calendar': typeof CalendarRoute
+  '/meta-dashboard': typeof MetaDashboardRoute
   '/posts': typeof PostsRoute
   '/schedule': typeof ScheduleRoute
   '/settings': typeof SettingsRouteWithChildren
@@ -73,6 +80,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/bulk': typeof BulkRoute
   '/calendar': typeof CalendarRoute
+  '/meta-dashboard': typeof MetaDashboardRoute
   '/posts': typeof PostsRoute
   '/schedule': typeof ScheduleRoute
   '/settings/meta-ads': typeof SettingsMetaAdsRoute
@@ -83,6 +91,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/bulk': typeof BulkRoute
   '/calendar': typeof CalendarRoute
+  '/meta-dashboard': typeof MetaDashboardRoute
   '/posts': typeof PostsRoute
   '/schedule': typeof ScheduleRoute
   '/settings': typeof SettingsRouteWithChildren
@@ -95,6 +104,7 @@ export interface FileRouteTypes {
     | '/'
     | '/bulk'
     | '/calendar'
+    | '/meta-dashboard'
     | '/posts'
     | '/schedule'
     | '/settings'
@@ -105,6 +115,7 @@ export interface FileRouteTypes {
     | '/'
     | '/bulk'
     | '/calendar'
+    | '/meta-dashboard'
     | '/posts'
     | '/schedule'
     | '/settings/meta-ads'
@@ -114,6 +125,7 @@ export interface FileRouteTypes {
     | '/'
     | '/bulk'
     | '/calendar'
+    | '/meta-dashboard'
     | '/posts'
     | '/schedule'
     | '/settings'
@@ -125,6 +137,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   BulkRoute: typeof BulkRoute
   CalendarRoute: typeof CalendarRoute
+  MetaDashboardRoute: typeof MetaDashboardRoute
   PostsRoute: typeof PostsRoute
   ScheduleRoute: typeof ScheduleRoute
   SettingsRoute: typeof SettingsRouteWithChildren
@@ -151,6 +164,13 @@ declare module '@tanstack/react-router' {
       path: '/posts'
       fullPath: '/posts'
       preLoaderRoute: typeof PostsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/meta-dashboard': {
+      id: '/meta-dashboard'
+      path: '/meta-dashboard'
+      fullPath: '/meta-dashboard'
+      preLoaderRoute: typeof MetaDashboardRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/calendar': {
@@ -209,6 +229,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   BulkRoute: BulkRoute,
   CalendarRoute: CalendarRoute,
+  MetaDashboardRoute: MetaDashboardRoute,
   PostsRoute: PostsRoute,
   ScheduleRoute: ScheduleRoute,
   SettingsRoute: SettingsRouteWithChildren,
