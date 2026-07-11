@@ -327,3 +327,77 @@ export interface FreepikImage {
   id: string; title: string; thumbnail_url: string; image_url: string;
   source: "freepik" | "freepik-ai" | "fallback-picsum";
 }
+
+// ---------- Canva Apps + IdP OAuth2 ----------
+
+export type CanvaDesignType = "poster" | "social" | "video" | "doc";
+export type CanvaDesignStatus = "draft" | "published";
+
+export interface CanvaDesign {
+  id: string;
+  name: string;
+  thumbnail_url: string;
+  type: CanvaDesignType;
+  status: CanvaDesignStatus;
+  updated_at: string;
+}
+
+export type CanvaIntentKind = "data" | "design" | "publish";
+
+export interface CanvaIntentLog {
+  id: number;
+  intent: CanvaIntentKind;
+  design_id: string;
+  design_name: string;
+  operation: "read" | "edit" | "create" | "publish";
+  status: "ok" | "error";
+  created_at: string;
+}
+
+export interface CanvaAppStatus {
+  app_id: string;
+  connected: boolean;
+  scopes: string[];
+  webhook_url: string;
+  last_sync?: string;
+  designs_count: number;
+}
+
+export interface OAuthClient {
+  id: number;
+  client_id: string;
+  client_secret: string; // masked in UI
+  name: string;
+  redirect_uris: string[];
+  scopes: string[];
+  is_active: boolean;
+  created_at: string;
+}
+
+export interface OAuthUser {
+  username: string;
+  display_name: string;
+  is_admin: boolean;
+  created_at: string;
+}
+
+export interface OAuthToken {
+  id: number;
+  client_id: string;
+  username: string;
+  scopes: string[];
+  issued_at: string;
+  expires_at: string;
+  revoked: boolean;
+}
+
+export interface IdPStatus {
+  enabled: boolean;
+  issuer: string;
+  jwks_url: string;
+  authorize_url: string;
+  token_url: string;
+  active_tokens: number;
+  clients_count: number;
+  users_count: number;
+}
