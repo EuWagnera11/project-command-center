@@ -32,6 +32,8 @@ const items: Item[] = [
   { title: "A/B Tests", url: "/ab-tests", icon: FlaskConical, group: "IA" },
   { title: "Freepik Studio", url: "/freepik-studio", icon: Sparkles, group: "IA" },
   { title: "Histórico", url: "/history", icon: History, group: "IA" },
+  { title: "Canva Studio", url: "/canva-studio", icon: Palette, group: "Integrações" },
+  { title: "IdP OAuth2", url: "/idp", icon: KeyRound, group: "Integrações" },
   { title: "Agências", url: "/organizacoes", icon: Building2, group: "Agência" },
   { title: "Links do cliente", url: "/shared-links", icon: Link2, group: "Agência" },
   { title: "Quick Share", url: "/quick-share", icon: Zap, group: "Agência" },
