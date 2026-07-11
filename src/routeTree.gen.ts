@@ -20,6 +20,7 @@ import { Route as MetaDashboardRouteImport } from './routes/meta-dashboard'
 import { Route as MetaCreativesRouteImport } from './routes/meta-creatives'
 import { Route as MediaLibraryRouteImport } from './routes/media-library'
 import { Route as InboxRouteImport } from './routes/inbox'
+import { Route as IdpRouteImport } from './routes/idp'
 import { Route as HistoryRouteImport } from './routes/history'
 import { Route as FreepikStudioRouteImport } from './routes/freepik-studio'
 import { Route as CanvaStudioRouteImport } from './routes/canva-studio'
@@ -90,6 +91,11 @@ const MediaLibraryRoute = MediaLibraryRouteImport.update({
 const InboxRoute = InboxRouteImport.update({
   id: '/inbox',
   path: '/inbox',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const IdpRoute = IdpRouteImport.update({
+  id: '/idp',
+  path: '/idp',
   getParentRoute: () => rootRouteImport,
 } as any)
 const HistoryRoute = HistoryRouteImport.update({
@@ -186,6 +192,7 @@ export interface FileRoutesByFullPath {
   '/canva-studio': typeof CanvaStudioRoute
   '/freepik-studio': typeof FreepikStudioRoute
   '/history': typeof HistoryRoute
+  '/idp': typeof IdpRoute
   '/inbox': typeof InboxRoute
   '/media-library': typeof MediaLibraryRoute
   '/meta-creatives': typeof MetaCreativesRouteWithChildren
@@ -215,6 +222,7 @@ export interface FileRoutesByTo {
   '/canva-studio': typeof CanvaStudioRoute
   '/freepik-studio': typeof FreepikStudioRoute
   '/history': typeof HistoryRoute
+  '/idp': typeof IdpRoute
   '/inbox': typeof InboxRoute
   '/media-library': typeof MediaLibraryRoute
   '/meta-creatives': typeof MetaCreativesRouteWithChildren
@@ -244,6 +252,7 @@ export interface FileRoutesById {
   '/canva-studio': typeof CanvaStudioRoute
   '/freepik-studio': typeof FreepikStudioRoute
   '/history': typeof HistoryRoute
+  '/idp': typeof IdpRoute
   '/inbox': typeof InboxRoute
   '/media-library': typeof MediaLibraryRoute
   '/meta-creatives': typeof MetaCreativesRouteWithChildren
@@ -275,6 +284,7 @@ export interface FileRouteTypes {
     | '/canva-studio'
     | '/freepik-studio'
     | '/history'
+    | '/idp'
     | '/inbox'
     | '/media-library'
     | '/meta-creatives'
@@ -304,6 +314,7 @@ export interface FileRouteTypes {
     | '/canva-studio'
     | '/freepik-studio'
     | '/history'
+    | '/idp'
     | '/inbox'
     | '/media-library'
     | '/meta-creatives'
@@ -332,6 +343,7 @@ export interface FileRouteTypes {
     | '/canva-studio'
     | '/freepik-studio'
     | '/history'
+    | '/idp'
     | '/inbox'
     | '/media-library'
     | '/meta-creatives'
@@ -362,6 +374,7 @@ export interface RootRouteChildren {
   CanvaStudioRoute: typeof CanvaStudioRoute
   FreepikStudioRoute: typeof FreepikStudioRoute
   HistoryRoute: typeof HistoryRoute
+  IdpRoute: typeof IdpRoute
   InboxRoute: typeof InboxRoute
   MediaLibraryRoute: typeof MediaLibraryRoute
   MetaCreativesRoute: typeof MetaCreativesRouteWithChildren
@@ -453,6 +466,13 @@ declare module '@tanstack/react-router' {
       path: '/inbox'
       fullPath: '/inbox'
       preLoaderRoute: typeof InboxRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/idp': {
+      id: '/idp'
+      path: '/idp'
+      fullPath: '/idp'
+      preLoaderRoute: typeof IdpRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/history': {
@@ -609,6 +629,7 @@ const rootRouteChildren: RootRouteChildren = {
   CanvaStudioRoute: CanvaStudioRoute,
   FreepikStudioRoute: FreepikStudioRoute,
   HistoryRoute: HistoryRoute,
+  IdpRoute: IdpRoute,
   InboxRoute: InboxRoute,
   MediaLibraryRoute: MediaLibraryRoute,
   MetaCreativesRoute: MetaCreativesRouteWithChildren,
