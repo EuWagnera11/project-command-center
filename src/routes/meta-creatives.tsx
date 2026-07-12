@@ -1,8 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
+import { useServerFn } from "@tanstack/react-start";
 import { Image as ImageIcon, ArrowRight } from "lucide-react";
 
-import { api } from "@/lib/api";
+import { listRealCampaigns } from "@/lib/meta-ads.functions";
 import { PageHeader } from "@/components/page-header";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -18,12 +19,14 @@ export const Route = createFileRoute("/meta-creatives")({
 });
 
 function Page() {
-  const { data: campaigns } = useQuery({ queryKey: ["meta-campaigns"], queryFn: () => api.metaCampaigns() });
+  const campsFn = useServerFn(listRealCampaigns);
+  const { data: campaigns, isLoading } = useQuery({ queryKey: ["meta-camps-real", "creatives"], queryFn: () => campsFn({ data: { days: 7 } }) });
 
   return (
     <div>
       <PageHeader eyebrow="Meta Ads" title="🖼️ Criativos" subtitle="Escolha uma campanha para ver seus AdSets e Ads" />
       <div className="grid gap-4 p-6 md:grid-cols-2 lg:grid-cols-3">
+        {isLoading && <Card className="p-12 text-center text-sm text-muted-foreground md:col-span-2 lg:col-span-3">Carregando campanhas…</Card>}
         {(campaigns ?? []).map((c) => (
           <Link key={c.id} to="/meta-creatives/$campaignId" params={{ campaignId: c.id }} className="group">
             <Card className="p-5 transition hover:border-primary/60 hover:shadow-lg">
@@ -37,13 +40,19 @@ function Page() {
                 </div>
                 <ArrowRight className="h-4 w-4 text-muted-foreground transition group-hover:translate-x-1 group-hover:text-primary" />
               </div>
-              <div className="flex gap-2">
-                <Badge variant="outline">{c.status}</Badge>
+              <div className="flex flex-wrap gap-2">
+                <Badge variant="outline">{c.effective_status}</Badge>
                 <Badge variant="outline">{c.objective}</Badge>
+                {c.insights && <Badge variant="secondary">R$ {c.insights.spend.toFixed(2)} · {c.insights.ctr.toFixed(2)}%</Badge>}
               </div>
             </Card>
           </Link>
         ))}
+        {!isLoading && (campaigns ?? []).length === 0 && (
+          <Card className="p-12 text-center text-sm text-muted-foreground md:col-span-2 lg:col-span-3">
+            Nenhuma campanha encontrada nas contas de anúncio conectadas.
+          </Card>
+        )}
       </div>
     </div>
   );

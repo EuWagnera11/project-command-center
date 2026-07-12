@@ -1,13 +1,14 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
+import { useServerFn } from "@tanstack/react-start";
 import { useMemo } from "react";
-import { Eye, MousePointerClick, DollarSign, TrendingUp, Zap, RefreshCcw, AlertTriangle, Key, Users, Activity, Wallet, PauseCircle, PlayCircle, Sparkles, Target } from "lucide-react";
+import { Eye, MousePointerClick, DollarSign, TrendingUp, Zap, RefreshCcw, Key, Users, Activity, Wallet, PauseCircle, PlayCircle, Target } from "lucide-react";
 import {
   LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, BarChart, Bar, Legend,
 } from "recharts";
 import { toast } from "sonner";
 
-import { api } from "@/lib/api";
+import { getRealMetaKPI, getRealMetaTimeseries, getRealMetaComparison, listRealCampaigns } from "@/lib/meta-ads.functions";
 import { PageHeader } from "@/components/page-header";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -17,27 +18,25 @@ export const Route = createFileRoute("/meta-dashboard")({
   head: () => ({
     meta: [
       { title: "Meta Ads Dashboard — InstaBot" },
-      { name: "description", content: "KPIs consolidados, comparação de contas e evolução diária de campanhas Meta." },
+      { name: "description", content: "KPIs reais das suas contas Meta Ads via Graph API." },
     ],
   }),
   component: MetaDashboardPage,
 });
 
 function MetaDashboardPage() {
-  const { data: kpis } = useQuery({ queryKey: ["meta-kpis"], queryFn: () => api.metaKPI() });
-  const { data: campaigns } = useQuery({ queryKey: ["meta-camps"], queryFn: () => api.metaCampaigns() });
-  const { data: daily } = useQuery({ queryKey: ["meta-daily"], queryFn: () => api.metaTimeseries() });
-  const { data: alerts } = useQuery({ queryKey: ["meta-alerts"], queryFn: () => api.metaAlerts() });
-  const { data: comparison } = useQuery({ queryKey: ["meta-comp"], queryFn: () => api.metaComparison() });
-  const { data: report } = useQuery({ queryKey: ["meta-report"], queryFn: () => api.metaWeeklyReport() });
+  const kpiFn = useServerFn(getRealMetaKPI);
+  const dailyFn = useServerFn(getRealMetaTimeseries);
+  const compFn = useServerFn(getRealMetaComparison);
+  const campsFn = useServerFn(listRealCampaigns);
+
+  const { data: kpis, refetch: refetchKpi, isFetching: kpiLoading } = useQuery({ queryKey: ["meta-kpi-real", 7], queryFn: () => kpiFn({ data: { days: 7 } }) });
+  const { data: daily } = useQuery({ queryKey: ["meta-daily-real", 7], queryFn: () => dailyFn({ data: { days: 7 } }) });
+  const { data: comparison } = useQuery({ queryKey: ["meta-comparison-real", 7], queryFn: () => compFn({ data: { days: 7 } }) });
+  const { data: campaigns } = useQuery({ queryKey: ["meta-camps-real", 7], queryFn: () => campsFn({ data: { days: 7 } }) });
 
   const trend = useMemo(
-    () => (daily ?? []).map((d) => ({
-      date: d.label,
-      Gasto: d.spend,
-      Impressões: d.impressions,
-      Cliques: d.clicks,
-    })),
+    () => (daily ?? []).map((d) => ({ date: d.label, Gasto: d.spend, Impressões: d.impressions, Cliques: d.clicks })),
     [daily],
   );
 
@@ -54,27 +53,25 @@ function MetaDashboardPage() {
     { label: "CPC médio", value: `R$ ${kpis.avg_cpc.toFixed(2)}`, icon: Zap, color: "text-destructive", grad: "bg-gradient-to-br from-destructive/10 to-destructive/5" },
   ] : [];
 
-
   return (
     <div>
       <PageHeader
         eyebrow="Meta Ads"
         title="Dashboard de campanhas"
-        subtitle="Métricas consolidadas dos últimos 7 dias em todas as contas"
+        subtitle="Métricas reais dos últimos 7 dias via Meta Graph API"
         actions={
           <div className="flex gap-2">
             <Button variant="outline" size="sm" asChild>
               <Link to="/settings/meta-ads"><Key className="mr-1 h-4 w-4" /> Credenciais</Link>
             </Button>
-            <Button size="sm" onClick={() => toast.info("Atualizando métricas...")}>
-              <RefreshCcw className="mr-1 h-4 w-4" /> Atualizar
+            <Button size="sm" disabled={kpiLoading} onClick={() => { refetchKpi(); toast.info("Atualizando…"); }}>
+              <RefreshCcw className={`mr-1 h-4 w-4 ${kpiLoading ? "animate-spin" : ""}`} /> Atualizar
             </Button>
           </div>
         }
       />
 
       <div className="space-y-6 p-6">
-        {/* KPI grid */}
         <div className="grid grid-cols-2 gap-3 md:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-10">
           {kpiCards.map((k) => (
             <Card key={k.label} className={`p-4 ${k.grad} border-0`}>
@@ -87,24 +84,9 @@ function MetaDashboardPage() {
           ))}
         </div>
 
-        {/* Alerts */}
-        {alerts && alerts.length > 0 && (
-          <Card className="border-warning/40 bg-warning/5 p-4">
-            <div className="mb-2 flex items-center gap-2 text-sm font-semibold">
-              <AlertTriangle className="h-4 w-4 text-warning-foreground" />
-              Alertas ativos ({alerts.length})
-            </div>
-            <div className="space-y-2">
-              {alerts.map((a) => (
-                <div key={a.id} className="flex items-center justify-between rounded-md bg-background/60 p-3 text-sm">
-                  <div className="flex items-center gap-3">
-                    <Badge variant="outline" className="uppercase">{a.alert_type.replace("_", " ")}</Badge>
-                    <span>{a.message}</span>
-                  </div>
-                  <Button size="sm" variant="ghost" onClick={() => toast.success("Resolvido")}>Resolver</Button>
-                </div>
-              ))}
-            </div>
+        {kpis && kpis.total_accounts === 0 && (
+          <Card className="border-warning/40 bg-warning/5 p-4 text-sm">
+            Nenhuma conta de anúncio encontrada com este token. Verifique se o token tem permissão <code>ads_read</code> e se você tem acesso a contas Meta Ads.
           </Card>
         )}
 
@@ -115,42 +97,48 @@ function MetaDashboardPage() {
               <span className="text-xs text-muted-foreground">últimos 7 dias</span>
             </div>
             <div className="h-64">
-              <ResponsiveContainer>
-                <LineChart data={trend}>
-                  <CartesianGrid strokeDasharray="3 3" opacity={0.3} />
-                  <XAxis dataKey="date" fontSize={11} />
-                  <YAxis fontSize={11} />
-                  <Tooltip />
-                  <Legend />
-                  <Line type="monotone" dataKey="Gasto" stroke="hsl(var(--primary))" strokeWidth={2.5} dot={{ r: 3 }} />
-                  <Line type="monotone" dataKey="Cliques" stroke="hsl(var(--success))" strokeWidth={2.5} dot={{ r: 3 }} />
-                </LineChart>
-              </ResponsiveContainer>
+              {trend.length > 0 ? (
+                <ResponsiveContainer>
+                  <LineChart data={trend}>
+                    <CartesianGrid strokeDasharray="3 3" opacity={0.3} />
+                    <XAxis dataKey="date" fontSize={11} />
+                    <YAxis fontSize={11} />
+                    <Tooltip />
+                    <Legend />
+                    <Line type="monotone" dataKey="Gasto" stroke="var(--primary)" strokeWidth={2.5} dot={{ r: 3 }} />
+                    <Line type="monotone" dataKey="Cliques" stroke="var(--success)" strokeWidth={2.5} dot={{ r: 3 }} />
+                  </LineChart>
+                </ResponsiveContainer>
+              ) : (
+                <div className="grid h-full place-items-center text-sm text-muted-foreground">Sem dados no período.</div>
+              )}
             </div>
           </Card>
 
           <Card className="p-5 lg:col-span-2">
             <h3 className="mb-4 text-sm font-semibold">Impressões diárias</h3>
             <div className="h-64">
-              <ResponsiveContainer>
-                <BarChart data={trend}>
-                  <CartesianGrid strokeDasharray="3 3" opacity={0.3} />
-                  <XAxis dataKey="date" fontSize={11} />
-                  <YAxis fontSize={11} />
-                  <Tooltip />
-                  <Bar dataKey="Impressões" fill="hsl(var(--accent))" radius={[6, 6, 0, 0]} />
-                </BarChart>
-              </ResponsiveContainer>
+              {trend.length > 0 ? (
+                <ResponsiveContainer>
+                  <BarChart data={trend}>
+                    <CartesianGrid strokeDasharray="3 3" opacity={0.3} />
+                    <XAxis dataKey="date" fontSize={11} />
+                    <YAxis fontSize={11} />
+                    <Tooltip />
+                    <Bar dataKey="Impressões" fill="var(--accent)" radius={[6, 6, 0, 0]} />
+                  </BarChart>
+                </ResponsiveContainer>
+              ) : (
+                <div className="grid h-full place-items-center text-sm text-muted-foreground">Sem dados.</div>
+              )}
             </div>
           </Card>
         </div>
 
         <Card className="p-5">
-          <div className="mb-4 flex items-center justify-between">
-            <h3 className="text-sm font-semibold flex items-center gap-2">
-              <Activity className="h-4 w-4 text-primary" /> Comparação entre contas
-            </h3>
-          </div>
+          <h3 className="mb-4 text-sm font-semibold flex items-center gap-2">
+            <Activity className="h-4 w-4 text-primary" /> Comparação entre contas
+          </h3>
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead className="border-b text-left text-xs uppercase text-muted-foreground">
@@ -165,7 +153,7 @@ function MetaDashboardPage() {
                 </tr>
               </thead>
               <tbody className="divide-y">
-                {comparison?.map((c) => (
+                {(comparison ?? []).map((c) => (
                   <tr key={c.account_id}>
                     <td className="py-3 font-medium">{c.name}</td>
                     <td className="text-muted-foreground">{c.business_name}</td>
@@ -176,6 +164,9 @@ function MetaDashboardPage() {
                     <td className="text-right tabular-nums text-muted-foreground">R$ {c.lifetime_spent.toLocaleString("pt-BR")}</td>
                   </tr>
                 ))}
+                {(!comparison || comparison.length === 0) && (
+                  <tr><td colSpan={7} className="py-6 text-center text-muted-foreground">Nenhuma conta.</td></tr>
+                )}
               </tbody>
             </table>
           </div>
@@ -192,16 +183,20 @@ function MetaDashboardPage() {
                   <th className="pb-2">Status</th>
                   <th className="pb-2">Objetivo</th>
                   <th className="pb-2 text-right">Orçamento</th>
+                  <th className="pb-2 text-right">Gasto</th>
+                  <th className="pb-2 text-right">CTR</th>
                 </tr>
               </thead>
               <tbody className="divide-y">
-                {campaigns?.map((c) => (
+                {(campaigns ?? []).map((c) => (
                   <tr key={c.id}>
-                    <td className="py-3 font-medium">{c.name}</td>
+                    <td className="py-3 font-medium">
+                      <Link to="/meta-creatives/$campaignId" params={{ campaignId: c.id }} className="hover:text-primary">{c.name}</Link>
+                    </td>
                     <td className="text-muted-foreground">{c.ad_account_name}</td>
                     <td>
-                      <Badge variant={c.status === "ACTIVE" ? "default" : "secondary"} className={c.status === "ACTIVE" ? "bg-success text-success-foreground" : ""}>
-                        {c.status}
+                      <Badge variant={c.effective_status === "ACTIVE" ? "default" : "secondary"} className={c.effective_status === "ACTIVE" ? "bg-success text-success-foreground" : ""}>
+                        {c.effective_status}
                       </Badge>
                     </td>
                     <td className="text-xs text-muted-foreground">{c.objective}</td>
@@ -212,36 +207,17 @@ function MetaDashboardPage() {
                           ? `R$ ${(c.lifetime_budget / 100).toFixed(2)} total`
                           : "—"}
                     </td>
+                    <td className="text-right tabular-nums">{c.insights ? `R$ ${c.insights.spend.toFixed(2)}` : "—"}</td>
+                    <td className="text-right tabular-nums">{c.insights ? `${c.insights.ctr.toFixed(2)}%` : "—"}</td>
                   </tr>
                 ))}
+                {(!campaigns || campaigns.length === 0) && (
+                  <tr><td colSpan={7} className="py-6 text-center text-muted-foreground">Nenhuma campanha.</td></tr>
+                )}
               </tbody>
             </table>
           </div>
         </Card>
-
-        {/* Weekly AI report */}
-        {report && (
-          <Card className="border-primary/30 bg-gradient-to-br from-primary/5 to-ig-purple/5 p-5">
-            <div className="mb-3 flex items-center gap-2">
-              <div className="grid h-9 w-9 place-items-center rounded-lg bg-gradient-primary text-white shadow-glow">
-                <Sparkles className="h-4 w-4" />
-              </div>
-              <div>
-                <h3 className="text-sm font-semibold">Relatório Semanal com IA</h3>
-                <p className="text-xs text-muted-foreground">Análise automática dos últimos 7 dias</p>
-              </div>
-            </div>
-            <p className="mb-4 text-sm leading-relaxed">{report.summary}</p>
-            <ul className="grid gap-2 sm:grid-cols-2">
-              {report.highlights.map((h, i) => (
-                <li key={i} className="flex items-start gap-2 rounded-lg border bg-background/60 p-3 text-sm">
-                  <span className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-primary" />
-                  <span>{h}</span>
-                </li>
-              ))}
-            </ul>
-          </Card>
-        )}
       </div>
     </div>
   );
