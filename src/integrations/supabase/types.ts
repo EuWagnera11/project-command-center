@@ -14,6 +14,87 @@ export type Database = {
   }
   public: {
     Tables: {
+      kanban_briefs: {
+        Row: {
+          ai_analysis: Json | null
+          ai_log: Json
+          briefing: string
+          campaign_id: string | null
+          created_at: string
+          error: string | null
+          generated_copy: string | null
+          generated_image_url: string | null
+          goal: string
+          id: string
+          platforms: string[]
+          position: number
+          profile_id: string | null
+          reference_urls: Json
+          scheduled_at: string | null
+          scheduled_post_id: string | null
+          status: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          ai_analysis?: Json | null
+          ai_log?: Json
+          briefing: string
+          campaign_id?: string | null
+          created_at?: string
+          error?: string | null
+          generated_copy?: string | null
+          generated_image_url?: string | null
+          goal?: string
+          id?: string
+          platforms?: string[]
+          position?: number
+          profile_id?: string | null
+          reference_urls?: Json
+          scheduled_at?: string | null
+          scheduled_post_id?: string | null
+          status?: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          ai_analysis?: Json | null
+          ai_log?: Json
+          briefing?: string
+          campaign_id?: string | null
+          created_at?: string
+          error?: string | null
+          generated_copy?: string | null
+          generated_image_url?: string | null
+          goal?: string
+          id?: string
+          platforms?: string[]
+          position?: number
+          profile_id?: string | null
+          reference_urls?: Json
+          scheduled_at?: string | null
+          scheduled_post_id?: string | null
+          status?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "kanban_briefs_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
+            referencedRelation: "meta_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "kanban_briefs_scheduled_post_id_fkey"
+            columns: ["scheduled_post_id"]
+            isOneToOne: false
+            referencedRelation: "scheduled_posts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       meta_ai_actions: {
         Row: {
           action_params: Json
