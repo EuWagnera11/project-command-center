@@ -3,7 +3,7 @@ import {
   LayoutDashboard, ListChecks, PlusCircle, Package, CalendarDays,
   Settings, BarChart3, Instagram, Link2, Building2,
   Bot, MessageSquare, History, ImageIcon, Zap,
-  LineChart, Workflow, CheckCheck, FolderOpen, ShieldCheck,
+  LineChart, Workflow, FolderOpen, ShieldCheck,
   LayoutTemplate, Plug, Download, Users, Eye,
 } from "lucide-react";
 
