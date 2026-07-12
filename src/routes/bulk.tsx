@@ -112,8 +112,8 @@ function BulkPage() {
           language: "pt-BR",
         },
       });
-      update(it.id, { caption: r.text, status: "idle" });
-      return r.text;
+      update(it.id, { caption: r.caption, status: "idle" });
+      return r.caption;
     } catch (e) {
       const msg = e instanceof Error ? e.message : "Erro";
       update(it.id, { status: "error", error: msg });
