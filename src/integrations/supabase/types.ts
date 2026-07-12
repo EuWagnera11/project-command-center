@@ -14,6 +14,66 @@ export type Database = {
   }
   public: {
     Tables: {
+      meta_ai_actions: {
+        Row: {
+          action_params: Json
+          action_type: string
+          ad_account_id: string | null
+          campaign_id: string
+          campaign_name: string
+          created_at: string
+          description: string
+          executed_at: string | null
+          execution_result: string | null
+          feedback_comment: string | null
+          feedback_rating: number | null
+          id: string
+          rejection_reason: string | null
+          severity: string
+          status: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          action_params?: Json
+          action_type?: string
+          ad_account_id?: string | null
+          campaign_id: string
+          campaign_name: string
+          created_at?: string
+          description: string
+          executed_at?: string | null
+          execution_result?: string | null
+          feedback_comment?: string | null
+          feedback_rating?: number | null
+          id?: string
+          rejection_reason?: string | null
+          severity?: string
+          status?: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          action_params?: Json
+          action_type?: string
+          ad_account_id?: string | null
+          campaign_id?: string
+          campaign_name?: string
+          created_at?: string
+          description?: string
+          executed_at?: string | null
+          execution_result?: string | null
+          feedback_comment?: string | null
+          feedback_rating?: number | null
+          id?: string
+          rejection_reason?: string | null
+          severity?: string
+          status?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       meta_profiles: {
         Row: {
           created_at: string
