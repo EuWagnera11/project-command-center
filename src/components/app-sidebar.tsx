@@ -33,8 +33,8 @@ const ia = [
   { title: "IA Manager", url: "/ai-manager", icon: Bot },
   { title: "Chat IA", url: "/ai-chat", icon: MessageSquare },
   { title: "AI Templates", url: "/ai-templates", icon: LayoutTemplate },
-  { title: "Automações", url: "/rules", icon: Workflow },
-  { title: "Aprovações", url: "/approvals", icon: CheckCheck },
+  { title: "Kanban IA", url: "/approvals", icon: Workflow },
+
   { title: "Histórico", url: "/history", icon: History },
 ] as const;
 
