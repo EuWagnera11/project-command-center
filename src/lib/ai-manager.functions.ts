@@ -224,7 +224,7 @@ export const approveRealAIAction = createServerFn({ method: "POST" })
     if (action.status !== "pending") throw new Error(`Ação já ${action.status}`);
 
     let result = "OK";
-    const params = (action.action_params ?? {}) as Record<string, unknown>;
+    const params = (action.action_params ?? {}) as { [k: string]: Json };
 
     try {
       switch (action.action_type) {
