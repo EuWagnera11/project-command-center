@@ -1,9 +1,10 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
+import { useEffect, useState } from "react";
 import {
   Camera, Users, TrendingUp, Image as ImageIcon, DollarSign,
-  PlusCircle, Package, CalendarDays, ListChecks, BarChart3, Settings, Key, Activity,
+  PlusCircle, Package, CalendarDays, ListChecks, BarChart3, Settings, Key,
   ExternalLink, RefreshCw, Heart, MessageCircle,
 } from "lucide-react";
 import {
@@ -13,12 +14,13 @@ import { toast } from "sonner";
 
 import { listInstagramProfiles, listInstagramPosts, refreshInstagramProfile } from "@/lib/instagram.functions";
 import { getRealMetaKPI, getRealMetaComparison } from "@/lib/meta-ads.functions";
-import { BRL, relativeTime } from "@/lib/format";
+import { BRL } from "@/lib/format";
 import { PageHeader } from "@/components/page-header";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -41,14 +43,26 @@ function Dashboard() {
   const compFn = useServerFn(getRealMetaComparison);
 
   const { data: profiles } = useQuery({ queryKey: ["ig-profiles"], queryFn: () => listProfilesFn() });
+
+  const [selectedId, setSelectedId] = useState<string | null>(() =>
+    typeof window !== "undefined" ? localStorage.getItem("dashboard.profileId") : null,
+  );
+  useEffect(() => {
+    if (!selectedId && profiles?.length) setSelectedId(profiles[0].ig_business_id);
+  }, [profiles, selectedId]);
+  useEffect(() => {
+    if (selectedId) localStorage.setItem("dashboard.profileId", selectedId);
+  }, [selectedId]);
+  const profile = profiles?.find((p) => p.ig_business_id === selectedId) ?? profiles?.[0];
+
   const { data: postsData, isLoading: postsLoading, refetch } = useQuery({
-    queryKey: ["ig-posts", "dashboard"],
-    queryFn: () => listPostsFn({ data: { limit: 6 } }),
+    queryKey: ["ig-posts", "dashboard", profile?.ig_business_id],
+    queryFn: () => listPostsFn({ data: { limit: 6, igBusinessId: profile?.ig_business_id } }),
+    enabled: !!profile,
   });
   const { data: kpi } = useQuery({ queryKey: ["meta-kpi-real"], queryFn: () => kpiFn({ data: { days: 7 } }) });
   const { data: comparison } = useQuery({ queryKey: ["meta-comparison-real"], queryFn: () => compFn({ data: { days: 7 } }) });
 
-  const profile = profiles?.[0];
   const posts = postsData?.posts ?? [];
   const totalEngagement = posts.reduce((sum, p) => sum + p.like_count + p.comments_count, 0);
   const avgEngagement = posts.length > 0 ? Math.round(totalEngagement / posts.length) : 0;
@@ -92,6 +106,18 @@ function Dashboard() {
         subtitle={profile ? `@${profile.ig_username} · InstaBot + Meta Ads` : "Conecte uma conta"}
         actions={
           <>
+            {profiles && profiles.length > 1 && (
+              <Select value={profile?.ig_business_id} onValueChange={setSelectedId}>
+                <SelectTrigger className="h-9 w-[220px]"><SelectValue placeholder="Perfil" /></SelectTrigger>
+                <SelectContent>
+                  {profiles.map((p) => (
+                    <SelectItem key={p.ig_business_id} value={p.ig_business_id}>
+                      @{p.ig_username}{p.ig_name ? ` — ${p.ig_name}` : ""}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            )}
             <Button variant="outline" size="sm" onClick={handleRefresh}><RefreshCw className="mr-1 h-4 w-4" /> Sincronizar</Button>
             <Button size="sm" asChild><Link to="/schedule"><PlusCircle className="mr-1 h-4 w-4" />Novo post</Link></Button>
           </>
