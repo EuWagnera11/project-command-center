@@ -4,6 +4,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { createClient } from "@supabase/supabase-js";
 import { z } from "zod";
+import { renderAgentContext, type ClientAgent } from "./client-agents.functions";
 
 const SUPABASE_URL = process.env.SUPABASE_URL!;
 const SUPABASE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_PUBLISHABLE_KEY!;
@@ -179,12 +180,27 @@ export const runBriefAgent = createServerFn({ method: "POST" })
     // Move to generating
     const { data: brief, error: fetchErr } = await supabase
       .from("kanban_briefs")
-      .select("*")
+      .select("*, meta_profiles(ig_username, page_name)")
       .eq("id", data.id)
       .single();
     if (fetchErr || !brief) throw new Error("Brief not found");
 
     await supabase.from("kanban_briefs").update({ status: "generating", ai_log: log, error: null }).eq("id", data.id);
+
+    // Load per-profile agent context (tone, audience, offerings, do-not-use)
+    let agentCtx = "";
+    if (brief.profile_id) {
+      const { data: agent } = await supabase
+        .from("client_agents")
+        .select("*")
+        .eq("profile_id", brief.profile_id)
+        .maybeSingle();
+      agentCtx = renderAgentContext(agent as ClientAgent | null, {
+        ig_username: (brief as { meta_profiles?: { ig_username?: string } }).meta_profiles?.ig_username,
+        page_name: (brief as { meta_profiles?: { page_name?: string } }).meta_profiles?.page_name,
+      });
+      addLog("context", agentCtx ? "Contexto do cliente carregado" : "Sem contexto");
+    }
 
     try {
       // 1) Analyze briefing with Claude Opus 4.8
@@ -193,7 +209,8 @@ export const runBriefAgent = createServerFn({ method: "POST" })
         {
           role: "system",
           content:
-            "Você é um estrategista de conteúdo para Instagram. Analise o briefing e retorne APENAS um JSON válido no formato: " +
+            `${agentCtx}\n\n` +
+            "Você é um estrategista de conteúdo para Instagram. Respeite ESTRITAMENTE o contexto do cliente acima (tom, público, pilares, o que NÃO usar). Analise o briefing e retorne APENAS um JSON válido no formato: " +
             '{"theme":"...","visual_prompt":"prompt em inglês fotorrealista para gerar imagem no Freepik Imagen 3","caption_direction":"tom e ângulo da copy em pt-BR","hashtags":["#tag1","#tag2"],"aspect_ratio":"square_1_1|social_story_9_16|widescreen_16_9"}',
         },
         {
@@ -234,7 +251,8 @@ export const runBriefAgent = createServerFn({ method: "POST" })
         {
           role: "system",
           content:
-            "Você escreve legendas de Instagram em português brasileiro. Retorne APENAS a legenda pronta pra postar, sem prefixos, com emojis se apropriado, e hashtags no final.",
+            `${agentCtx}\n\n` +
+            "Você escreve legendas de Instagram respeitando ESTRITAMENTE o contexto do cliente acima (tom de voz, idioma, público, hashtags base, o que NÃO usar). Retorne APENAS a legenda pronta pra postar, sem prefixos, com emojis se apropriado, e hashtags no final.",
         },
         {
           role: "user",

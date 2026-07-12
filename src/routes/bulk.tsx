@@ -110,6 +110,7 @@ function BulkPage() {
           includeEmojis: true,
           maxLength: 500,
           language: "pt-BR",
+          profileId: profileId || undefined,
         },
       });
       update(it.id, { caption: r.caption, status: "idle" });

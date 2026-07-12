@@ -81,14 +81,32 @@ export const kpaGenerateCaption = createServerFn({ method: "POST" })
         maxLength: z.number().int().positive().max(2200).default(500),
         language: z.string().default("pt-BR"),
         referenceImage: z.string().url().optional(),
+        profileId: z.string().uuid().optional(),
       })
       .parse(input),
   )
   .handler(async ({ data }) => {
-    const system = `Você é copywriter especialista em Instagram. Escreva legendas em ${data.language}, tom ${data.tone}${
+    // Load per-profile agent context if profileId provided
+    let agentCtx = "";
+    if (data.profileId) {
+      const { createClient } = await import("@supabase/supabase-js");
+      const { renderAgentContext } = await import("./client-agents.functions");
+      const sb = createClient(
+        process.env.SUPABASE_URL!,
+        process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_PUBLISHABLE_KEY!,
+        { auth: { persistSession: false, autoRefreshToken: false } },
+      );
+      const [{ data: agent }, { data: profile }] = await Promise.all([
+        sb.from("client_agents").select("*").eq("profile_id", data.profileId).maybeSingle(),
+        sb.from("meta_profiles").select("ig_username, page_name").eq("id", data.profileId).maybeSingle(),
+      ]);
+      agentCtx = renderAgentContext(agent, profile ?? undefined);
+    }
+
+    const system = `${agentCtx ? agentCtx + "\n\n" : ""}Você é copywriter especialista em Instagram. Respeite ESTRITAMENTE o contexto do cliente acima quando presente. Escreva legendas em ${data.language}, tom ${data.tone}${
       data.includeEmojis ? ", com emojis relevantes" : ", sem emojis"
     }. Máximo ${data.maxLength} caracteres.${
-      data.includeHashtags ? " Termine com 5-10 hashtags virais." : " NÃO inclua hashtags."
+      data.includeHashtags ? " Termine com 5-10 hashtags virais (inclua as hashtags base do cliente se houver)." : " NÃO inclua hashtags."
     } Retorne apenas a legenda, sem explicações.`;
 
     const userContent = data.referenceImage

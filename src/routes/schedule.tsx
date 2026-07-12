@@ -62,7 +62,7 @@ function SchedulePage() {
     setGenLoading(true);
     try {
       const r = await genCaption({
-        data: { topic: t, tone, includeHashtags, includeEmojis, maxLength: 500, language: "pt-BR" },
+        data: { topic: t, tone, includeHashtags, includeEmojis, maxLength: 500, language: "pt-BR", profileId: profileId || undefined },
       });
       setCaption(r.caption);
       toast.success("Legenda gerada com IA");

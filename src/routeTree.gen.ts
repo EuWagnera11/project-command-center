@@ -31,6 +31,7 @@ import { Route as AnalyticsRouteImport } from './routes/analytics'
 import { Route as AiTemplatesRouteImport } from './routes/ai-templates'
 import { Route as AiManagerRouteImport } from './routes/ai-manager'
 import { Route as AiChatRouteImport } from './routes/ai-chat'
+import { Route as AgentesRouteImport } from './routes/agentes'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as SettingsIndexRouteImport } from './routes/settings.index'
 import { Route as SettingsMetaAdsRouteImport } from './routes/settings.meta-ads'
@@ -148,6 +149,11 @@ const AiChatRoute = AiChatRouteImport.update({
   path: '/ai-chat',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AgentesRoute = AgentesRouteImport.update({
+  id: '/agentes',
+  path: '/agentes',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -182,6 +188,7 @@ const ApiPublicHooksPublishScheduledRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/agentes': typeof AgentesRoute
   '/ai-chat': typeof AiChatRoute
   '/ai-manager': typeof AiManagerRoute
   '/ai-templates': typeof AiTemplatesRoute
@@ -212,6 +219,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/agentes': typeof AgentesRoute
   '/ai-chat': typeof AiChatRoute
   '/ai-manager': typeof AiManagerRoute
   '/ai-templates': typeof AiTemplatesRoute
@@ -242,6 +250,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/agentes': typeof AgentesRoute
   '/ai-chat': typeof AiChatRoute
   '/ai-manager': typeof AiManagerRoute
   '/ai-templates': typeof AiTemplatesRoute
@@ -274,6 +283,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/agentes'
     | '/ai-chat'
     | '/ai-manager'
     | '/ai-templates'
@@ -304,6 +314,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/agentes'
     | '/ai-chat'
     | '/ai-manager'
     | '/ai-templates'
@@ -333,6 +344,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/agentes'
     | '/ai-chat'
     | '/ai-manager'
     | '/ai-templates'
@@ -364,6 +376,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AgentesRoute: typeof AgentesRoute
   AiChatRoute: typeof AiChatRoute
   AiManagerRoute: typeof AiManagerRoute
   AiTemplatesRoute: typeof AiTemplatesRoute
@@ -546,6 +559,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AiChatRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/agentes': {
+      id: '/agentes'
+      path: '/agentes'
+      fullPath: '/agentes'
+      preLoaderRoute: typeof AgentesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -619,6 +639,7 @@ const SettingsRouteWithChildren = SettingsRoute._addFileChildren(
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AgentesRoute: AgentesRoute,
   AiChatRoute: AiChatRoute,
   AiManagerRoute: AiManagerRoute,
   AiTemplatesRoute: AiTemplatesRoute,

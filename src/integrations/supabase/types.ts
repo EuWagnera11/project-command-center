@@ -14,6 +14,74 @@ export type Database = {
   }
   public: {
     Tables: {
+      client_agents: {
+        Row: {
+          brand_keywords: string[]
+          business_description: string
+          content_pillars: string[]
+          created_at: string
+          do_not_use: string
+          extra_context: string
+          goals: string[]
+          hashtags_base: string[]
+          id: string
+          is_active: boolean
+          language: string
+          offerings: string
+          posting_frequency: string
+          profile_id: string
+          target_audience: string
+          tone_of_voice: string
+          updated_at: string
+        }
+        Insert: {
+          brand_keywords?: string[]
+          business_description?: string
+          content_pillars?: string[]
+          created_at?: string
+          do_not_use?: string
+          extra_context?: string
+          goals?: string[]
+          hashtags_base?: string[]
+          id?: string
+          is_active?: boolean
+          language?: string
+          offerings?: string
+          posting_frequency?: string
+          profile_id: string
+          target_audience?: string
+          tone_of_voice?: string
+          updated_at?: string
+        }
+        Update: {
+          brand_keywords?: string[]
+          business_description?: string
+          content_pillars?: string[]
+          created_at?: string
+          do_not_use?: string
+          extra_context?: string
+          goals?: string[]
+          hashtags_base?: string[]
+          id?: string
+          is_active?: boolean
+          language?: string
+          offerings?: string
+          posting_frequency?: string
+          profile_id?: string
+          target_audience?: string
+          tone_of_voice?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "client_agents_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: true
+            referencedRelation: "meta_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       kanban_briefs: {
         Row: {
           ai_analysis: Json | null
