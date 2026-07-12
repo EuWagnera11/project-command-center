@@ -3,7 +3,7 @@ import { useNavigate } from "@tanstack/react-router";
 import {
   LayoutDashboard, ListChecks, PlusCircle, Package, CalendarDays, LineChart,
   FolderOpen, BarChart3, ImageIcon, Bot, MessageSquare, Workflow,
-  CheckCheck, History, Building2, Link2, Zap,
+  History, Building2, Link2, Zap,
   Settings, ShieldCheck, Search,
   LayoutTemplate, Plug, Download, Users, Eye,
 } from "lucide-react";
