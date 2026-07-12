@@ -65,6 +65,62 @@ export type Database = {
         }
         Relationships: []
       }
+      scheduled_posts: {
+        Row: {
+          caption: string
+          created_at: string
+          error: string | null
+          fb_post_id: string | null
+          id: string
+          ig_media_id: string | null
+          image_url: string
+          platforms: string[]
+          profile_id: string
+          published_at: string | null
+          scheduled_at: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          caption: string
+          created_at?: string
+          error?: string | null
+          fb_post_id?: string | null
+          id?: string
+          ig_media_id?: string | null
+          image_url: string
+          platforms?: string[]
+          profile_id: string
+          published_at?: string | null
+          scheduled_at: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          caption?: string
+          created_at?: string
+          error?: string | null
+          fb_post_id?: string | null
+          id?: string
+          ig_media_id?: string | null
+          image_url?: string
+          platforms?: string[]
+          profile_id?: string
+          published_at?: string | null
+          scheduled_at?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "scheduled_posts_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
+            referencedRelation: "meta_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
