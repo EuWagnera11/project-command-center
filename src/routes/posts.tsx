@@ -1,184 +1,156 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
-import { Play, X, Pencil, Eye, PlusCircle, Sparkles, Trash2 } from "lucide-react";
+import { useServerFn } from "@tanstack/react-start";
+import { Instagram, ExternalLink, RefreshCw, Heart, MessageCircle, Film, Images } from "lucide-react";
 import { toast } from "sonner";
 
-import { api } from "@/lib/api";
+import { listInstagramPosts, refreshInstagramProfile, listInstagramProfiles } from "@/lib/instagram.functions";
 import { PageHeader } from "@/components/page-header";
-import { PostTypeBadge, StatusBadge } from "./index";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
 import { Skeleton } from "@/components/ui/skeleton";
-import {
-  Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription,
-} from "@/components/ui/dialog";
-import { formatDateTime, relativeTime } from "@/lib/format";
-import type { Post, PostStatus } from "@/lib/types";
+import { relativeTime } from "@/lib/format";
 
 export const Route = createFileRoute("/posts")({
   head: () => ({
     meta: [
       { title: "Posts — InstaBot" },
-      { name: "description", content: "Gerencie, edite e agende suas publicações do Instagram." },
+      { name: "description", content: "Publicações reais do Instagram conectado via Meta Graph API." },
     ],
   }),
   component: PostsPage,
 });
 
-type Filter = "all" | PostStatus;
-
 function PostsPage() {
-  const { data: posts, isLoading } = useQuery({ queryKey: ["posts"], queryFn: () => api.listPosts() });
-  const [filter, setFilter] = useState<Filter>("all");
-  const [editing, setEditing] = useState<Post | null>(null);
+  const listPostsFn = useServerFn(listInstagramPosts);
+  const listProfilesFn = useServerFn(listInstagramProfiles);
+  const refreshFn = useServerFn(refreshInstagramProfile);
 
-  const counts = {
-    all: posts?.length ?? 0,
-    pending: posts?.filter((p) => p.status === "pending").length ?? 0,
-    published: posts?.filter((p) => p.status === "published").length ?? 0,
-    failed: posts?.filter((p) => p.status === "failed").length ?? 0,
-  };
-  const filtered = (posts ?? []).filter((p) => filter === "all" || p.status === filter);
+  const { data: profiles } = useQuery({
+    queryKey: ["ig-profiles"],
+    queryFn: () => listProfilesFn(),
+  });
 
-  const pills: { key: Filter; label: string; count: number }[] = [
-    { key: "all", label: "Todos", count: counts.all },
-    { key: "pending", label: "Agendados", count: counts.pending },
-    { key: "published", label: "Publicados", count: counts.published },
-    { key: "failed", label: "Falhas", count: counts.failed },
-  ];
+  const { data, isLoading, refetch, isFetching } = useQuery({
+    queryKey: ["ig-posts"],
+    queryFn: () => listPostsFn({ data: { limit: 30 } }),
+  });
+
+  const profile = profiles?.[0];
+  const posts = data?.posts ?? [];
+
+  async function handleRefresh() {
+    if (!profile) return;
+    toast.info("Sincronizando com Instagram...");
+    try {
+      await refreshFn({ data: { igBusinessId: profile.ig_business_id } });
+      await refetch();
+      toast.success("Perfil atualizado");
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Erro ao sincronizar");
+    }
+  }
 
   return (
     <div>
       <PageHeader
         eyebrow="Publicações"
-        title="Gerenciamento de Posts"
-        subtitle="Visualize, edite e gerencie todas as publicações"
+        title="Posts do Instagram"
+        subtitle="Dados reais puxados via Meta Graph API"
         actions={
-          <>
-            <Button variant="outline" size="sm"><Eye className="mr-1 h-4 w-4" /> Preview do feed</Button>
-            <Button size="sm"><PlusCircle className="mr-1 h-4 w-4" /> Novo post</Button>
-          </>
+          <Button size="sm" variant="outline" onClick={handleRefresh} disabled={isFetching}>
+            <RefreshCw className={`mr-1 h-4 w-4 ${isFetching ? "animate-spin" : ""}`} /> Sincronizar
+          </Button>
         }
       />
 
-      <div className="p-6">
-        <div className="mb-6 flex flex-wrap gap-2">
-          {pills.map((p) => {
-            const active = filter === p.key;
-            return (
-              <button
-                key={p.key}
-                onClick={() => setFilter(p.key)}
-                className={`rounded-full px-4 py-1.5 text-sm font-medium transition ${
-                  active
-                    ? "bg-gradient-primary text-primary-foreground shadow-glow"
-                    : "border bg-card hover:bg-muted"
-                }`}
-              >
-                {p.label} <span className={`ml-1 rounded-full px-1.5 text-xs ${active ? "bg-white/20" : "bg-muted text-muted-foreground"}`}>{p.count}</span>
-              </button>
-            );
-          })}
-        </div>
+      <div className="space-y-6 p-6">
+        {profile && (
+          <Card className="flex flex-wrap items-center gap-4 p-4">
+            <img
+              src={profile.profile_picture_url ?? ""}
+              alt={profile.ig_username}
+              className="h-16 w-16 rounded-full border-2 border-primary/40 object-cover"
+              onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }}
+            />
+            <div className="min-w-0 flex-1">
+              <div className="flex items-center gap-2">
+                <Instagram className="h-4 w-4 text-primary" />
+                <span className="font-semibold">@{profile.ig_username}</span>
+                <Badge variant="secondary" className="text-xs">Business</Badge>
+              </div>
+              <div className="mt-0.5 truncate text-sm text-muted-foreground">{profile.ig_name}</div>
+            </div>
+            <div className="flex gap-6 text-sm">
+              <Stat label="Seguidores" value={profile.followers_count?.toLocaleString("pt-BR") ?? "—"} />
+              <Stat label="Posts" value={String(profile.media_count ?? "—")} />
+            </div>
+          </Card>
+        )}
 
         {isLoading ? (
           <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-            {[...Array(6)].map((_, i) => <Skeleton key={i} className="h-40" />)}
+            {[...Array(6)].map((_, i) => <Skeleton key={i} className="h-64" />)}
           </div>
-        ) : filtered.length === 0 ? (
-          <Card className="p-12 text-center text-sm text-muted-foreground">Nada por aqui ainda.</Card>
+        ) : posts.length === 0 ? (
+          <Card className="p-12 text-center text-sm text-muted-foreground">
+            Nenhum post encontrado. Publique algo no Instagram e clique em Sincronizar.
+          </Card>
         ) : (
           <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-            {filtered.map((p) => (
-              <Card key={p.id} className={`overflow-hidden border-l-4 p-4 transition hover:shadow-md ${statusBorder(p.status)}`}>
-                <div className="flex items-start gap-3">
-                  <div className="grid h-12 w-12 shrink-0 place-items-center rounded-lg bg-gradient-ig text-lg text-white">
-                    {p.post_type === "reel" ? "🎬" : p.post_type === "carousel" ? "🖼" : p.post_type === "story" ? "⭕" : "📷"}
-                  </div>
-                  <div className="min-w-0 flex-1">
-                    <div className="mb-1 flex flex-wrap items-center gap-2">
-                      <PostTypeBadge type={p.post_type} />
-                      <StatusBadge status={p.status} />
-                    </div>
-                    <div className="text-xs font-medium text-muted-foreground">@{p.instagram_username}</div>
+            {posts.map((p) => (
+              <Card key={p.id} className="overflow-hidden transition hover:shadow-md">
+                <div className="relative aspect-square bg-muted">
+                  {p.media_url && (
+                    <img
+                      src={p.thumbnail_url ?? p.media_url}
+                      alt={p.caption.slice(0, 80)}
+                      className="h-full w-full object-cover"
+                      loading="lazy"
+                    />
+                  )}
+                  <div className="absolute right-2 top-2">
+                    <Badge className="bg-black/60 text-white backdrop-blur">
+                      {p.media_type === "VIDEO" ? <Film className="mr-1 h-3 w-3" /> :
+                        p.media_type === "CAROUSEL_ALBUM" ? <Images className="mr-1 h-3 w-3" /> :
+                          <Instagram className="mr-1 h-3 w-3" />}
+                      {p.media_type === "CAROUSEL_ALBUM" ? "Carrossel" : p.media_type === "VIDEO" ? "Reel" : "Foto"}
+                    </Badge>
                   </div>
                 </div>
-                <p className="mt-3 line-clamp-2 text-sm">{p.caption}</p>
-                <div className="mt-3 flex items-center justify-between">
-                  <div className="text-xs text-muted-foreground">
-                    {formatDateTime(p.scheduled_at)} · {relativeTime(p.scheduled_at)}
+                <div className="p-4">
+                  <p className="mb-3 line-clamp-2 text-sm">{p.caption || <em className="text-muted-foreground">sem legenda</em>}</p>
+                  <div className="flex items-center justify-between text-xs text-muted-foreground">
+                    <div className="flex gap-3">
+                      <span className="flex items-center gap-1"><Heart className="h-3.5 w-3.5" /> {p.like_count}</span>
+                      <span className="flex items-center gap-1"><MessageCircle className="h-3.5 w-3.5" /> {p.comments_count}</span>
+                    </div>
+                    <span>{relativeTime(p.timestamp)}</span>
                   </div>
-                  <div className="flex gap-1">
-                    <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => setEditing(p)}><Pencil className="h-3.5 w-3.5" /></Button>
-                    {p.status === "pending" && (
-                      <>
-                        <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => toast.success(`#${p.id} publicando`)}><Play className="h-3.5 w-3.5" /></Button>
-                        <Button variant="ghost" size="icon" className="h-8 w-8 text-destructive" onClick={() => toast.error(`#${p.id} cancelado`)}><X className="h-3.5 w-3.5" /></Button>
-                      </>
-                    )}
-                  </div>
+                  <a
+                    href={p.permalink}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="mt-3 flex items-center gap-1 text-xs text-primary hover:underline"
+                  >
+                    Ver no Instagram <ExternalLink className="h-3 w-3" />
+                  </a>
                 </div>
               </Card>
             ))}
           </div>
         )}
       </div>
-
-      <EditPostDialog post={editing} onClose={() => setEditing(null)} />
     </div>
   );
 }
 
-function statusBorder(s: PostStatus) {
-  return s === "published" ? "border-l-success" : s === "failed" ? "border-l-destructive" : s === "publishing" ? "border-l-info" : "border-l-warning";
-}
-
-function EditPostDialog({ post, onClose }: { post: Post | null; onClose: () => void }) {
-  const [caption, setCaption] = useState(post?.caption ?? "");
+function Stat({ label, value }: { label: string; value: string }) {
   return (
-    <Dialog open={!!post} onOpenChange={(o) => !o && onClose()}>
-      <DialogContent className="max-w-lg">
-        <DialogHeader>
-          <DialogTitle>Editar post {post ? `#${post.id}` : ""}</DialogTitle>
-          <DialogDescription>Atualize a legenda, o horário ou o tipo.</DialogDescription>
-        </DialogHeader>
-        <div className="space-y-4">
-          <div>
-            <Label>Legenda</Label>
-            <Textarea rows={5} value={caption} onChange={(e) => setCaption(e.target.value)} className="mt-1" />
-            <Button size="sm" variant="outline" className="mt-2" onClick={() => toast.info("Regenerando com IA...")}>
-              <Sparkles className="mr-1 h-3.5 w-3.5" /> Regenerar com IA
-            </Button>
-          </div>
-          <div className="grid grid-cols-2 gap-3">
-            <div>
-              <Label>Data</Label>
-              <Input type="datetime-local" defaultValue={post?.scheduled_at.slice(0, 16)} />
-            </div>
-            <div>
-              <Label>Tipo</Label>
-              <Input readOnly value={post?.post_type ?? ""} />
-            </div>
-          </div>
-        </div>
-        <DialogFooter className="justify-between sm:justify-between">
-          <Button variant="destructive" size="sm" onClick={() => { toast.error("Deletado"); onClose(); }}>
-            <Trash2 className="mr-1 h-4 w-4" /> Deletar
-          </Button>
-          <div className="flex gap-2">
-            <Button variant="outline" onClick={onClose}>Cancelar</Button>
-            <Button onClick={() => { toast.success("Post atualizado"); onClose(); }}>Salvar</Button>
-          </div>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+    <div className="text-center">
+      <div className="text-lg font-bold">{value}</div>
+      <div className="text-xs text-muted-foreground">{label}</div>
+    </div>
   );
 }
-
-// Re-export badges so other pages can reuse (already exported from index)
-export { Badge };

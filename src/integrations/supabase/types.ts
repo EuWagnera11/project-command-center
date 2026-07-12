@@ -14,7 +14,57 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      meta_profiles: {
+        Row: {
+          created_at: string
+          followers_count: number | null
+          follows_count: number | null
+          id: string
+          ig_business_id: string
+          ig_name: string | null
+          ig_username: string
+          is_active: boolean
+          last_synced_at: string | null
+          media_count: number | null
+          page_id: string
+          page_name: string
+          profile_picture_url: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          followers_count?: number | null
+          follows_count?: number | null
+          id?: string
+          ig_business_id: string
+          ig_name?: string | null
+          ig_username: string
+          is_active?: boolean
+          last_synced_at?: string | null
+          media_count?: number | null
+          page_id: string
+          page_name: string
+          profile_picture_url?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          followers_count?: number | null
+          follows_count?: number | null
+          id?: string
+          ig_business_id?: string
+          ig_name?: string | null
+          ig_username?: string
+          is_active?: boolean
+          last_synced_at?: string | null
+          media_count?: number | null
+          page_id?: string
+          page_name?: string
+          profile_picture_url?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
