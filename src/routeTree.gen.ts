@@ -47,7 +47,6 @@ import { Route as SettingsIndexRouteImport } from './routes/settings.index'
 import { Route as SettingsMetaAdsRouteImport } from './routes/settings.meta-ads'
 import { Route as MetaCreativesCampaignIdRouteImport } from './routes/meta-creatives.$campaignId'
 import { Route as ClientTokenRouteImport } from './routes/client.$token'
-import { Route as ApiDiagMetaRouteImport } from './routes/api/diag-meta'
 
 const VideoEditorRoute = VideoEditorRouteImport.update({
   id: '/video-editor',
@@ -239,11 +238,6 @@ const ClientTokenRoute = ClientTokenRouteImport.update({
   path: '/client/$token',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiDiagMetaRoute = ApiDiagMetaRouteImport.update({
-  id: '/api/diag-meta',
-  path: '/api/diag-meta',
-  getParentRoute: () => rootRouteImport,
-} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -280,7 +274,6 @@ export interface FileRoutesByFullPath {
   '/settings': typeof SettingsRouteWithChildren
   '/shared-links': typeof SharedLinksRoute
   '/video-editor': typeof VideoEditorRoute
-  '/api/diag-meta': typeof ApiDiagMetaRoute
   '/client/$token': typeof ClientTokenRoute
   '/meta-creatives/$campaignId': typeof MetaCreativesCampaignIdRoute
   '/settings/meta-ads': typeof SettingsMetaAdsRoute
@@ -320,7 +313,6 @@ export interface FileRoutesByTo {
   '/schedule': typeof ScheduleRoute
   '/shared-links': typeof SharedLinksRoute
   '/video-editor': typeof VideoEditorRoute
-  '/api/diag-meta': typeof ApiDiagMetaRoute
   '/client/$token': typeof ClientTokenRoute
   '/meta-creatives/$campaignId': typeof MetaCreativesCampaignIdRoute
   '/settings/meta-ads': typeof SettingsMetaAdsRoute
@@ -362,7 +354,6 @@ export interface FileRoutesById {
   '/settings': typeof SettingsRouteWithChildren
   '/shared-links': typeof SharedLinksRoute
   '/video-editor': typeof VideoEditorRoute
-  '/api/diag-meta': typeof ApiDiagMetaRoute
   '/client/$token': typeof ClientTokenRoute
   '/meta-creatives/$campaignId': typeof MetaCreativesCampaignIdRoute
   '/settings/meta-ads': typeof SettingsMetaAdsRoute
@@ -405,7 +396,6 @@ export interface FileRouteTypes {
     | '/settings'
     | '/shared-links'
     | '/video-editor'
-    | '/api/diag-meta'
     | '/client/$token'
     | '/meta-creatives/$campaignId'
     | '/settings/meta-ads'
@@ -445,7 +435,6 @@ export interface FileRouteTypes {
     | '/schedule'
     | '/shared-links'
     | '/video-editor'
-    | '/api/diag-meta'
     | '/client/$token'
     | '/meta-creatives/$campaignId'
     | '/settings/meta-ads'
@@ -486,7 +475,6 @@ export interface FileRouteTypes {
     | '/settings'
     | '/shared-links'
     | '/video-editor'
-    | '/api/diag-meta'
     | '/client/$token'
     | '/meta-creatives/$campaignId'
     | '/settings/meta-ads'
@@ -528,7 +516,6 @@ export interface RootRouteChildren {
   SettingsRoute: typeof SettingsRouteWithChildren
   SharedLinksRoute: typeof SharedLinksRoute
   VideoEditorRoute: typeof VideoEditorRoute
-  ApiDiagMetaRoute: typeof ApiDiagMetaRoute
   ClientTokenRoute: typeof ClientTokenRoute
 }
 
@@ -800,13 +787,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ClientTokenRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/diag-meta': {
-      id: '/api/diag-meta'
-      path: '/api/diag-meta'
-      fullPath: '/api/diag-meta'
-      preLoaderRoute: typeof ApiDiagMetaRouteImport
-      parentRoute: typeof rootRouteImport
-    }
   }
 }
 
@@ -871,7 +851,6 @@ const rootRouteChildren: RootRouteChildren = {
   SettingsRoute: SettingsRouteWithChildren,
   SharedLinksRoute: SharedLinksRoute,
   VideoEditorRoute: VideoEditorRoute,
-  ApiDiagMetaRoute: ApiDiagMetaRoute,
   ClientTokenRoute: ClientTokenRoute,
 }
 export const routeTree = rootRouteImport
