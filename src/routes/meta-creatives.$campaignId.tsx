@@ -1,8 +1,10 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { ArrowLeft } from "lucide-react";
+import { useServerFn } from "@tanstack/react-start";
+import { ArrowLeft, ExternalLink } from "lucide-react";
 
-import { api } from "@/lib/api";
+import { listRealAdSetsWithAds } from "@/lib/meta-ads.functions";
+import { listRealCampaigns } from "@/lib/meta-ads.functions";
 import { PageHeader } from "@/components/page-header";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -20,10 +22,12 @@ export const Route = createFileRoute("/meta-creatives/$campaignId")({
 
 function Page() {
   const { campaignId } = Route.useParams();
-  const { data: campaigns } = useQuery({ queryKey: ["meta-campaigns"], queryFn: () => api.metaCampaigns() });
+  const adsetsFn = useServerFn(listRealAdSetsWithAds);
+  const campsFn = useServerFn(listRealCampaigns);
+  const { data: campaigns } = useQuery({ queryKey: ["meta-camps-real", "creatives"], queryFn: () => campsFn({ data: { days: 7 } }) });
   const { data: adsets, isLoading } = useQuery({
-    queryKey: ["adsets-with-ads", campaignId],
-    queryFn: () => api.campaignAdsetsWithAds(campaignId),
+    queryKey: ["adsets-real", campaignId],
+    queryFn: () => adsetsFn({ data: { campaignId } }),
   });
   const campaign = campaigns?.find((c) => c.id === campaignId);
 
@@ -48,7 +52,7 @@ function Page() {
               <h3 className="text-lg font-semibold">{adset.name}</h3>
               <Badge variant="outline">{adset.status}</Badge>
               {adset.daily_budget != null && (
-                <Badge variant="outline">R$ {adset.daily_budget}/dia</Badge>
+                <Badge variant="outline">R$ {adset.daily_budget.toFixed(2)}/dia</Badge>
               )}
               <span className="ml-auto text-sm text-muted-foreground">
                 {ads.length} {ads.length === 1 ? "criativo" : "criativos"}
@@ -71,9 +75,18 @@ function Page() {
                     </div>
                     {ad.title && <p className="mt-1 truncate text-xs font-medium">{ad.title}</p>}
                     {ad.body && <p className="line-clamp-2 text-[11px] text-muted-foreground">{ad.body}</p>}
+                    <a
+                      href={`https://business.facebook.com/adsmanager/manage/ads?selected_ad_ids=${ad.id}`}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="mt-2 inline-flex items-center gap-1 text-[11px] text-primary hover:underline"
+                    >
+                      Ver no Ads Manager <ExternalLink className="h-3 w-3" />
+                    </a>
                   </div>
                 </Card>
               ))}
+              {ads.length === 0 && <div className="text-sm text-muted-foreground">Nenhum ad neste conjunto.</div>}
             </div>
           </div>
         ))}

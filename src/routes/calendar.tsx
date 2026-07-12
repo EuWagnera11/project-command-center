@@ -7,7 +7,7 @@ import { api } from "@/lib/api";
 import { PageHeader } from "@/components/page-header";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { PostTypeBadge, StatusBadge } from "./index";
+import { PostTypeBadge, StatusBadge } from "@/components/post-badges";
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle,
 } from "@/components/ui/dialog";
