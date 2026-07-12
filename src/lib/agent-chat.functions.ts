@@ -319,10 +319,12 @@ const AgentInput = z.object({
   ).min(1),
 });
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type JsonValue = any;
 export type ToolTrace = {
   name: string;
-  args: Record<string, unknown>;
-  result?: unknown;
+  args: JsonValue;
+  result?: JsonValue;
   error?: string;
 };
 
