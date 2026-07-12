@@ -106,6 +106,18 @@ function Dashboard() {
         subtitle={profile ? `@${profile.ig_username} · InstaBot + Meta Ads` : "Conecte uma conta"}
         actions={
           <>
+            {profiles && profiles.length > 1 && (
+              <Select value={profile?.ig_business_id} onValueChange={setSelectedId}>
+                <SelectTrigger className="h-9 w-[220px]"><SelectValue placeholder="Perfil" /></SelectTrigger>
+                <SelectContent>
+                  {profiles.map((p) => (
+                    <SelectItem key={p.ig_business_id} value={p.ig_business_id}>
+                      @{p.ig_username}{p.ig_name ? ` — ${p.ig_name}` : ""}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            )}
             <Button variant="outline" size="sm" onClick={handleRefresh}><RefreshCw className="mr-1 h-4 w-4" /> Sincronizar</Button>
             <Button size="sm" asChild><Link to="/schedule"><PlusCircle className="mr-1 h-4 w-4" />Novo post</Link></Button>
           </>
