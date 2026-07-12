@@ -4,7 +4,7 @@ import {
   Settings, BarChart3, Instagram, Link2, Building2,
   Bot, MessageSquare, History, ImageIcon, Zap,
   LineChart, Workflow, FolderOpen, ShieldCheck,
-  LayoutTemplate, Plug, Download, Users, Eye,
+  LayoutTemplate, Plug, Download, Users, Eye, UserCog,
 } from "lucide-react";
 
 import {
@@ -30,11 +30,11 @@ const ads = [
 ] as const;
 
 const ia = [
+  { title: "Agentes (Contexto)", url: "/agentes", icon: UserCog },
   { title: "IA Manager", url: "/ai-manager", icon: Bot },
   { title: "Chat IA", url: "/ai-chat", icon: MessageSquare },
   { title: "AI Templates", url: "/ai-templates", icon: LayoutTemplate },
   { title: "Kanban IA", url: "/approvals", icon: Workflow },
-
   { title: "Histórico", url: "/history", icon: History },
 ] as const;
 
