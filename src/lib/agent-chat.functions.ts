@@ -310,11 +310,19 @@ REGRAS:
 - Formate com markdown (listas, negrito, código quando útil)
 - Ao gerar imagem, mostre a URL final em markdown: ![alt](url)`;
 
+const AttachmentSchema = z.object({
+  kind: z.enum(["image", "file", "audio"]),
+  url: z.string().url(),
+  name: z.string().optional(),
+  mime: z.string().optional(),
+});
+
 const AgentInput = z.object({
   messages: z.array(
     z.object({
       role: z.enum(["user", "assistant"]),
       content: z.string(),
+      attachments: z.array(AttachmentSchema).optional(),
     }),
   ).min(1),
 });
@@ -328,12 +336,41 @@ export type ToolTrace = {
   error?: string;
 };
 
+type UserContentPart =
+  | { type: "text"; text: string }
+  | { type: "image_url"; image_url: { url: string } };
+
+function buildUserContent(
+  text: string,
+  attachments: Array<z.infer<typeof AttachmentSchema>> | undefined,
+): string | UserContentPart[] {
+  if (!attachments || attachments.length === 0) return text;
+  const images = attachments.filter((a) => a.kind === "image");
+  const others = attachments.filter((a) => a.kind !== "image");
+
+  let extraText = text;
+  if (others.length) {
+    extraText += (extraText ? "\n\n" : "") + "Anexos:\n" +
+      others.map((a) => `- ${a.kind === "audio" ? "🎙️ áudio" : "📎 arquivo"}${a.name ? ` "${a.name}"` : ""}: ${a.url}`).join("\n");
+  }
+  if (!images.length) return extraText;
+
+  const parts: UserContentPart[] = [{ type: "text", text: extraText || "(veja as imagens)" }];
+  for (const img of images) parts.push({ type: "image_url", image_url: { url: img.url } });
+  return parts;
+}
+
 export const agentChat = createServerFn({ method: "POST" })
   .inputValidator((input: unknown) => AgentInput.parse(input))
   .handler(async ({ data }) => {
     const conversation: ChatMsg[] = [
       { role: "system", content: SYSTEM_PROMPT },
-      ...data.messages.map((m) => ({ role: m.role, content: m.content })),
+      ...data.messages.map((m) => ({
+        role: m.role,
+        content: m.role === "user"
+          ? (buildUserContent(m.content, m.attachments) as unknown as string)
+          : m.content,
+      })),
     ];
     const trace: ToolTrace[] = [];
 
