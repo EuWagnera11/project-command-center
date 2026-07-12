@@ -1,10 +1,10 @@
 // KPA Labz — OpenAI-compatible custom API for text/vision.
-// Model: opus-4.8 (default). Change KPA_MODEL below if provider uses a different id.
+// Model: claude-opus-4-8 (Claude Opus 4.8 via KPA Labz proxy).
 
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 
-const KPA_MODEL = "opus-4.8";
+export const KPA_MODEL = "claude-opus-4-8";
 
 const ChatMessage = z.object({
   role: z.enum(["system", "user", "assistant"]),
@@ -34,7 +34,7 @@ async function callKpa(body: unknown) {
   const base = process.env.KPA_LABZ_BASE_URL;
   if (!key) throw new Error("KPA_LABZ_API_KEY missing");
   if (!base) throw new Error("KPA_LABZ_BASE_URL missing");
-  const url = `${base.replace(/\/$/, "")}/chat/completions`;
+  const url = `${base.replace(/\/$/, "")}/v1/chat/completions`;
   const res = await fetch(url, {
     method: "POST",
     headers: {
