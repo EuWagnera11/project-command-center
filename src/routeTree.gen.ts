@@ -9,7 +9,6 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as VideoEditorRouteImport } from './routes/video-editor'
 import { Route as SharedLinksRouteImport } from './routes/shared-links'
 import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as ScheduleRouteImport } from './routes/schedule'
@@ -21,16 +20,10 @@ import { Route as PostsRouteImport } from './routes/posts'
 import { Route as OrganizacoesRouteImport } from './routes/organizacoes'
 import { Route as MetaDashboardRouteImport } from './routes/meta-dashboard'
 import { Route as MetaCreativesRouteImport } from './routes/meta-creatives'
-import { Route as MediaToolsRouteImport } from './routes/media-tools'
 import { Route as MediaLibraryRouteImport } from './routes/media-library'
 import { Route as IntegrationsRouteImport } from './routes/integrations'
-import { Route as InboxRouteImport } from './routes/inbox'
-import { Route as ImageEditorRouteImport } from './routes/image-editor'
-import { Route as IdpRouteImport } from './routes/idp'
 import { Route as HistoryRouteImport } from './routes/history'
-import { Route as FreepikStudioRouteImport } from './routes/freepik-studio'
 import { Route as ExportsRouteImport } from './routes/exports'
-import { Route as CanvaStudioRouteImport } from './routes/canva-studio'
 import { Route as CalendarRouteImport } from './routes/calendar'
 import { Route as BulkRouteImport } from './routes/bulk'
 import { Route as AuditRouteImport } from './routes/audit'
@@ -39,8 +32,6 @@ import { Route as AnalyticsRouteImport } from './routes/analytics'
 import { Route as AiTemplatesRouteImport } from './routes/ai-templates'
 import { Route as AiManagerRouteImport } from './routes/ai-manager'
 import { Route as AiChatRouteImport } from './routes/ai-chat'
-import { Route as AdvancedAiRouteImport } from './routes/advanced-ai'
-import { Route as AbTestsRouteImport } from './routes/ab-tests'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as SettingsIndexRouteImport } from './routes/settings.index'
 import { Route as SettingsMetaAdsRouteImport } from './routes/settings.meta-ads'
@@ -48,11 +39,6 @@ import { Route as MetaCreativesCampaignIdRouteImport } from './routes/meta-creat
 import { Route as ClientTokenRouteImport } from './routes/client.$token'
 import { Route as ApiPublicHooksPublishScheduledRouteImport } from './routes/api/public/hooks/publish-scheduled'
 
-const VideoEditorRoute = VideoEditorRouteImport.update({
-  id: '/video-editor',
-  path: '/video-editor',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const SharedLinksRoute = SharedLinksRouteImport.update({
   id: '/shared-links',
   path: '/shared-links',
@@ -108,11 +94,6 @@ const MetaCreativesRoute = MetaCreativesRouteImport.update({
   path: '/meta-creatives',
   getParentRoute: () => rootRouteImport,
 } as any)
-const MediaToolsRoute = MediaToolsRouteImport.update({
-  id: '/media-tools',
-  path: '/media-tools',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const MediaLibraryRoute = MediaLibraryRouteImport.update({
   id: '/media-library',
   path: '/media-library',
@@ -123,39 +104,14 @@ const IntegrationsRoute = IntegrationsRouteImport.update({
   path: '/integrations',
   getParentRoute: () => rootRouteImport,
 } as any)
-const InboxRoute = InboxRouteImport.update({
-  id: '/inbox',
-  path: '/inbox',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ImageEditorRoute = ImageEditorRouteImport.update({
-  id: '/image-editor',
-  path: '/image-editor',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const IdpRoute = IdpRouteImport.update({
-  id: '/idp',
-  path: '/idp',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const HistoryRoute = HistoryRouteImport.update({
   id: '/history',
   path: '/history',
   getParentRoute: () => rootRouteImport,
 } as any)
-const FreepikStudioRoute = FreepikStudioRouteImport.update({
-  id: '/freepik-studio',
-  path: '/freepik-studio',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const ExportsRoute = ExportsRouteImport.update({
   id: '/exports',
   path: '/exports',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const CanvaStudioRoute = CanvaStudioRouteImport.update({
-  id: '/canva-studio',
-  path: '/canva-studio',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CalendarRoute = CalendarRouteImport.update({
@@ -198,16 +154,6 @@ const AiChatRoute = AiChatRouteImport.update({
   path: '/ai-chat',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AdvancedAiRoute = AdvancedAiRouteImport.update({
-  id: '/advanced-ai',
-  path: '/advanced-ai',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AbTestsRoute = AbTestsRouteImport.update({
-  id: '/ab-tests',
-  path: '/ab-tests',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -242,8 +188,6 @@ const ApiPublicHooksPublishScheduledRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/ab-tests': typeof AbTestsRoute
-  '/advanced-ai': typeof AdvancedAiRoute
   '/ai-chat': typeof AiChatRoute
   '/ai-manager': typeof AiManagerRoute
   '/ai-templates': typeof AiTemplatesRoute
@@ -252,16 +196,10 @@ export interface FileRoutesByFullPath {
   '/audit': typeof AuditRoute
   '/bulk': typeof BulkRoute
   '/calendar': typeof CalendarRoute
-  '/canva-studio': typeof CanvaStudioRoute
   '/exports': typeof ExportsRoute
-  '/freepik-studio': typeof FreepikStudioRoute
   '/history': typeof HistoryRoute
-  '/idp': typeof IdpRoute
-  '/image-editor': typeof ImageEditorRoute
-  '/inbox': typeof InboxRoute
   '/integrations': typeof IntegrationsRoute
   '/media-library': typeof MediaLibraryRoute
-  '/media-tools': typeof MediaToolsRoute
   '/meta-creatives': typeof MetaCreativesRouteWithChildren
   '/meta-dashboard': typeof MetaDashboardRoute
   '/organizacoes': typeof OrganizacoesRoute
@@ -273,7 +211,6 @@ export interface FileRoutesByFullPath {
   '/schedule': typeof ScheduleRoute
   '/settings': typeof SettingsRouteWithChildren
   '/shared-links': typeof SharedLinksRoute
-  '/video-editor': typeof VideoEditorRoute
   '/client/$token': typeof ClientTokenRoute
   '/meta-creatives/$campaignId': typeof MetaCreativesCampaignIdRoute
   '/settings/meta-ads': typeof SettingsMetaAdsRoute
@@ -282,8 +219,6 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/ab-tests': typeof AbTestsRoute
-  '/advanced-ai': typeof AdvancedAiRoute
   '/ai-chat': typeof AiChatRoute
   '/ai-manager': typeof AiManagerRoute
   '/ai-templates': typeof AiTemplatesRoute
@@ -292,16 +227,10 @@ export interface FileRoutesByTo {
   '/audit': typeof AuditRoute
   '/bulk': typeof BulkRoute
   '/calendar': typeof CalendarRoute
-  '/canva-studio': typeof CanvaStudioRoute
   '/exports': typeof ExportsRoute
-  '/freepik-studio': typeof FreepikStudioRoute
   '/history': typeof HistoryRoute
-  '/idp': typeof IdpRoute
-  '/image-editor': typeof ImageEditorRoute
-  '/inbox': typeof InboxRoute
   '/integrations': typeof IntegrationsRoute
   '/media-library': typeof MediaLibraryRoute
-  '/media-tools': typeof MediaToolsRoute
   '/meta-creatives': typeof MetaCreativesRouteWithChildren
   '/meta-dashboard': typeof MetaDashboardRoute
   '/organizacoes': typeof OrganizacoesRoute
@@ -312,7 +241,6 @@ export interface FileRoutesByTo {
   '/rules': typeof RulesRoute
   '/schedule': typeof ScheduleRoute
   '/shared-links': typeof SharedLinksRoute
-  '/video-editor': typeof VideoEditorRoute
   '/client/$token': typeof ClientTokenRoute
   '/meta-creatives/$campaignId': typeof MetaCreativesCampaignIdRoute
   '/settings/meta-ads': typeof SettingsMetaAdsRoute
@@ -322,8 +250,6 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/ab-tests': typeof AbTestsRoute
-  '/advanced-ai': typeof AdvancedAiRoute
   '/ai-chat': typeof AiChatRoute
   '/ai-manager': typeof AiManagerRoute
   '/ai-templates': typeof AiTemplatesRoute
@@ -332,16 +258,10 @@ export interface FileRoutesById {
   '/audit': typeof AuditRoute
   '/bulk': typeof BulkRoute
   '/calendar': typeof CalendarRoute
-  '/canva-studio': typeof CanvaStudioRoute
   '/exports': typeof ExportsRoute
-  '/freepik-studio': typeof FreepikStudioRoute
   '/history': typeof HistoryRoute
-  '/idp': typeof IdpRoute
-  '/image-editor': typeof ImageEditorRoute
-  '/inbox': typeof InboxRoute
   '/integrations': typeof IntegrationsRoute
   '/media-library': typeof MediaLibraryRoute
-  '/media-tools': typeof MediaToolsRoute
   '/meta-creatives': typeof MetaCreativesRouteWithChildren
   '/meta-dashboard': typeof MetaDashboardRoute
   '/organizacoes': typeof OrganizacoesRoute
@@ -353,7 +273,6 @@ export interface FileRoutesById {
   '/schedule': typeof ScheduleRoute
   '/settings': typeof SettingsRouteWithChildren
   '/shared-links': typeof SharedLinksRoute
-  '/video-editor': typeof VideoEditorRoute
   '/client/$token': typeof ClientTokenRoute
   '/meta-creatives/$campaignId': typeof MetaCreativesCampaignIdRoute
   '/settings/meta-ads': typeof SettingsMetaAdsRoute
@@ -364,8 +283,6 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/ab-tests'
-    | '/advanced-ai'
     | '/ai-chat'
     | '/ai-manager'
     | '/ai-templates'
@@ -374,16 +291,10 @@ export interface FileRouteTypes {
     | '/audit'
     | '/bulk'
     | '/calendar'
-    | '/canva-studio'
     | '/exports'
-    | '/freepik-studio'
     | '/history'
-    | '/idp'
-    | '/image-editor'
-    | '/inbox'
     | '/integrations'
     | '/media-library'
-    | '/media-tools'
     | '/meta-creatives'
     | '/meta-dashboard'
     | '/organizacoes'
@@ -395,7 +306,6 @@ export interface FileRouteTypes {
     | '/schedule'
     | '/settings'
     | '/shared-links'
-    | '/video-editor'
     | '/client/$token'
     | '/meta-creatives/$campaignId'
     | '/settings/meta-ads'
@@ -404,8 +314,6 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/ab-tests'
-    | '/advanced-ai'
     | '/ai-chat'
     | '/ai-manager'
     | '/ai-templates'
@@ -414,16 +322,10 @@ export interface FileRouteTypes {
     | '/audit'
     | '/bulk'
     | '/calendar'
-    | '/canva-studio'
     | '/exports'
-    | '/freepik-studio'
     | '/history'
-    | '/idp'
-    | '/image-editor'
-    | '/inbox'
     | '/integrations'
     | '/media-library'
-    | '/media-tools'
     | '/meta-creatives'
     | '/meta-dashboard'
     | '/organizacoes'
@@ -434,7 +336,6 @@ export interface FileRouteTypes {
     | '/rules'
     | '/schedule'
     | '/shared-links'
-    | '/video-editor'
     | '/client/$token'
     | '/meta-creatives/$campaignId'
     | '/settings/meta-ads'
@@ -443,8 +344,6 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
-    | '/ab-tests'
-    | '/advanced-ai'
     | '/ai-chat'
     | '/ai-manager'
     | '/ai-templates'
@@ -453,16 +352,10 @@ export interface FileRouteTypes {
     | '/audit'
     | '/bulk'
     | '/calendar'
-    | '/canva-studio'
     | '/exports'
-    | '/freepik-studio'
     | '/history'
-    | '/idp'
-    | '/image-editor'
-    | '/inbox'
     | '/integrations'
     | '/media-library'
-    | '/media-tools'
     | '/meta-creatives'
     | '/meta-dashboard'
     | '/organizacoes'
@@ -474,7 +367,6 @@ export interface FileRouteTypes {
     | '/schedule'
     | '/settings'
     | '/shared-links'
-    | '/video-editor'
     | '/client/$token'
     | '/meta-creatives/$campaignId'
     | '/settings/meta-ads'
@@ -484,8 +376,6 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  AbTestsRoute: typeof AbTestsRoute
-  AdvancedAiRoute: typeof AdvancedAiRoute
   AiChatRoute: typeof AiChatRoute
   AiManagerRoute: typeof AiManagerRoute
   AiTemplatesRoute: typeof AiTemplatesRoute
@@ -494,16 +384,10 @@ export interface RootRouteChildren {
   AuditRoute: typeof AuditRoute
   BulkRoute: typeof BulkRoute
   CalendarRoute: typeof CalendarRoute
-  CanvaStudioRoute: typeof CanvaStudioRoute
   ExportsRoute: typeof ExportsRoute
-  FreepikStudioRoute: typeof FreepikStudioRoute
   HistoryRoute: typeof HistoryRoute
-  IdpRoute: typeof IdpRoute
-  ImageEditorRoute: typeof ImageEditorRoute
-  InboxRoute: typeof InboxRoute
   IntegrationsRoute: typeof IntegrationsRoute
   MediaLibraryRoute: typeof MediaLibraryRoute
-  MediaToolsRoute: typeof MediaToolsRoute
   MetaCreativesRoute: typeof MetaCreativesRouteWithChildren
   MetaDashboardRoute: typeof MetaDashboardRoute
   OrganizacoesRoute: typeof OrganizacoesRoute
@@ -515,20 +399,12 @@ export interface RootRouteChildren {
   ScheduleRoute: typeof ScheduleRoute
   SettingsRoute: typeof SettingsRouteWithChildren
   SharedLinksRoute: typeof SharedLinksRoute
-  VideoEditorRoute: typeof VideoEditorRoute
   ClientTokenRoute: typeof ClientTokenRoute
   ApiPublicHooksPublishScheduledRoute: typeof ApiPublicHooksPublishScheduledRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/video-editor': {
-      id: '/video-editor'
-      path: '/video-editor'
-      fullPath: '/video-editor'
-      preLoaderRoute: typeof VideoEditorRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/shared-links': {
       id: '/shared-links'
       path: '/shared-links'
@@ -606,13 +482,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MetaCreativesRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/media-tools': {
-      id: '/media-tools'
-      path: '/media-tools'
-      fullPath: '/media-tools'
-      preLoaderRoute: typeof MediaToolsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/media-library': {
       id: '/media-library'
       path: '/media-library'
@@ -627,27 +496,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IntegrationsRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/inbox': {
-      id: '/inbox'
-      path: '/inbox'
-      fullPath: '/inbox'
-      preLoaderRoute: typeof InboxRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/image-editor': {
-      id: '/image-editor'
-      path: '/image-editor'
-      fullPath: '/image-editor'
-      preLoaderRoute: typeof ImageEditorRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/idp': {
-      id: '/idp'
-      path: '/idp'
-      fullPath: '/idp'
-      preLoaderRoute: typeof IdpRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/history': {
       id: '/history'
       path: '/history'
@@ -655,25 +503,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HistoryRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/freepik-studio': {
-      id: '/freepik-studio'
-      path: '/freepik-studio'
-      fullPath: '/freepik-studio'
-      preLoaderRoute: typeof FreepikStudioRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/exports': {
       id: '/exports'
       path: '/exports'
       fullPath: '/exports'
       preLoaderRoute: typeof ExportsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/canva-studio': {
-      id: '/canva-studio'
-      path: '/canva-studio'
-      fullPath: '/canva-studio'
-      preLoaderRoute: typeof CanvaStudioRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/calendar': {
@@ -730,20 +564,6 @@ declare module '@tanstack/react-router' {
       path: '/ai-chat'
       fullPath: '/ai-chat'
       preLoaderRoute: typeof AiChatRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/advanced-ai': {
-      id: '/advanced-ai'
-      path: '/advanced-ai'
-      fullPath: '/advanced-ai'
-      preLoaderRoute: typeof AdvancedAiRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/ab-tests': {
-      id: '/ab-tests'
-      path: '/ab-tests'
-      fullPath: '/ab-tests'
-      preLoaderRoute: typeof AbTestsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -819,8 +639,6 @@ const SettingsRouteWithChildren = SettingsRoute._addFileChildren(
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  AbTestsRoute: AbTestsRoute,
-  AdvancedAiRoute: AdvancedAiRoute,
   AiChatRoute: AiChatRoute,
   AiManagerRoute: AiManagerRoute,
   AiTemplatesRoute: AiTemplatesRoute,
@@ -829,16 +647,10 @@ const rootRouteChildren: RootRouteChildren = {
   AuditRoute: AuditRoute,
   BulkRoute: BulkRoute,
   CalendarRoute: CalendarRoute,
-  CanvaStudioRoute: CanvaStudioRoute,
   ExportsRoute: ExportsRoute,
-  FreepikStudioRoute: FreepikStudioRoute,
   HistoryRoute: HistoryRoute,
-  IdpRoute: IdpRoute,
-  ImageEditorRoute: ImageEditorRoute,
-  InboxRoute: InboxRoute,
   IntegrationsRoute: IntegrationsRoute,
   MediaLibraryRoute: MediaLibraryRoute,
-  MediaToolsRoute: MediaToolsRoute,
   MetaCreativesRoute: MetaCreativesRouteWithChildren,
   MetaDashboardRoute: MetaDashboardRoute,
   OrganizacoesRoute: OrganizacoesRoute,
@@ -850,7 +662,6 @@ const rootRouteChildren: RootRouteChildren = {
   ScheduleRoute: ScheduleRoute,
   SettingsRoute: SettingsRouteWithChildren,
   SharedLinksRoute: SharedLinksRoute,
-  VideoEditorRoute: VideoEditorRoute,
   ClientTokenRoute: ClientTokenRoute,
   ApiPublicHooksPublishScheduledRoute: ApiPublicHooksPublishScheduledRoute,
 }
