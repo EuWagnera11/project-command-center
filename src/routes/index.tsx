@@ -1,9 +1,10 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
+import { useEffect, useState } from "react";
 import {
   Camera, Users, TrendingUp, Image as ImageIcon, DollarSign,
-  PlusCircle, Package, CalendarDays, ListChecks, BarChart3, Settings, Key, Activity,
+  PlusCircle, Package, CalendarDays, ListChecks, BarChart3, Settings, Key,
   ExternalLink, RefreshCw, Heart, MessageCircle,
 } from "lucide-react";
 import {
@@ -13,12 +14,13 @@ import { toast } from "sonner";
 
 import { listInstagramProfiles, listInstagramPosts, refreshInstagramProfile } from "@/lib/instagram.functions";
 import { getRealMetaKPI, getRealMetaComparison } from "@/lib/meta-ads.functions";
-import { BRL, relativeTime } from "@/lib/format";
+import { BRL } from "@/lib/format";
 import { PageHeader } from "@/components/page-header";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 export const Route = createFileRoute("/")({
   head: () => ({
