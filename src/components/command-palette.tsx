@@ -28,8 +28,8 @@ const items: Item[] = [
   { title: "IA Manager", url: "/ai-manager", icon: Bot, group: "IA" },
   { title: "Chat IA", url: "/ai-chat", icon: MessageSquare, group: "IA" },
   { title: "AI Templates", url: "/ai-templates", icon: LayoutTemplate, group: "IA" },
-  { title: "Regras de automação", url: "/rules", icon: Workflow, group: "IA" },
-  { title: "Fila de aprovação", url: "/approvals", icon: CheckCheck, group: "IA" },
+  { title: "Kanban IA", url: "/approvals", icon: Workflow, group: "IA" },
+
   { title: "Histórico", url: "/history", icon: History, group: "IA" },
   { title: "Hub de Integrações", url: "/integrations", icon: Plug, group: "Integrações" },
   { title: "Agências", url: "/organizacoes", icon: Building2, group: "Agência" },
