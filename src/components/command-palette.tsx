@@ -2,10 +2,10 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import {
   LayoutDashboard, ListChecks, PlusCircle, Package, CalendarDays, LineChart,
-  FolderOpen, Inbox, BarChart3, ImageIcon, Bot, MessageSquare, Workflow,
-  CheckCheck, FlaskConical, Sparkles, History, Building2, Link2, Zap,
-  Settings, ShieldCheck, Search, Palette, KeyRound,
-  LayoutTemplate, Brain, Wand2, Film, Plug, Download, Users, Eye, Wrench,
+  FolderOpen, BarChart3, ImageIcon, Bot, MessageSquare, Workflow,
+  CheckCheck, History, Building2, Link2, Zap,
+  Settings, ShieldCheck, Search,
+  LayoutTemplate, Plug, Download, Users, Eye,
 } from "lucide-react";
 import {
   CommandDialog, CommandEmpty, CommandGroup, CommandInput,
@@ -23,33 +23,25 @@ const items: Item[] = [
   { title: "Calendário", url: "/calendar", icon: CalendarDays, group: "Workspace" },
   { title: "Analytics", url: "/analytics", icon: LineChart, group: "Workspace" },
   { title: "Biblioteca de mídia", url: "/media-library", icon: FolderOpen, group: "Workspace" },
-  { title: "Inbox", url: "/inbox", icon: Inbox, group: "Workspace" },
   { title: "Meta Ads Dashboard", url: "/meta-dashboard", icon: BarChart3, group: "Anúncios" },
   { title: "Criativos Meta", url: "/meta-creatives", icon: ImageIcon, group: "Anúncios" },
   { title: "IA Manager", url: "/ai-manager", icon: Bot, group: "IA" },
   { title: "Chat IA", url: "/ai-chat", icon: MessageSquare, group: "IA" },
   { title: "AI Templates", url: "/ai-templates", icon: LayoutTemplate, group: "IA" },
-  { title: "Advanced AI", url: "/advanced-ai", icon: Brain, group: "IA" },
   { title: "Regras de automação", url: "/rules", icon: Workflow, group: "IA" },
   { title: "Fila de aprovação", url: "/approvals", icon: CheckCheck, group: "IA" },
-  { title: "A/B Tests", url: "/ab-tests", icon: FlaskConical, group: "IA" },
-  { title: "Freepik Studio", url: "/freepik-studio", icon: Sparkles, group: "IA" },
-  { title: "Editor de Imagem IA", url: "/image-editor", icon: Wand2, group: "IA" },
-  { title: "Editor de Vídeo", url: "/video-editor", icon: Film, group: "IA" },
   { title: "Histórico", url: "/history", icon: History, group: "IA" },
   { title: "Hub de Integrações", url: "/integrations", icon: Plug, group: "Integrações" },
-  { title: "Canva Studio", url: "/canva-studio", icon: Palette, group: "Integrações" },
-  { title: "IdP OAuth2", url: "/idp", icon: KeyRound, group: "Integrações" },
   { title: "Agências", url: "/organizacoes", icon: Building2, group: "Agência" },
   { title: "Links do cliente", url: "/shared-links", icon: Link2, group: "Agência" },
   { title: "Quick Share", url: "/quick-share", icon: Zap, group: "Agência" },
   { title: "Configurações", url: "/settings", icon: Settings, group: "Sistema" },
   { title: "Roles & Times", url: "/roles", icon: Users, group: "Sistema" },
-  { title: "Ferramentas de Mídia", url: "/media-tools", icon: Wrench, group: "Sistema" },
   { title: "Preview Realista", url: "/preview", icon: Eye, group: "Sistema" },
   { title: "Exports", url: "/exports", icon: Download, group: "Sistema" },
   { title: "Audit Logs", url: "/audit", icon: ShieldCheck, group: "Sistema" },
 ];
+
 
 let openFn: (() => void) | null = null;
 
