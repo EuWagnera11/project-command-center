@@ -43,14 +43,26 @@ function Dashboard() {
   const compFn = useServerFn(getRealMetaComparison);
 
   const { data: profiles } = useQuery({ queryKey: ["ig-profiles"], queryFn: () => listProfilesFn() });
+
+  const [selectedId, setSelectedId] = useState<string | null>(() =>
+    typeof window !== "undefined" ? localStorage.getItem("dashboard.profileId") : null,
+  );
+  useEffect(() => {
+    if (!selectedId && profiles?.length) setSelectedId(profiles[0].ig_business_id);
+  }, [profiles, selectedId]);
+  useEffect(() => {
+    if (selectedId) localStorage.setItem("dashboard.profileId", selectedId);
+  }, [selectedId]);
+  const profile = profiles?.find((p) => p.ig_business_id === selectedId) ?? profiles?.[0];
+
   const { data: postsData, isLoading: postsLoading, refetch } = useQuery({
-    queryKey: ["ig-posts", "dashboard"],
-    queryFn: () => listPostsFn({ data: { limit: 6 } }),
+    queryKey: ["ig-posts", "dashboard", profile?.ig_business_id],
+    queryFn: () => listPostsFn({ data: { limit: 6, igBusinessId: profile?.ig_business_id } }),
+    enabled: !!profile,
   });
   const { data: kpi } = useQuery({ queryKey: ["meta-kpi-real"], queryFn: () => kpiFn({ data: { days: 7 } }) });
   const { data: comparison } = useQuery({ queryKey: ["meta-comparison-real"], queryFn: () => compFn({ data: { days: 7 } }) });
 
-  const profile = profiles?.[0];
   const posts = postsData?.posts ?? [];
   const totalEngagement = posts.reduce((sum, p) => sum + p.like_count + p.comments_count, 0);
   const avgEngagement = posts.length > 0 ? Math.round(totalEngagement / posts.length) : 0;
