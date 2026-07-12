@@ -112,11 +112,3 @@ export const refreshInstagramProfile = createServerFn({ method: "POST" })
     return { success: true, ...fresh };
   });
 
-export const discoverAllPages = createServerFn({ method: "GET" }).handler(async () => {
-  const pages = await graph<{ data: Array<{ id: string; name: string; instagram_business_account?: { id: string; username: string; name: string } }> }>(
-    "/me/accounts",
-    { fields: "id,name,instagram_business_account{id,username,name}", limit: "200" },
-  );
-  const businesses = await graph<{ data: Array<{ id: string; name: string }> }>("/me/businesses", { fields: "id,name" }).catch((e) => ({ data: [], error: String(e) } as any));
-  return { pages: pages.data, businesses: (businesses as any).data ?? [] };
-});
