@@ -3,8 +3,8 @@ import {
   LayoutDashboard, ListChecks, PlusCircle, Package, CalendarDays,
   Settings, BarChart3, Instagram, Link2, Building2,
   Bot, MessageSquare, History, ImageIcon, Zap,
-  LineChart, Workflow, CheckCheck, FlaskConical, Inbox, FolderOpen, ShieldCheck, Sparkles,
-  Palette, KeyRound, LayoutTemplate, Brain, Wand2, Film, Plug, Download, Users, Eye, Wrench,
+  LineChart, Workflow, CheckCheck, FolderOpen, ShieldCheck,
+  LayoutTemplate, Plug, Download, Users, Eye,
 } from "lucide-react";
 
 import {
@@ -22,7 +22,6 @@ const nav = [
   { title: "Calendário", url: "/calendar", icon: CalendarDays },
   { title: "Analytics", url: "/analytics", icon: LineChart },
   { title: "Biblioteca", url: "/media-library", icon: FolderOpen },
-  { title: "Inbox", url: "/inbox", icon: Inbox },
 ] as const;
 
 const ads = [
@@ -34,20 +33,13 @@ const ia = [
   { title: "IA Manager", url: "/ai-manager", icon: Bot },
   { title: "Chat IA", url: "/ai-chat", icon: MessageSquare },
   { title: "AI Templates", url: "/ai-templates", icon: LayoutTemplate },
-  { title: "Advanced AI", url: "/advanced-ai", icon: Brain },
   { title: "Automações", url: "/rules", icon: Workflow },
   { title: "Aprovações", url: "/approvals", icon: CheckCheck },
-  { title: "A/B Tests", url: "/ab-tests", icon: FlaskConical },
-  { title: "Freepik Studio", url: "/freepik-studio", icon: Sparkles },
-  { title: "Editor Imagem", url: "/image-editor", icon: Wand2 },
-  { title: "Editor Vídeo", url: "/video-editor", icon: Film },
   { title: "Histórico", url: "/history", icon: History },
 ] as const;
 
 const integrations = [
   { title: "Hub Integrações", url: "/integrations", icon: Plug },
-  { title: "Canva Studio", url: "/canva-studio", icon: Palette },
-  { title: "IdP OAuth2", url: "/idp", icon: KeyRound },
 ] as const;
 
 const agency = [
@@ -59,11 +51,11 @@ const agency = [
 const system = [
   { title: "Configurações", url: "/settings", icon: Settings },
   { title: "Roles & Times", url: "/roles", icon: Users },
-  { title: "Ferramentas Mídia", url: "/media-tools", icon: Wrench },
   { title: "Preview Realista", url: "/preview", icon: Eye },
   { title: "Exports", url: "/exports", icon: Download },
   { title: "Audit Logs", url: "/audit", icon: ShieldCheck },
 ] as const;
+
 
 export function AppSidebar() {
   const { state } = useSidebar();
