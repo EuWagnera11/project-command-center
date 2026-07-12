@@ -57,12 +57,14 @@ async function callKpa(messages: Array<{ role: "system" | "user" | "assistant"; 
 type Severity = "high" | "info" | "ok";
 type ActionType = "pause_campaign" | "resume_campaign" | "change_daily_budget" | "change_lifetime_budget" | "none";
 
+type Json = string | number | boolean | null | Json[] | { [k: string]: Json };
+
 type Suggestion = {
   severity: Severity;
   title: string;
   description: string;
   action_type: ActionType;
-  action_params: Record<string, unknown>;
+  action_params: { [k: string]: Json };
 };
 
 function extractJson(text: string): unknown {
